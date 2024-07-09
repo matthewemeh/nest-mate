@@ -12,11 +12,14 @@ import { addClass, removeClass } from 'utils';
 import { updateUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 
+const AddHostel = lazy(() => import('pages/admin/AddHostel'));
 const Dashboard = lazy(() => import('pages/admin/Dashboard'));
 const Reservations = lazy(() => import('pages/admin/Reservations'));
+const AddHostelRoom = lazy(() => import('pages/admin/AddHostelRoom'));
+const EditHostelRoom = lazy(() => import('pages/admin/EditHostelRoom'));
 
 const App = () => {
-  const { DASHBOARD, RESERVATIONS } = PATHS;
+  const { DASHBOARD, RESERVATIONS, ADD_HOSTEL, ADD_HOSTEL_ROOM, EDIT_HOSTEL_ROOM } = PATHS;
 
   const dispatch = useAppDispatch();
   const isAuthorized: boolean = useAuth();
@@ -26,7 +29,10 @@ const App = () => {
       return [
         ...routes,
         { path: DASHBOARD, element: <Dashboard /> },
-        { path: RESERVATIONS, element: <Reservations /> }
+        { path: ADD_HOSTEL, element: <AddHostel /> },
+        { path: RESERVATIONS, element: <Reservations /> },
+        { path: ADD_HOSTEL_ROOM, element: <AddHostelRoom /> },
+        { path: EDIT_HOSTEL_ROOM, element: <EditHostelRoom /> }
       ];
     }
     return routes;

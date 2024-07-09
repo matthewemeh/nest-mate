@@ -5,9 +5,6 @@ import { getDateProps } from 'utils';
 
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useGetEntriesMutation } from 'services/apis/entryApi';
-import { useGetRoomsMutation } from 'services/apis/roomApi/roomStoreApi';
-import { useGetUsersMutation } from 'services/apis/userApi/userStoreApi';
-import { useGetHostelsMutation } from 'services/apis/hostelApi/hostelStoreApi';
 import {
   useGetReservationsMutation,
   useGetReservationsLengthMutation
@@ -23,28 +20,24 @@ const Dashboard = () => {
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(MIN_PAGE_INDEX);
-  const { _id } = useAppSelector(state => state.userStore.currentUser);
   const { monthDate: todayDate } = useMemo<DateProps>(() => getDateProps(), []);
   const { pages, paginatedReservations } = useAppSelector(state => state.reservationStore);
 
   useEffect(() => setPage(MIN_PAGE_INDEX), [limit]);
 
-  const [getUsers] = useGetUsersMutation();
-  const [getRooms] = useGetRoomsMutation();
-  const [getHostels] = useGetHostelsMutation();
   const [getReservations] = useGetReservationsMutation();
   const [getEntries, { data: entriesData = [] }] = useGetEntriesMutation();
   const [getReservationsLength, { data: reservationsLength = 0 }] =
     useGetReservationsLengthMutation();
 
   useEffect(() => {
-    getRooms({});
-    getHostels({});
     getEntries({});
-    getReservations({});
-    getUsers({ userID: _id });
     getReservationsLength({});
   }, []);
+
+  useEffect(() => {
+    getReservations({ params: { page, limit } });
+  }, [page]);
 
   return (
     <PageLayout extraClassNames='p-4'>
@@ -77,7 +70,7 @@ const Dashboard = () => {
         <section className='mt-5 bg-swan-white rounded py-2 px-4'>
           <div className='flex items-center justify-between'>
             <p>Reservation List</p>
-            <PaginationControls page={page!} setPage={setPage!} pages={pages} />
+            <PaginationControls page={page} setPage={setPage} pages={pages} />
           </div>
 
           <div>

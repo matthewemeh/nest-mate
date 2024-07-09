@@ -8,7 +8,7 @@ router.route('/').get(async (req, res) => {
     const type = req.query['type'];
 
     if (isNaN(page) || isNaN(limit)) {
-      entries = type ? await Entry.find({ type }) : await Entry.find({});
+      entries = type ? await Entry.find({ type }) : await Entry.find();
     } else {
       entries = type
         ? await Entry.paginate({ type }, { page, limit })

@@ -5,10 +5,13 @@ export const PATHS = {
   PROFILE: '/profile',
   DASHBOARD: '/dashboard',
   REGISTER: '/auth/register',
+  ADD_HOSTEL: '/hostels/add',
   RESERVATIONS: '/reservations',
-  ROOM: '/hostels/:id/rooms/:id',
   VERIFY_OTP: '/auth/verify-otp',
-  HOSTEL_ROOMS: '/hostels/:id/rooms',
   RESET_PASSWORD: '/auth/reset-password',
-  FORGOT_PASSWORD: '/auth/forgot-password'
+  HOSTEL_ROOMS: '/hostels/:hostelID/rooms',
+  ROOM: '/hostels/:hostelID/rooms/:roomID',
+  FORGOT_PASSWORD: '/auth/forgot-password',
+  ADD_HOSTEL_ROOM: '/hostels/:hostelID/rooms/add',
+  EDIT_HOSTEL_ROOM: '/hostels/:hostelID/rooms/:roomID/edit'
 } as const;

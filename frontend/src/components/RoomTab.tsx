@@ -25,10 +25,9 @@ const RoomTab: React.FC<Props> = ({ room }) => {
   ] = useReserveSpaceMutation();
   const { roomNumber, floor, hostelID, occupants, _id: roomID } = room;
   const {
+    _id: userID,
     reservationID,
-    roomID: userRoomID,
-    role,
-    _id: userID
+    roomID: userRoomID
   } = useAppSelector(state => state.userStore.currentUser);
 
   useEffect(() => {
@@ -49,18 +48,15 @@ const RoomTab: React.FC<Props> = ({ room }) => {
       <p>{roomNumber}</p>
       <p>{floor}</p>
       <p>{occupants.length}</p>
-      {role === 'USER' ? (
-        <Button
-          content='Reserve Space'
-          onClick={() => reserveSpace({ userID, roomID })}
-          disabled={reservationID.length > 0 || (userRoomID !== undefined && userRoomID.length > 0)}
-        />
-      ) : (
-        <Button
-          content='Edit Room'
-          onClick={() => navigate(`/hostels/${hostelID}/rooms/${roomID}`)}
-        />
-      )}
+      <Button
+        content='View Room'
+        onClick={() => navigate(`/hostels/${hostelID}/rooms/${roomID}`)}
+      />
+      <Button
+        content='Reserve Space'
+        onClick={() => reserveSpace({ userID, roomID })}
+        disabled={reservationID.length > 0 || (userRoomID !== undefined && userRoomID.length > 0)}
+      />
     </div>
   );
 };

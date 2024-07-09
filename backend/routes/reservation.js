@@ -10,7 +10,7 @@ router.route('/').get(async (req, res) => {
     let reservations;
 
     if (isNaN(page) || isNaN(limit)) {
-      reservations = status ? await Reservation.find({ status }) : await Reservation.find({});
+      reservations = status ? await Reservation.find({ status }) : await Reservation.find();
     } else {
       reservations = status
         ? await Reservation.paginate({ status }, { page, limit })
@@ -26,7 +26,7 @@ router.route('/').get(async (req, res) => {
 /* get reservations length */
 router.route('/length').get(async (req, res) => {
   try {
-    let reservations = await Reservation.find({});
+    let reservations = await Reservation.find();
 
     res.status(200).json(reservations.length);
   } catch (err) {

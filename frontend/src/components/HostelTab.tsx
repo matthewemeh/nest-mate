@@ -9,10 +9,12 @@ const HostelTab: React.FC<Props> = ({ hostel }) => {
   const { _id, name, rooms } = hostel;
 
   return (
-    <Link to={`/hostels/${_id}/rooms`} className='flex items-center justify-between'>
+    <Link
+      to={`/hostels/${_id}/rooms`}
+      className='grid grid-cols-[1fr_1fr_auto] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
       <p>{name}</p>
       <p>{rooms.length}</p>
-      <PiCaretRightBold />
+      <PiCaretRightBold className='self-center' />
     </Link>
   );
 };
