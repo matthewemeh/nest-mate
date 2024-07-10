@@ -37,7 +37,7 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   try {
-    const room = Room.findById(id).populate(['ratings', 'occupants']);
+    const room = await Room.findById(id).populate(['ratings', 'occupants']);
 
     res.status(200).json(room);
   } catch (err) {
@@ -75,6 +75,9 @@ router.route('/').post(upload.any(), async (req, res) => {
     }
 
     await newRoom.save();
+
+    hostel.rooms.push(newRoom._id);
+    await hostel.save();
 
     let rooms;
     const page = Number(req.query['page']);

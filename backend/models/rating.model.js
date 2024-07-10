@@ -12,6 +12,11 @@ const RatingSchema = new Schema(
 );
 RatingSchema.plugin(mongoosePaginate);
 
+/* Before deleting a rating, remove all records of user ratings for that room */
+RatingSchema.pre('remove', function (next) {
+  this.model('User').updateMany({ ratings: this._id }, { $pull: { ratings: this._id } }, next);
+});
+
 const Rating = model('Rating', RatingSchema);
 
 module.exports = Rating;

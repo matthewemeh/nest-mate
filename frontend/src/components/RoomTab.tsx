@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from './buttons/Button';
 
+import useAdmin from 'hooks/useAdmin';
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useReserveSpaceMutation } from 'services/apis/userApi/userStoreApi';
 
@@ -14,6 +15,7 @@ interface Props {
 
 const RoomTab: React.FC<Props> = ({ room }) => {
   const navigate = useNavigate();
+  const isAdmin: boolean = useAdmin();
   const [
     reserveSpace,
     {
@@ -52,11 +54,13 @@ const RoomTab: React.FC<Props> = ({ room }) => {
         content='View Room'
         onClick={() => navigate(`/hostels/${hostelID}/rooms/${roomID}`)}
       />
-      <Button
-        content='Reserve Space'
-        onClick={() => reserveSpace({ userID, roomID })}
-        disabled={reservationID.length > 0 || (userRoomID !== undefined && userRoomID.length > 0)}
-      />
+      {isAdmin || (
+        <Button
+          content='Reserve Space'
+          onClick={() => reserveSpace({ userID, roomID })}
+          disabled={reservationID.length > 0 || (userRoomID !== undefined && userRoomID.length > 0)}
+        />
+      )}
     </div>
   );
 };

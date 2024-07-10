@@ -1,6 +1,7 @@
 const multer = require('multer');
 const router = require('express').Router();
 const storage = require('../firebase-config');
+const Room = require('../models/room.model');
 const { User, roles } = require('../models/user.model');
 const { Entry, entryStatuses } = require('../models/entry.model');
 const { Reservation, reservationStatuses } = require('../models/reservation.model');
@@ -156,10 +157,15 @@ router.route('/confirm-reservation/:reservationID').post(async (req, res) => {
 
     if (status === reservationStatuses.PENDING) {
       reservation.status = reservationStatuses.CONFIRMED;
+      await reservation.save();
+
       user.roomID = roomID;
       user.reservationID = '';
-      reservation.save();
-      user.save();
+      await user.save();
+
+      const room = await Room.findById(roomID);
+      room.occupants.push(userID);
+      await room.save();
       return res.status(200).send('Room reservation confirmed');
     } else if (status === reservationStatuses.DECLINED) {
       return res.status(400).send('Room reservation already declined');
@@ -185,9 +191,10 @@ router.route('/decline-reservation/:reservationID').post(async (req, res) => {
 
     if (status === reservationStatuses.PENDING) {
       reservation.status = reservationStatuses.DECLINED;
+      await reservation.save();
+
       user.reservationID = '';
-      reservation.save();
-      user.save();
+      await user.save();
       return res.status(200).send('Room reservation declined');
     } else if (status === reservationStatuses.DECLINED) {
       return res.status(400).send('Room reservation already declined');
@@ -238,11 +245,15 @@ router.route('/check-out/:id').post(async (req, res) => {
     const userToBeCheckedOut = await User.findById(id);
     userToBeCheckedOut.checkedIn = false;
     userToBeCheckedOut.lastCheckedOut = new Date().toISOString();
+    await userToBeCheckedOut.save();
 
     const newEntry = new Entry({ type: entryStatuses.CHECK_OUT, roomID, userID: id });
-
-    await userToBeCheckedOut.save();
     await newEntry.save();
+
+    const room = await Room.findById(roomID);
+    room.occupants = room.occupants.filter(occupant => occupant !== userID);
+    await room.save();
+
     return res.status(200).send('Check out successful');
   } catch (err) {
     res.status(400).send(err.message);

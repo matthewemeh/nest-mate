@@ -15,12 +15,12 @@ import Constants from 'Constants';
 import { showAlert } from 'utils';
 
 const EditHostelRoom = () => {
-  const { hostelID } = useParams();
+  const { roomID } = useParams();
   const { ACCEPTED_IMAGE_TYPES } = Constants;
 
   const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { _id: userID } = useAppSelector(state => state.userStore.currentUser);
-  const [createRoom, { error, isError, isLoading, isSuccess }] = useUpdateRoomMutation();
+  const [updateRoom, { error, isError, isLoading, isSuccess }] = useUpdateRoomMutation();
 
   const [roomImageChanged, setRoomImageChanged] = useState<boolean>(false);
 
@@ -61,11 +61,11 @@ const EditHostelRoom = () => {
       userID,
       roomImage,
       roomNumber,
-      maxOccupants,
-      hostelID: hostelID!
+      _id: roomID!,
+      maxOccupants
     };
 
-    createRoom(roomPayload);
+    updateRoom(roomPayload);
   };
 
   useEffect(() => {

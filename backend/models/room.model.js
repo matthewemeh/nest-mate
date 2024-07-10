@@ -27,6 +27,16 @@ RoomSchema.pre('remove', function (next) {
   this.model('Rating').remove({ roomID: this._id }, next);
 });
 
+/* Before deleting a room, remove all reservations for that room */
+RoomSchema.pre('remove', function (next) {
+  this.model('Reservation').remove({ roomID: this._id }, next);
+});
+
+/* Before deleting a room, remove that room from the hostel's rooms */
+RoomSchema.pre('remove', function (next) {
+  this.model('Hostel').updateOne({ rooms: this._id }, { $pull: { rooms: this._id } }, next);
+});
+
 const Room = model('Room', RoomSchema);
 
 module.exports = Room;

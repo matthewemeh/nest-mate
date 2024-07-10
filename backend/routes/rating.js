@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const Rating = require('../models/rating.model');
+const { User } = require('../models/user.model');
+const Room = require('../models/room.model');
 
 /* update room rating */
 router.route('/').post(async (req, res) => {
@@ -14,6 +16,14 @@ router.route('/').post(async (req, res) => {
     } else {
       const newRating = new Rating({ roomID, userID, value });
       await newRating.save();
+
+      const user = await User.findById(userID);
+      user.ratings.push(newRating._id);
+      await user.save();
+
+      const room = await Room.findById(roomID);
+      room.ratings.push(newRating._id);
+      await room.save();
     }
 
     res.status(200).send('Rating updated!');

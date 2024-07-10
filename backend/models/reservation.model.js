@@ -14,6 +14,24 @@ const ReservationSchema = new Schema(
 );
 ReservationSchema.plugin(mongoosePaginate);
 
+/* Before deleting a reservation, set reservationID of User who made reservation to null */
+ReservationSchema.pre('remove', function (next) {
+  this.model('User').updateOne(
+    { reservationID: this._id },
+    { $set: { reservationID: null } },
+    next
+  );
+});
+
+/* Before deleting a reservation, remove the reservation id from rooms reservations */
+ReservationSchema.pre('remove', function (next) {
+  this.model('Room').updateOne(
+    { reservations: this._id },
+    { $pull: { reservations: this._id } },
+    next
+  );
+});
+
 const Reservation = model('Reservation', ReservationSchema);
 
 module.exports = { Reservation, reservationStatuses };
