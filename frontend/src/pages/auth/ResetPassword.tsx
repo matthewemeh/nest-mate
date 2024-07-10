@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { FaHotel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { MdLocalLibrary } from 'react-icons/md';
+import { useEffect, useRef, useState } from 'react';
 
 import { PATHS } from 'routes/PathConstants';
 
@@ -80,7 +80,7 @@ const ResetPassword = () => {
 
   return (
     <section className='flex flex-col h-full items-center justify-center'>
-      <MdLocalLibrary className='w-[100px] h-[100px] text-current' />
+      <FaHotel className='w-[100px] h-[100px] text-current' />
       <h1 className='text-2xl font-semibold'>Reset Password</h1>
 
       <form onSubmit={handleSubmit} className='flex flex-col'>

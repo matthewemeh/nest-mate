@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { MdLocalLibrary } from 'react-icons/md';
+import { FaHotel } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 
 import FormInput from 'components/forms/FormInput';
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
 
   return (
     <section className='flex flex-col h-full items-center justify-center'>
-      <MdLocalLibrary className='w-[100px] h-[100px] text-current' />
+      <FaHotel className='w-[100px] h-[100px] text-current' />
       <h1 className='text-2xl font-semibold'>Forgot Password</h1>
 
       <form onSubmit={handleSubmit} className='flex flex-col'>

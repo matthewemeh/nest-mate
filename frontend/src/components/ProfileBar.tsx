@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaHotel } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { RiMoonLine, RiSunLine, RiUser3Line } from 'react-icons/ri';
 
@@ -6,7 +7,6 @@ import { PATHS } from 'routes/PathConstants';
 import { logout } from 'services/apis/userApi/userStoreSlice';
 import { updateUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
-import { FaHotel } from 'react-icons/fa';
 
 interface Props {
   extraClassNames?: string;

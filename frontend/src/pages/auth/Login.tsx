@@ -1,5 +1,5 @@
+import { FaHotel } from 'react-icons/fa';
 import { useEffect, useRef } from 'react';
-import { MdLocalLibrary } from 'react-icons/md';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { PATHS } from 'routes/PathConstants';
@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div className='flex flex-col h-full items-center justify-center'>
-      <MdLocalLibrary className='w-[100px] h-[100px] text-current' />
+      <FaHotel className='w-[100px] h-[100px] text-current' />
       <h1 className='text-2xl font-semibold'>Welcome back</h1>
       <p className='text-base'>Please enter your details</p>
 
