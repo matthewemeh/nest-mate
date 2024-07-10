@@ -1,26 +1,52 @@
-import { useParams } from 'react-router-dom';
+import { MdDelete } from 'react-icons/md';
+import { FaUserSlash } from 'react-icons/fa';
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import PageLayout from 'layouts/PageLayout';
+import Button from 'components/buttons/Button';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
 import { useAppSelector } from 'hooks/useRootStorage';
-import { useUpdateRoomMutation } from 'services/apis/roomApi/roomStoreApi';
+import { useGetRoomMutation, useUpdateRoomMutation } from 'services/apis/roomApi/roomStoreApi';
 
 import FaHotelDark from 'assets/fa-bed-dark.svg';
 import FaHotelLight from 'assets/fa-bed-light.svg';
 
 import Constants from 'Constants';
 import { showAlert } from 'utils';
+import { PATHS } from 'routes/PathConstants';
 
 const EditHostelRoom = () => {
-  const { roomID } = useParams();
+  const { RESERVATIONS } = PATHS;
   const { ACCEPTED_IMAGE_TYPES } = Constants;
 
+  const navigate = useNavigate();
+  const { roomID } = useParams();
   const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { _id: userID } = useAppSelector(state => state.userStore.currentUser);
-  const [updateRoom, { error, isError, isLoading, isSuccess }] = useUpdateRoomMutation();
+  const [
+    updateRoom,
+    {
+      error: updateError,
+      isError: isUpdateError,
+      isLoading: isUpdateLoading,
+      isSuccess: isUpdateSuccess
+    }
+  ] = useUpdateRoomMutation();
+  const [
+    getRoom,
+    { data: room = {}, error: hostelError, isError: isHostelError, isLoading: isHostelLoading }
+  ] = useGetRoomMutation();
+
+  const {
+    roomImageUrl,
+    occupants = [],
+    floor: defaultFloor = 0,
+    roomNumber: defaultRoomNumber = 0,
+    maxOccupants: defaultMaxOccupants = 6
+  } = room as Room;
 
   const [roomImageChanged, setRoomImageChanged] = useState<boolean>(false);
 
@@ -68,8 +94,19 @@ const EditHostelRoom = () => {
     updateRoom(roomPayload);
   };
 
+  const handleDeleteOccupant = (occupantID: string, occupantName: string) => {
+    const isDeletedConfirmed: boolean = window.confirm(
+      `Are you sure you want to delete ${occupantName} from this room?`
+    );
+    if (isDeletedConfirmed) updateRoom({ _id: roomID!, userID, occupantID });
+  };
+
   useEffect(() => {
-    if (isSuccess) {
+    getRoom({ _id: roomID! });
+  }, [roomID]);
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
       setRoomImageChanged(false);
       const imageTag: HTMLImageElement = roomImagePreviewRef.current!;
       imageTag.src = prefersDarkMode ? FaHotelDark : FaHotelLight;
@@ -77,14 +114,21 @@ const EditHostelRoom = () => {
       showAlert({ msg: 'Room added successfully' });
       formRef.current!.reset();
     }
-  }, [isSuccess]);
+  }, [isUpdateSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
+    if (isUpdateError && updateError && 'status' in updateError) {
+      showAlert({ msg: `${updateError.data ?? ''}` });
+      console.error(updateError);
     }
-  }, [error, isError]);
+  }, [updateError, isUpdateError]);
+
+  useEffect(() => {
+    if (isHostelError && hostelError && 'status' in hostelError) {
+      showAlert({ msg: `${hostelError.data ?? ''}` });
+      console.error(hostelError);
+    }
+  }, [hostelError, isHostelError]);
 
   return (
     <PageLayout
@@ -100,7 +144,7 @@ const EditHostelRoom = () => {
           alt=''
           loading='lazy'
           ref={roomImagePreviewRef}
-          src={prefersDarkMode ? FaHotelDark : FaHotelLight}
+          src={roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
           className={`mx-auto h-full ${roomImageChanged ? 'w-full' : 'w-2/5'}`}
         />
       </label>
@@ -117,6 +161,7 @@ const EditHostelRoom = () => {
           inputName='room-number'
           inputRef={roomNumberRef}
           extraLabelClassNames='mt-[15px]'
+          defaultValue={defaultRoomNumber.toString()}
           formatRule={{ allowedChars: '0123456789' }}
           extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
         />
@@ -129,19 +174,20 @@ const EditHostelRoom = () => {
           label='Floor Number'
           inputRef={floorRef}
           extraLabelClassNames='mt-[15px]'
+          defaultValue={defaultFloor.toString()}
           formatRule={{ allowedChars: '0123456789' }}
           extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
         />
 
         <FormInput
           type='text'
-          defaultValue='6'
           autoComplete='off'
           inputID='occupants'
           inputName='occupants'
           inputRef={occupantsRef}
           label='Maximum no. of occupants'
           extraLabelClassNames='mt-[15px]'
+          defaultValue={defaultMaxOccupants.toString()}
           formatRule={{ allowedChars: '0123456789' }}
           extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
         />
@@ -161,14 +207,38 @@ const EditHostelRoom = () => {
         <AuthButton
           type='submit'
           title='Update Room'
-          disabled={isLoading}
-          isLoading={isLoading}
+          disabled={isUpdateLoading}
+          isLoading={isUpdateLoading}
           extraClassNames={`!w-1/2 mx-auto ${
             prefersDarkMode &&
             'dark:bg-zircon dark:text-nile-blue-900 dark:hover:bg-transparent dark:hover:text-zircon'
           }`}
         />
       </form>
+
+      <div className='col-start-1 col-end-3'>
+        <h1>Room Occupants</h1>
+
+        <div>
+          {occupants.length > 0 ? (
+            occupants.map(({ name, _id }) => (
+              <div className=' flex items-center justify-between'>
+                {name}
+                <MdDelete
+                  className='text-red-600'
+                  onClick={() => handleDeleteOccupant(_id, name)}
+                />
+              </div>
+            ))
+          ) : (
+            <div className='flex flex-col gap-4 items-center justify-center'>
+              <FaUserSlash className='w-10 h-10' />
+              No Occupants Available
+              <Button content='Check Reservations' onClick={() => navigate(RESERVATIONS)} />
+            </div>
+          )}
+        </div>
+      </div>
     </PageLayout>
   );
 };

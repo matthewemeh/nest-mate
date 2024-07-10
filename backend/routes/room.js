@@ -101,7 +101,7 @@ router.route('/:id').patch(upload.any(), async (req, res) => {
     const userPayload = JSON.parse(
       req.files.find(({ fieldname }) => fieldname === USER_PAYLOAD_KEY).buffer
     );
-    const { floor, maxOccupants, roomNumber, newHostelID, userID } = userPayload;
+    const { floor, maxOccupants, roomNumber, newHostelID, userID, occupantID } = userPayload;
 
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
@@ -115,6 +115,20 @@ router.route('/:id').patch(upload.any(), async (req, res) => {
     if (newHostelID) room.hostelID = newHostelID;
     if (roomNumber) room.roomNumber = roomNumber;
     if (maxOccupants) room.maxOccupants = maxOccupants;
+    if (occupantID) {
+      const { occupants } = room;
+      const occupantExists = occupants.find(occupant => occupant == occupantID);
+
+      const userToBeMoved = await User.findById(occupantID);
+      if (occupantExists) {
+        userToBeMoved.roomID = null;
+        room.occupants = occupants.filter(occupant => occupant != occupantID);
+      } else {
+        userToBeMoved.roomID = room._id;
+        room.occupants.push(occupantID);
+      }
+      await userToBeMoved.save();
+    }
 
     const roomImageFile = req.files.find(({ fieldname }) => fieldname === ROOM_IMAGE_KEY);
     const roomImage = roomImageFile?.buffer;

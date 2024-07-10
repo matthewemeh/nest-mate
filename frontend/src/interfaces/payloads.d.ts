@@ -58,6 +58,7 @@ interface UpdateRoomPayload {
   roomImage?: File;
   roomNumber?: number;
   newHostelID?: string;
+  occupantID?: string;
   maxOccupants?: number;
 }
 
