@@ -44,16 +44,21 @@ const Reservations = () => {
         </div>
 
         {paginatedReservations.length > 0 && (
-          <div className='grid grid-cols-[1fr_1fr_auto] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
+          <div className='grid gap-4 grid-cols-[repeat(5,minmax(0,1fr))] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
+            <p>Username</p>
             <p>Hostel Name</p>
-            <p>Number of Rooms</p>
+            <p>Room Number</p>
+            <p>Max Occupants</p>
+            <p>Occupants</p>
           </div>
         )}
 
-        <div className='flex flex-col gap-3 mt-4'>
+        <ul className='flex flex-col gap-3 mt-4'>
           {paginatedReservations.length > 0 ? (
             paginatedReservations.map(reservation => (
-              <ReservationTab key={reservation._id} reservation={reservation} />
+              <li key={reservation._id}>
+                <ReservationTab reservation={reservation} />
+              </li>
             ))
           ) : (
             <div className='flex flex-col gap-4 items-center justify-center'>
@@ -61,7 +66,7 @@ const Reservations = () => {
               No Reservations made
             </div>
           )}
-        </div>
+        </ul>
       </section>
     </div>
   );

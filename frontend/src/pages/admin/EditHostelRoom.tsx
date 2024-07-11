@@ -2,6 +2,7 @@ import { FaUserSlash } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRef, useState, useEffect, useMemo } from 'react';
 
+import Loading from 'components/Loading';
 import PageLayout from 'layouts/PageLayout';
 import Button from 'components/buttons/Button';
 import OccupantTab from 'components/OccupantTab';
@@ -35,8 +36,10 @@ const EditHostelRoom = () => {
       isSuccess: isUpdateSuccess
     }
   ] = useUpdateRoomMutation();
-  const [getRoom, { data: room = {}, error: hostelError, isError: isHostelError }] =
-    useGetRoomMutation();
+  const [
+    getRoom,
+    { data: room = {}, error: hostelError, isError: isHostelError, isLoading: isHostelLoading }
+  ] = useGetRoomMutation();
 
   const {
     roomImageUrl,
@@ -149,75 +152,76 @@ const EditHostelRoom = () => {
         />
       </label>
 
-      <form onSubmit={handleUpdateRoom} ref={formRef}>
-        <h1 className='text-2xl font-semibold mt-4'>Edit Room information</h1>
+      {isHostelLoading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleUpdateRoom} ref={formRef}>
+          <h1 className='text-2xl font-semibold mt-4'>Edit Room information</h1>
 
-        <FormInput
-          required
-          type='text'
-          autoComplete='off'
-          label='Room Number'
-          inputID='room-number'
-          key={defaultRoomNumber}
-          inputName='room-number'
-          inputRef={roomNumberRef}
-          extraLabelClassNames='mt-[15px]'
-          defaultValue={defaultRoomNumber.toString()}
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            required
+            type='text'
+            autoComplete='off'
+            label='Room Number'
+            inputID='room-number'
+            inputName='room-number'
+            inputRef={roomNumberRef}
+            extraLabelClassNames='mt-[15px]'
+            defaultValue={defaultRoomNumber.toString()}
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+          />
 
-        <FormInput
-          type='text'
-          inputID='floor'
-          inputName='floor'
-          autoComplete='off'
-          key={defaultFloor}
-          inputRef={floorRef}
-          label='Floor Number'
-          extraLabelClassNames='mt-[15px]'
-          defaultValue={defaultFloor.toString()}
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='text'
+            inputID='floor'
+            inputName='floor'
+            autoComplete='off'
+            inputRef={floorRef}
+            label='Floor Number'
+            extraLabelClassNames='mt-[15px]'
+            defaultValue={defaultFloor.toString()}
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+          />
 
-        <FormInput
-          type='text'
-          autoComplete='off'
-          inputID='occupants'
-          inputName='occupants'
-          inputRef={occupantsRef}
-          key={defaultMaxOccupants}
-          label='Maximum no. of occupants'
-          extraLabelClassNames='mt-[15px]'
-          defaultValue={defaultMaxOccupants.toString()}
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='text'
+            autoComplete='off'
+            inputID='occupants'
+            inputName='occupants'
+            inputRef={occupantsRef}
+            label='Maximum no. of occupants'
+            extraLabelClassNames='mt-[15px]'
+            defaultValue={defaultMaxOccupants.toString()}
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+          />
 
-        <FormInput
-          type='file'
-          label='Room Image'
-          inputID='room-image'
-          inputName='room-image'
-          inputRef={roomImageRef}
-          accept={ACCEPTED_IMAGE_TYPES}
-          extraLabelClassNames='mt-[15px]'
-          onChange={e => updatePreviewImage(e.target.files?.[0])}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='file'
+            label='Room Image'
+            inputID='room-image'
+            inputName='room-image'
+            inputRef={roomImageRef}
+            accept={ACCEPTED_IMAGE_TYPES}
+            extraLabelClassNames='mt-[15px]'
+            onChange={e => updatePreviewImage(e.target.files?.[0])}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+          />
 
-        <AuthButton
-          type='submit'
-          title='Update Room'
-          disabled={isUpdateLoading}
-          isLoading={isUpdateLoading}
-          extraClassNames={`!w-1/2 mx-auto ${
-            prefersDarkMode &&
-            'dark:bg-zircon dark:text-nile-blue-900 dark:hover:bg-transparent dark:hover:text-zircon'
-          }`}
-        />
-      </form>
+          <AuthButton
+            type='submit'
+            title='Update Room'
+            disabled={isUpdateLoading}
+            isLoading={isUpdateLoading}
+            extraClassNames={`!w-1/2 mx-auto ${
+              prefersDarkMode &&
+              'dark:bg-zircon dark:text-nile-blue-900 dark:hover:bg-transparent dark:hover:text-zircon'
+            }`}
+          />
+        </form>
+      )}
 
       <div className='mt-10 col-start-1 col-end-3'>
         <h1 className='mb-3'>Room Occupants</h1>
@@ -225,9 +229,8 @@ const EditHostelRoom = () => {
         <ul>
           {occupants.length > 0 ? (
             occupants.map(occupant => (
-              <li>
+              <li key={occupant._id}>
                 <OccupantTab
-                  key={occupant._id}
                   occupant={occupant}
                   onDeleteOccupant={() => handleDeleteOccupant(occupant._id, occupant.name)}
                 />
