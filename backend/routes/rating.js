@@ -32,4 +32,20 @@ router.route('/').post(async (req, res) => {
   }
 });
 
+router.route('/:userID/:roomID').get(async (req, res) => {
+  try {
+    const { userID, roomID } = req.params;
+
+    const rating = await Rating.findOne({ roomID, userID }).populate('userID');
+
+    if (rating) {
+      res.status(200).json(rating);
+    } else {
+      res.status(400).send('No user rating for this room');
+    }
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
 module.exports = router;

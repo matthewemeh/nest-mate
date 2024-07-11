@@ -12,7 +12,7 @@ import FaHotelDark from 'assets/fa-bed-dark.svg';
 import FaHotelLight from 'assets/fa-bed-light.svg';
 
 import Constants from 'Constants';
-import { showAlert } from 'utils';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 const AddHostelRoom = () => {
   const { hostelID } = useParams();
@@ -80,10 +80,7 @@ const AddHostelRoom = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (

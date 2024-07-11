@@ -17,8 +17,8 @@ import {
 } from 'services/apis/userApi/userStoreApi';
 
 import Constants from 'Constants';
-import { showAlert } from 'utils';
 import RiUser3Line from 'assets/ri-user-3-line.svg';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 const Profile = () => {
   const { FORGOT_PASSWORD, LOGIN } = PATHS;
@@ -141,26 +141,15 @@ const Profile = () => {
   }, [isDeleteSuccess]);
 
   useEffect(() => {
-    if (isUpdateError && updateError && 'status' in updateError) {
-      showAlert({ msg: `${updateError.data ?? 'An error occured while updating your profile'}` });
-      console.error(updateError);
-    }
+    handleReduxQueryError(isUpdateError, updateError);
   }, [updateError, isUpdateError]);
 
   useEffect(() => {
-    if (isDeleteError && deleteError && 'status' in deleteError) {
-      showAlert({ msg: `${deleteError.data ?? 'An error occured while deleting your profile'}` });
-      console.error(deleteError);
-    }
+    handleReduxQueryError(isDeleteError, deleteError);
   }, [deleteError, isDeleteError]);
 
   useEffect(() => {
-    if (isProfileImagError && profileImageError && 'status' in profileImageError) {
-      showAlert({
-        msg: `${profileImageError.data ?? 'An error occured while deleting your profile'}`
-      });
-      console.error(profileImageError);
-    }
+    handleReduxQueryError(isProfileImagError, profileImageError);
   }, [profileImageError, isProfileImagError]);
 
   return (

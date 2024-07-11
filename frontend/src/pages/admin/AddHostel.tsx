@@ -11,7 +11,7 @@ import FaHotelDark from 'assets/fa-hotel-dark.svg';
 import FaHotelLight from 'assets/fa-hotel-light.svg';
 
 import Constants from 'Constants';
-import { showAlert } from 'utils';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 const AddHostel = () => {
   const { ACCEPTED_IMAGE_TYPES } = Constants;
@@ -69,10 +69,7 @@ const AddHostel = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (

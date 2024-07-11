@@ -5,6 +5,7 @@ import { useAppSelector } from 'hooks/useRootStorage';
 
 interface Props {
   list: string[];
+  disabled?: boolean;
   tabIndex?: number;
   chevronImage?: string;
   selectedValue: string;
@@ -17,6 +18,7 @@ interface Props {
 const Dropdown: React.FC<Props> = ({
   list,
   tabIndex,
+  disabled,
   chevronImage,
   onSelectItem,
   selectedValue,
@@ -30,6 +32,7 @@ const Dropdown: React.FC<Props> = ({
   return (
     <button
       type='button'
+      disabled={disabled}
       id='dropdown-button'
       tabIndex={tabIndex}
       aria-haspopup={true}
@@ -37,7 +40,7 @@ const Dropdown: React.FC<Props> = ({
       aria-expanded={dropdownActive}
       onBlur={() => setDropdownActive(false)}
       onClick={() => setDropdownActive(true)}
-      className={`relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-nile-blue-900 ${extraDropdownButtonClassNames}`}>
+      className={`relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-nile-blue-900 disabled:cursor-not-allowed ${extraDropdownButtonClassNames}`}>
       <p className='cursor-[inherit]'>{selectedValue}</p>
       <img
         alt='chevron-image'

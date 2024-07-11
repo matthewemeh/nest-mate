@@ -7,7 +7,7 @@ import useAdmin from 'hooks/useAdmin';
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useReserveSpaceMutation } from 'services/apis/userApi/userStoreApi';
 
-import { showAlert } from 'utils';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 interface Props {
   room: Room;
@@ -39,10 +39,7 @@ const RoomTab: React.FC<Props> = ({ room }) => {
   }, [isReserveSuccess]);
 
   useEffect(() => {
-    if (isReserveError && reserveError && 'status' in reserveError) {
-      showAlert({ msg: `${reserveError.data ?? ''}` });
-      console.error(reserveError);
-    }
+    handleReduxQueryError(isReserveError, reserveError);
   }, [reserveError, isReserveError]);
 
   return (
@@ -52,7 +49,7 @@ const RoomTab: React.FC<Props> = ({ room }) => {
           ? 'grid-cols-[repeat(3,minmax(0,1fr))_auto]'
           : 'grid-cols-[repeat(3,minmax(0,1fr))_auto_auto]'
       }`}>
-      <p>{roomNumber.toString().padStart(3, '0')}</p>
+      <p>{roomNumber}</p>
       <p>{floor}</p>
       <p>{occupants.length}</p>
       <Button

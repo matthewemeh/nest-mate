@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MdOutlineBallot } from 'react-icons/md';
 
-import { showAlert } from 'utils';
+import { handleReduxQueryError } from 'utils';
 
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useGetReservationsMutation } from 'services/apis/reservationApi/reservationStoreApi';
@@ -23,10 +23,7 @@ const Reservations = () => {
   }, []);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (

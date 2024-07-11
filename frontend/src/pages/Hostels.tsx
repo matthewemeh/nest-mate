@@ -10,8 +10,8 @@ import useAdmin from 'hooks/useAdmin';
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useGetHostelsMutation } from 'services/apis/hostelApi/hostelStoreApi';
 
-import { showAlert } from 'utils';
 import { PATHS } from 'routes/PathConstants';
+import { handleReduxQueryError } from 'utils';
 
 const Hostels = () => {
   const MIN_PAGE_INDEX = 1;
@@ -32,10 +32,7 @@ const Hostels = () => {
   useEffect(() => setPage(MIN_PAGE_INDEX), [limit]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (

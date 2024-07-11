@@ -1,11 +1,8 @@
-import { FaUserSlash } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useRef, useState, useEffect, useMemo } from 'react';
 
 import Loading from 'components/Loading';
 import PageLayout from 'layouts/PageLayout';
-import Button from 'components/buttons/Button';
-import OccupantTab from 'components/OccupantTab';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
@@ -16,14 +13,11 @@ import FaHotelDark from 'assets/fa-bed-dark.svg';
 import FaHotelLight from 'assets/fa-bed-light.svg';
 
 import Constants from 'Constants';
-import { showAlert } from 'utils';
-import { PATHS } from 'routes/PathConstants';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 const EditHostelRoom = () => {
-  const { RESERVATIONS } = PATHS;
   const { ACCEPTED_IMAGE_TYPES } = Constants;
 
-  const navigate = useNavigate();
   const { roomID } = useParams();
   const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { _id: userID } = useAppSelector(state => state.userStore.currentUser);
@@ -43,7 +37,6 @@ const EditHostelRoom = () => {
 
   const {
     roomImageUrl,
-    occupants = [],
     floor: defaultFloor = 0,
     roomNumber: defaultRoomNumber = 0,
     maxOccupants: defaultMaxOccupants = 6
@@ -97,13 +90,6 @@ const EditHostelRoom = () => {
     updateRoom(roomPayload);
   };
 
-  const handleDeleteOccupant = (occupantID: string, occupantName: string) => {
-    const isDeletedConfirmed: boolean = window.confirm(
-      `Are you sure you want to delete ${occupantName} from this room?`
-    );
-    if (isDeletedConfirmed) updateRoom({ _id: roomID!, userID, occupantID });
-  };
-
   useEffect(() => {
     getRoom({ _id: roomID! });
   }, [roomID]);
@@ -120,17 +106,11 @@ const EditHostelRoom = () => {
   }, [isUpdateSuccess]);
 
   useEffect(() => {
-    if (isUpdateError && updateError && 'status' in updateError) {
-      showAlert({ msg: `${updateError.data ?? ''}` });
-      console.error(updateError);
-    }
+    handleReduxQueryError(isUpdateError, updateError);
   }, [updateError, isUpdateError]);
 
   useEffect(() => {
-    if (isHostelError && hostelError && 'status' in hostelError) {
-      showAlert({ msg: `${hostelError.data ?? ''}` });
-      console.error(hostelError);
-    }
+    handleReduxQueryError(isHostelError, hostelError);
   }, [hostelError, isHostelError]);
 
   return (
@@ -222,29 +202,6 @@ const EditHostelRoom = () => {
           />
         </form>
       )}
-
-      <div className='mt-10 col-start-1 col-end-3'>
-        <h1 className='mb-3'>Room Occupants</h1>
-
-        <ul>
-          {occupants.length > 0 ? (
-            occupants.map(occupant => (
-              <li key={occupant._id}>
-                <OccupantTab
-                  occupant={occupant}
-                  onDeleteOccupant={() => handleDeleteOccupant(occupant._id, occupant.name)}
-                />
-              </li>
-            ))
-          ) : (
-            <div className='flex flex-col gap-4 items-center justify-center'>
-              <FaUserSlash className='w-10 h-10' />
-              No Occupants Available
-              <Button content='Check Reservations' onClick={() => navigate(RESERVATIONS)} />
-            </div>
-          )}
-        </ul>
-      </div>
     </PageLayout>
   );
 };

@@ -8,7 +8,7 @@ import {
 
 import Button from './buttons/Button';
 
-import { showAlert } from 'utils';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 interface Props {
   reservation: Reservation;
@@ -32,17 +32,11 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
   ] = useDeclineReservationMutation();
 
   useEffect(() => {
-    if (isConfirmError && confirmError && 'status' in confirmError) {
-      showAlert({ msg: `${confirmError.data ?? ''}` });
-      console.error(confirmError);
-    }
+    handleReduxQueryError(isConfirmError, confirmError);
   }, [confirmError, isConfirmError]);
 
   useEffect(() => {
-    if (isDeclineError && declineError && 'status' in declineError) {
-      showAlert({ msg: `${declineError.data ?? ''}` });
-      console.error(declineError);
-    }
+    handleReduxQueryError(isDeclineError, declineError);
   }, [declineError, isDeclineError]);
 
   return (

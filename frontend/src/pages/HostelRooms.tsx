@@ -2,7 +2,7 @@ import { FaBed } from 'react-icons/fa';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { showAlert } from 'utils';
+import { handleReduxQueryError, showAlert } from 'utils';
 
 import RoomTab from 'components/RoomTab';
 import Button from 'components/buttons/Button';
@@ -51,17 +51,11 @@ const HostelRooms = () => {
   }, [hostelID]);
 
   useEffect(() => {
-    if (isGetError && getError && 'status' in getError) {
-      showAlert({ msg: `${getError.data ?? ''}` });
-      console.error(getError);
-    }
+    handleReduxQueryError(isGetError, getError);
   }, [getError, isGetError]);
 
   useEffect(() => {
-    if (isDeleteError && deleteError && 'status' in deleteError) {
-      showAlert({ msg: `${deleteError.data ?? ''}` });
-      console.error(deleteError);
-    }
+    handleReduxQueryError(isDeleteError, deleteError);
   }, [deleteError, isDeleteError]);
 
   useEffect(() => {

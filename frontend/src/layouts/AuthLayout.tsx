@@ -1,12 +1,13 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { createContext, Suspense, useCallback, useEffect, useMemo } from 'react';
 
-import { showAlert } from 'utils';
 import Loading from 'components/Loading';
 import { PATHS } from 'routes/PathConstants';
 import { updateUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 import { useUpdateUserMutation } from 'services/apis/userApi/userStoreApi';
+
+import { handleReduxQueryError, showAlert } from 'utils';
 
 export const AuthContext = createContext<Partial<AuthContext>>({});
 
@@ -58,10 +59,7 @@ const AuthLayout = () => {
   );
 
   useEffect(() => {
-    if (isUserUpdateError && userUpdateError && 'status' in userUpdateError) {
-      showAlert({ msg: `${userUpdateError.data ?? ''}` });
-      console.error(userUpdateError);
-    }
+    handleReduxQueryError(isUserUpdateError, userUpdateError);
   }, [userUpdateError, isUserUpdateError]);
 
   return (

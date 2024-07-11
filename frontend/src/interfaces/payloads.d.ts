@@ -112,8 +112,12 @@ interface EmailSendPayload {
   subject?: string;
 }
 
+interface RatingFetchPayload {
+  roomID: string;
+  userID: string;
+}
+
 interface RatingUpdatePayload {
-  _id: string;
   value: number;
   roomID: string;
   userID: string;

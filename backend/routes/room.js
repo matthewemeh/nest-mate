@@ -40,7 +40,10 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   try {
-    const room = await Room.findById(id).populate(['ratings', 'occupants']);
+    const room = await Room.findById(id).populate([
+      { path: 'ratings', populate: { path: 'userID' } },
+      'occupants'
+    ]);
 
     res.status(200).json(room);
   } catch (err) {

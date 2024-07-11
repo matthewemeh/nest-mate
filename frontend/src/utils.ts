@@ -1,4 +1,6 @@
 import { encrypt, decrypt } from 'n-krypta';
+import { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export const toggleClass = (element?: HTMLElement | null, ...classes: string[]) => {
   if (element) classes.forEach(className => element.classList.toggle(className));
@@ -286,4 +288,14 @@ export const checkArrayEquality = (array1: any[], array2: any[]): boolean => {
   }
 
   return true;
+};
+
+export const handleReduxQueryError = (
+  isError: boolean,
+  error?: FetchBaseQueryError | SerializedError
+) => {
+  if (isError && error && 'status' in error) {
+    showAlert({ msg: `${error.data ?? ''}` });
+    console.error(error);
+  }
 };
