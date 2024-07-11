@@ -7,12 +7,14 @@ router.route('/').get(async (req, res) => {
     const limit = Number(req.query['limit']);
     const type = req.query['type'];
 
+    const populateFields = ['userID'];
+
     if (isNaN(page) || isNaN(limit)) {
       entries = type ? await Entry.find({ type }) : await Entry.find();
     } else {
       entries = type
-        ? await Entry.paginate({ type }, { page, limit })
-        : await Entry.paginate({}, { page, limit });
+        ? await Entry.paginate({ type }, { page, limit, populate: populateFields })
+        : await Entry.paginate({}, { page, limit, populate: populateFields });
     }
 
     res.status(200).json(entries);

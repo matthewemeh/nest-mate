@@ -236,7 +236,7 @@ const Profile = () => {
             type='button'
             title='Reset Password?'
             onClick={handleResetPassword}
-            extraClassNames={`!bg-transparent !text-nile-blue-900 !border-transparent h-0 shadow-none w-max mx-auto ${
+            extraClassNames={`!bg-transparent !text-lightning-yellow-700 !border-transparent h-0 shadow-none w-max mx-auto ${
               prefersDarkMode && 'dark:!text-zircon'
             }`}
           />

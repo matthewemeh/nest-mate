@@ -1,15 +1,17 @@
 import { BsGridFill } from 'react-icons/bs';
+import { FiUserCheck } from 'react-icons/fi';
 import { MdOutlineBallot } from 'react-icons/md';
 import { RiHome4Line, RiUser3Line, RiHotelLine } from 'react-icons/ri';
 
-import useAuth from 'hooks/useAuth';
 import NavigationTab from './NavigationTab';
+
+import useAuth from 'hooks/useAuth';
 import { PATHS } from 'routes/PathConstants';
 import { useAppSelector } from 'hooks/useRootStorage';
 
 const Navigation = () => {
   const isAuthorized: boolean = useAuth();
-  const { HOME, PROFILE, HOSTELS, RESERVATIONS, DASHBOARD } = PATHS;
+  const { HOME, PROFILE, HOSTELS, RESERVATIONS, DASHBOARD, ENTRIES } = PATHS;
   const { prefersDarkMode } = useAppSelector(state => state.userData);
 
   return (
@@ -39,6 +41,12 @@ const Navigation = () => {
               <NavigationTab
                 to={DASHBOARD}
                 icon={<BsGridFill className='text-current text-[21px]' />}
+              />
+            </li>
+            <li>
+              <NavigationTab
+                to={ENTRIES}
+                icon={<FiUserCheck className='text-current text-[21px]' />}
               />
             </li>
           </>

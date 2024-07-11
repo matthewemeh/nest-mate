@@ -6,6 +6,7 @@ const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 const Room = require('../models/room.model');
 const Rating = require('../models/rating.model');
 const Hostel = require('../models/hostel.model');
+const { Entry } = require('../models/entry.model');
 const { User, roles } = require('../models/user.model');
 const { Reservation } = require('../models/reservation.model');
 
@@ -184,6 +185,8 @@ router.route('/:id').delete(async (req, res) => {
     reservations.forEach(async ({ _id: reservationID }) => {
       await User.updateOne({ reservationID }, { $set: { reservationID: '' } });
     });
+
+    await Entry.deleteMany({ roomID: id });
 
     await Rating.deleteMany({ roomID: id });
 

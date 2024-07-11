@@ -8,6 +8,7 @@ import { useGetReservationsMutation } from 'services/apis/reservationApi/reserva
 
 import ReservationTab from 'components/ReservationTab';
 import PaginationControls from 'components/PaginationControls';
+import ReservationsHeader from 'components/ReservationsHeader';
 
 const Reservations = () => {
   const MIN_PAGE_INDEX = 1;
@@ -40,20 +41,14 @@ const Reservations = () => {
           />
         </div>
 
-        {paginatedReservations.length > 0 && (
-          <div className='grid gap-4 grid-cols-[repeat(5,minmax(0,1fr))] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
-            <p>Username</p>
-            <p>Hostel Name</p>
-            <p>Room Number</p>
-            <p>Max Occupants</p>
-            <p>Occupants</p>
-          </div>
-        )}
+        {paginatedReservations.length > 0 && <ReservationsHeader />}
 
-        <ul className='flex flex-col gap-3 mt-4'>
+        <ul className='flex flex-col gap-4 mt-4'>
           {paginatedReservations.length > 0 ? (
             paginatedReservations.map(reservation => (
-              <li key={reservation._id}>
+              <li
+                key={reservation._id}
+                className='border-t border-lightning-yellow-700 last:border-b'>
                 <ReservationTab reservation={reservation} />
               </li>
             ))

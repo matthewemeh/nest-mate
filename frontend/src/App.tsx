@@ -12,6 +12,7 @@ import { addClass, removeClass } from 'utils';
 import { updateUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 
+const Entries = lazy(() => import('pages/admin/Entries'));
 const AddHostel = lazy(() => import('pages/admin/AddHostel'));
 const Dashboard = lazy(() => import('pages/admin/Dashboard'));
 const Reservations = lazy(() => import('pages/admin/Reservations'));
@@ -19,7 +20,7 @@ const AddHostelRoom = lazy(() => import('pages/admin/AddHostelRoom'));
 const EditHostelRoom = lazy(() => import('pages/admin/EditHostelRoom'));
 
 const App = () => {
-  const { DASHBOARD, RESERVATIONS, ADD_HOSTEL, ADD_HOSTEL_ROOM, EDIT_HOSTEL_ROOM } = PATHS;
+  const { DASHBOARD, RESERVATIONS, ADD_HOSTEL, ADD_HOSTEL_ROOM, EDIT_HOSTEL_ROOM, ENTRIES } = PATHS;
 
   const dispatch = useAppDispatch();
   const isAuthorized: boolean = useAuth();
@@ -28,6 +29,7 @@ const App = () => {
     if (isAuthorized) {
       return [
         ...routes,
+        { path: ENTRIES, element: <Entries /> },
         { path: DASHBOARD, element: <Dashboard /> },
         { path: ADD_HOSTEL, element: <AddHostel /> },
         { path: RESERVATIONS, element: <Reservations /> },

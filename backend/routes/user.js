@@ -254,11 +254,10 @@ router.route('/check-out/:id').post(async (req, res) => {
       return res.status(401).send('You are not authorized to carry out this operation');
     }
 
-    const userToBeCheckedOut = await User.findById(id);
-    userToBeCheckedOut.checkedIn = false;
-    userToBeCheckedOut.lastCheckedOut = new Date().toISOString();
-    delete userToBeCheckedOut.roomID;
-    await userToBeCheckedOut.save();
+    await User.updateOne(
+      { _id: id },
+      { $set: { checkedIn: false, lastCheckedOut: new Date().toISOString(), roomID: null } }
+    );
 
     const newEntry = new Entry({ type: entryStatuses.CHECK_OUT, roomID, userID: id });
     await newEntry.save();
@@ -372,11 +371,13 @@ router.route('/:id').delete(async (req, res) => {
 
     await User.findByIdAndDelete(id);
 
+    await Entry.deleteMany({ userID: id });
+
     await Room.updateOne({ occupants: id }, { $pull: { occupants: id } });
 
     await Rating.deleteMany({ userID: id });
 
-    await Reservation.deleteOne({ userID: id });
+    await Reservation.deleteMany({ userID: id });
 
     /* delete user image */
     const filePath = `users/${id}`;

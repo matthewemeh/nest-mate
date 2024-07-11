@@ -23,7 +23,7 @@ const initialState: UserStore = {
   }
 };
 
-type PaginatedUsersResponse = PaginatedResponse | User[];
+type PaginatedUsersResponse = PaginatedResponse<User> | User[];
 type ActionHandler<T> = CaseReducer<UserStore, PayloadAction<T>>;
 
 const refreshAction: ActionHandler<PaginatedUsersResponse> = (state, { payload }) => {

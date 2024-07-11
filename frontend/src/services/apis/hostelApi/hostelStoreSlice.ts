@@ -3,7 +3,7 @@ import hostelStoreApi from './hostelStoreApi';
 
 const initialState: HostelStore = { pages: -1, paginatedHostels: [], allHostels: [] };
 
-type PaginatedHostelsResponse = PaginatedResponse | Hostel[];
+type PaginatedHostelsResponse = PaginatedResponse<Hostel> | Hostel[];
 type ActionHandler<T> = CaseReducer<HostelStore, PayloadAction<T>>;
 
 const refreshAction: ActionHandler<PaginatedHostelsResponse> = (state, { payload }) => {

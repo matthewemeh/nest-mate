@@ -12,6 +12,7 @@ import {
 
 import PageLayout from 'layouts/PageLayout';
 import ReservationTab from 'components/ReservationTab';
+import ReservationsHeader from 'components/ReservationsHeader';
 import PaginationControls from 'components/PaginationControls';
 import ReservationSummaryCard from 'components/ReservationSummaryCard';
 
@@ -34,7 +35,7 @@ const Dashboard = () => {
   const [getEntries, { data = [] }] = useGetEntriesMutation();
   const [getReservationsLength, { data: reservationsLength = 0 }] =
     useGetReservationsLengthMutation();
-  const entriesData = useMemo(() => data as Entry[], [data]);
+  const entries = useMemo(() => data as Entry[], [data]);
 
   useEffect(() => {
     getEntries({});
@@ -55,7 +56,7 @@ const Dashboard = () => {
           <ReservationSummaryCard
             title='Check-in'
             value={
-              entriesData.filter(({ type, createdAt }) => {
+              entries.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
                 return type === 'CHECK_IN' && monthDate === todayDate;
               }).length
@@ -64,7 +65,7 @@ const Dashboard = () => {
           <ReservationSummaryCard
             title='Check-out'
             value={
-              entriesData.filter(({ type, createdAt }) => {
+              entries.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
                 return type === 'CHECK_OUT' && monthDate === todayDate;
               }).length
@@ -79,10 +80,16 @@ const Dashboard = () => {
             <PaginationControls page={page} setPage={setPage} pages={pages} />
           </div>
 
-          <div>
+          {paginatedReservations.length > 0 && <ReservationsHeader />}
+
+          <ul className='flex flex-col gap-4 mt-4'>
             {paginatedReservations.length > 0 ? (
               paginatedReservations.map(reservation => (
-                <ReservationTab key={reservation._id} reservation={reservation} />
+                <li
+                  key={reservation._id}
+                  className='border-t border-lightning-yellow-700 last:border-b'>
+                  <ReservationTab reservation={reservation} />
+                </li>
               ))
             ) : (
               <div className='mt-5 flex flex-col gap-4 items-center justify-center'>
@@ -90,7 +97,7 @@ const Dashboard = () => {
                 No Reservations made
               </div>
             )}
-          </div>
+          </ul>
         </section>
       </section>
     </PageLayout>

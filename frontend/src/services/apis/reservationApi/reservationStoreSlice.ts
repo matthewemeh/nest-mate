@@ -3,11 +3,11 @@ import reservationStoreApi from './reservationStoreApi';
 
 const initialState: ReservationStore = {
   pages: -1,
-  paginatedReservations: [],
-  allReservations: []
+  allReservations: [],
+  paginatedReservations: []
 };
 
-type PaginatedReservationsResponse = PaginatedResponse | Reservation[];
+type PaginatedReservationsResponse = PaginatedResponse<Reservation> | Reservation[];
 type ActionHandler<T> = CaseReducer<ReservationStore, PayloadAction<T>>;
 
 const refreshAction: ActionHandler<PaginatedReservationsResponse> = (state, { payload }) => {

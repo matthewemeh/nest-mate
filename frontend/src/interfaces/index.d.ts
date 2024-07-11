@@ -6,7 +6,7 @@ interface MongoInterface {
 
 interface Entry extends MongoInterface {
   roomID: string;
-  userID: string;
+  userID: User;
   type: EntryStatus;
 }
 
@@ -61,8 +61,8 @@ interface UserData {
   prefersDarkMode: boolean;
 }
 
-interface PaginatedResponse {
-  docs: any[];
+interface PaginatedResponse<T> {
+  docs: T[];
   page: number;
   total: number;
   limit: number;

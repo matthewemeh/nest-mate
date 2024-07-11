@@ -3,7 +3,7 @@ import roomStoreApi from './roomStoreApi';
 
 const initialState: RoomStore = { pages: -1, paginatedRooms: [], allRooms: [] };
 
-type PaginatedRoomsResponse = PaginatedResponse | Room[];
+type PaginatedRoomsResponse = PaginatedResponse<Room> | Room[];
 type ActionHandler<T> = CaseReducer<RoomStore, PayloadAction<T>>;
 
 const refreshAction: ActionHandler<PaginatedRoomsResponse> = (state, { payload }) => {

@@ -24,12 +24,30 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
 
   const [
     confirmReservation,
-    { error: confirmError, isError: isConfirmError, isLoading: isConfirmLoading }
+    {
+      error: confirmError,
+      isError: isConfirmError,
+      isLoading: isConfirmLoading,
+      isSuccess: isConfirmSuccess
+    }
   ] = useConfirmReservationMutation();
   const [
     declineReservation,
-    { error: declineError, isError: isDeclineError, isLoading: isDeclineLoading }
+    {
+      error: declineError,
+      isError: isDeclineError,
+      isLoading: isDeclineLoading,
+      isSuccess: isDeclineSuccess
+    }
   ] = useDeclineReservationMutation();
+
+  useEffect(() => {
+    if (isConfirmSuccess) showAlert({ msg: `${userName}'s reservation confirmed` });
+  }, [isConfirmSuccess]);
+
+  useEffect(() => {
+    if (isDeclineSuccess) showAlert({ msg: `${userName}'s reservation declined` });
+  }, [isDeclineSuccess]);
 
   useEffect(() => {
     handleReduxQueryError(isConfirmError, confirmError);
@@ -40,12 +58,7 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
   }, [declineError, isDeclineError]);
 
   return (
-    <div
-      className={`grid gap-4 px-4 ${
-        status === 'PENDING'
-          ? 'grid-cols-[repeat(5,minmax(0,1fr))_auto_auto]'
-          : 'grid-cols-[repeat(5,minmax(0,1fr))_auto]'
-      }`}>
+    <div className='grid items-center grid-cols-[repeat(5,minmax(0,1fr))_82.5469px_80.3438px] gap-4 px-4 py-2'>
       <p className='overflow-hidden whitespace-nowrap text-ellipsis'>{userName}</p>
       <p className='overflow-hidden whitespace-nowrap text-ellipsis'>{hostelName}</p>
       <p>{roomNumber}</p>
@@ -55,18 +68,20 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
         <>
           <Button
             content='Confirm'
-            disabled={isConfirmLoading}
             onClick={() => confirmReservation({ reservationID, adminID })}
+            disabled={isConfirmLoading || isConfirmSuccess || isDeclineSuccess}
           />
           <Button
             type='outline'
             content='Decline'
-            disabled={isDeclineLoading}
             onClick={() => declineReservation({ reservationID, adminID })}
+            disabled={isDeclineLoading || isConfirmSuccess || isDeclineSuccess}
           />
         </>
       ) : (
-        <p className='text-lightning-yellow-400 font-semibold'>{status}</p>
+        <p className='text-lightning-yellow-400 font-semibold text-right col-start-6 col-end-8'>
+          {status}
+        </p>
       )}
     </div>
   );

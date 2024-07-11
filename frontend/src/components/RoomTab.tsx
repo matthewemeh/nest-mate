@@ -44,7 +44,7 @@ const RoomTab: React.FC<Props> = ({ room }) => {
 
   return (
     <div
-      className={`grid gap-4 px-4 ${
+      className={`border-t border-lightning-yellow-700 items-center grid gap-4 pl-4 py-2 last:border-b ${
         isAdmin
           ? 'grid-cols-[repeat(3,minmax(0,1fr))_auto]'
           : 'grid-cols-[repeat(3,minmax(0,1fr))_auto_auto]'
@@ -59,7 +59,6 @@ const RoomTab: React.FC<Props> = ({ room }) => {
       {isAdmin || (
         <Button
           content='Reserve Space'
-          extraClassNames='-mr-4'
           onClick={() => reserveSpace({ userID, roomID, hostelID })}
           disabled={
             isReserveLoading ||

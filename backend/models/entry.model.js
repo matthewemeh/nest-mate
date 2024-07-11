@@ -7,8 +7,8 @@ const entryStatuses = { CHECK_IN: 'CHECK_IN', CHECK_OUT: 'CHECK_OUT' };
 const EntrySchema = new Schema(
   {
     type: { type: String, required: true },
-    roomID: { type: String, required: true },
-    userID: { type: String, required: true }
+    roomID: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
+    userID: { type: Schema.Types.ObjectId, ref: 'User', required: true }
   },
   { minimize: false, timestamps: true, versionKey: false, collection: 'entries' }
 );
