@@ -6,11 +6,12 @@ import { PATHS } from 'routes/PathConstants';
 import { useLoginMutation } from 'services/apis/userApi/userStoreApi';
 import { resetUserData, updateUserData } from 'services/userData/userDataSlice';
 
-import { showAlert } from 'utils';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 import { useAppDispatch } from 'hooks/useRootStorage';
 import { logout } from 'services/apis/userApi/userStoreSlice';
+
+import { handleReduxQueryError } from 'utils';
 
 const Login = () => {
   const { HOME, FORGOT_PASSWORD, REGISTER } = PATHS;
@@ -37,10 +38,7 @@ const Login = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (

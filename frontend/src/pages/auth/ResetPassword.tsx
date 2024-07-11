@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { PATHS } from 'routes/PathConstants';
 
-import { showAlert } from 'utils';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
@@ -14,6 +13,8 @@ import Endpoints from 'services/Endpoints';
 import { updateUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 import { useUpdateUserMutation } from 'services/apis/userApi/userStoreApi';
+
+import { handleReduxQueryError, showAlert } from 'utils';
 
 const ResetPassword = () => {
   const { USERS } = Endpoints;
@@ -66,10 +67,7 @@ const ResetPassword = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   useEffect(() => {

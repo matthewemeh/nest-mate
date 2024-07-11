@@ -10,10 +10,16 @@ export const ratingApi = createApi({
   endpoints: builder => ({
     updateRating: builder.mutation({
       query: (body: RatingUpdatePayload) => ({ body, url: RATINGS, method: 'POST' })
+    }),
+    getRating: builder.mutation({
+      query: (body: RatingFetchPayload) => ({
+        method: 'GET',
+        url: `${RATINGS}/${body.userID}/${body.roomID}`
+      })
     })
   })
 });
 
-export const { useUpdateRatingMutation } = ratingApi;
+export const { useUpdateRatingMutation, useGetRatingMutation } = ratingApi;
 
 export default ratingApi;

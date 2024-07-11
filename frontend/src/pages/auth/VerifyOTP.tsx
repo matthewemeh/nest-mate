@@ -8,7 +8,14 @@ import { PATHS } from 'routes/PathConstants';
 import { AuthContext } from 'layouts/AuthLayout';
 import { useAppSelector } from 'hooks/useRootStorage';
 import { useSendEmailMutation } from 'services/apis/emailApi';
-import { decryptString, generateOTP, secondsToMMSS, showAlert, validateOTP } from 'utils';
+import {
+  showAlert,
+  generateOTP,
+  validateOTP,
+  decryptString,
+  secondsToMMSS,
+  handleReduxQueryError
+} from 'utils';
 
 const VerifyOTP = () => {
   const NUMBER_OF_DIGITS = 6;
@@ -91,10 +98,7 @@ const VerifyOTP = () => {
   }, [generatedOtp]);
 
   useEffect(() => {
-    if (isOtpError && otpError && 'status' in otpError) {
-      showAlert({ msg: `${otpError.data ?? ''}` });
-      console.error(otpError);
-    }
+    handleReduxQueryError(isOtpError, otpError);
   }, [otpError, isOtpError]);
 
   useEffect(() => {

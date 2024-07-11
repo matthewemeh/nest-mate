@@ -6,7 +6,7 @@ import { useRegisterMutation } from 'services/apis/userApi/userStoreApi';
 
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
-import { addClass, removeClass, showAlert } from 'utils';
+import { addClass, handleReduxQueryError, removeClass } from 'utils';
 
 import Constants from 'Constants';
 import RiUser3Line from 'assets/ri-user-3-line.svg';
@@ -56,10 +56,7 @@ const Register = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isError && error && 'status' in error) {
-      showAlert({ msg: `${error.data ?? ''}` });
-      console.error(error);
-    }
+    handleReduxQueryError(isError, error);
   }, [error, isError]);
 
   return (
