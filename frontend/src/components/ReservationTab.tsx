@@ -15,15 +15,12 @@ interface Props {
 }
 
 const ReservationTab: React.FC<Props> = ({ reservation }) => {
-  const { roomID, userID, _id } = reservation;
-  const { allUsers } = useAppSelector(state => state.userStore);
-  const { allRooms } = useAppSelector(state => state.roomStore);
-  const { allHostels } = useAppSelector(state => state.hostelStore);
+  const { hostelID, roomID, userID, _id: reservationID } = reservation;
+  const { _id: adminID } = useAppSelector(state => state.userStore.currentUser);
 
-  const { name: userName } = allUsers.find(({ _id }) => _id === userID) ?? {};
-  const { name: hostelName } = allHostels.find(({ _id }) => _id === hostelID) ?? {};
-  const { roomNumber, hostelID, maxOccupants, occupants } =
-    allRooms.find(({ _id }) => _id === roomID) ?? {};
+  const { name: userName } = userID;
+  const { name: hostelName } = hostelID;
+  const { roomNumber, maxOccupants, occupants } = roomID;
 
   const [
     confirmReservation,
@@ -55,11 +52,16 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
       <p>{roomNumber}</p>
       <p>{maxOccupants}</p>
       <p>{occupants?.length ?? 0}</p>
-      <Button content='Confirm' onClick={() => confirmReservation({ reservationID: _id })} />
+      <Button
+        content='Confirm'
+        disabled={isConfirmLoading}
+        onClick={() => confirmReservation({ reservationID, adminID })}
+      />
       <Button
         type='outline'
         content='Decline'
-        onClick={() => declineReservation({ reservationID: _id })}
+        disabled={isDeclineLoading}
+        onClick={() => declineReservation({ reservationID, adminID })}
       />
     </div>
   );

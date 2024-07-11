@@ -52,7 +52,9 @@ const Reservations = () => {
 
         <div className='flex flex-col gap-3 mt-4'>
           {paginatedReservations.length > 0 ? (
-            paginatedReservations.map(reservation => <ReservationTab reservation={reservation} />)
+            paginatedReservations.map(reservation => (
+              <ReservationTab key={reservation._id} reservation={reservation} />
+            ))
           ) : (
             <div className='flex flex-col gap-4 items-center justify-center'>
               <MdOutlineBallot className='w-10 h-10' />

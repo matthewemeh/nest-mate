@@ -16,7 +16,11 @@ export const reservationStoreApi = createApi({
       })
     }),
     getReservationsLength: builder.mutation({
-      query: () => ({ method: 'GET', url: RESERVATIONS_LENGTH })
+      query: (body: GetReservationsLengthPayload) => ({
+        method: 'GET',
+        params: body.params,
+        url: RESERVATIONS_LENGTH
+      })
     })
   })
 });

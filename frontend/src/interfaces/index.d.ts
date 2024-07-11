@@ -11,8 +11,9 @@ interface Entry extends MongoInterface {
 }
 
 interface Reservation extends MongoInterface {
-  userID: string;
-  roomID: string;
+  userID: User;
+  roomID: Room;
+  hostelID: Hostel;
   status: ReservationStatus;
 }
 

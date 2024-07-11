@@ -43,11 +43,16 @@ const RoomTab: React.FC<Props> = ({ room }) => {
       showAlert({ msg: `${reserveError.data ?? ''}` });
       console.error(reserveError);
     }
-  }, [reserveError, isReserveLoading]);
+  }, [reserveError, isReserveError]);
 
   return (
-    <div className='flex items-center justify-between'>
-      <p>{roomNumber}</p>
+    <div
+      className={`grid gap-4 px-4 ${
+        isAdmin
+          ? 'grid-cols-[repeat(3,minmax(0,1fr))_auto]'
+          : 'grid-cols-[repeat(3,minmax(0,1fr))_auto_auto]'
+      }`}>
+      <p>{roomNumber.toString().padStart(3, '0')}</p>
       <p>{floor}</p>
       <p>{occupants.length}</p>
       <Button
@@ -57,8 +62,13 @@ const RoomTab: React.FC<Props> = ({ room }) => {
       {isAdmin || (
         <Button
           content='Reserve Space'
-          onClick={() => reserveSpace({ userID, roomID })}
-          disabled={reservationID.length > 0 || (userRoomID !== undefined && userRoomID.length > 0)}
+          extraClassNames='-mr-4'
+          onClick={() => reserveSpace({ userID, roomID, hostelID })}
+          disabled={
+            isReserveLoading ||
+            reservationID.length > 0 ||
+            (userRoomID !== undefined && userRoomID?.length > 0)
+          }
         />
       )}
     </div>

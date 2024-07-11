@@ -102,6 +102,7 @@ interface GetHostelsPayload {
 interface DeleteHostelPayload {
   _id: string;
   userID: string;
+  params?: Record<string, any>;
 }
 
 interface EmailSendPayload {
@@ -121,9 +122,11 @@ interface RatingUpdatePayload {
 interface ReserveSpacePayload {
   userID: string;
   roomID: string;
+  hostelID: string;
 }
 
 interface ReservationPayload {
+  adminID: string;
   reservationID: string;
 }
 
@@ -134,6 +137,10 @@ interface EntryPayload {
 }
 
 interface GetReservationsPayload {
+  params?: Record<string, any>;
+}
+
+interface GetReservationsLengthPayload {
   params?: Record<string, any>;
 }
 

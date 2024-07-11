@@ -1,9 +1,13 @@
 const multer = require('multer');
 const router = require('express').Router();
 const storage = require('../firebase-config');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+
+const Room = require('../models/room.model');
+const Rating = require('../models/rating.model');
 const Hostel = require('../models/hostel.model');
 const { User, roles } = require('../models/user.model');
-const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+const { Reservation } = require('../models/reservation.model');
 
 const upload = multer();
 
@@ -133,6 +137,20 @@ router.route('/:id').delete(async (req, res) => {
     }
 
     await Hostel.findByIdAndDelete(id);
+
+    const rooms = await Room.find({ hostelID: id });
+
+    rooms.forEach(async ({ _id: roomID }) => {
+      await User.updateMany(
+        { roomID },
+        { $set: { roomID: null, checkedIn: false, lastCheckedOut: new Date().toISOString() } }
+      );
+
+      await Rating.deleteMany({ roomID });
+    });
+    await Reservation.deleteMany({ hostelID: id });
+
+    await Room.deleteMany({ hostelID: id });
 
     let hostels;
     if (isNaN(page) || isNaN(limit)) {

@@ -1,10 +1,10 @@
-import { MdDelete } from 'react-icons/md';
 import { FaUserSlash } from 'react-icons/fa';
-import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRef, useState, useEffect, useMemo } from 'react';
 
 import PageLayout from 'layouts/PageLayout';
 import Button from 'components/buttons/Button';
+import OccupantTab from 'components/OccupantTab';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
@@ -46,7 +46,7 @@ const EditHostelRoom = () => {
     floor: defaultFloor = 0,
     roomNumber: defaultRoomNumber = 0,
     maxOccupants: defaultMaxOccupants = 6
-  } = room as Room;
+  } = useMemo(() => room as Room, [room]);
 
   const [roomImageChanged, setRoomImageChanged] = useState<boolean>(false);
 
@@ -69,7 +69,7 @@ const EditHostelRoom = () => {
       });
       setRoomImageChanged(true);
     } else {
-      imageTag.src = prefersDarkMode ? FaHotelDark : FaHotelLight;
+      imageTag.src = roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight);
       setRoomImageChanged(false);
     }
   };
@@ -82,14 +82,16 @@ const EditHostelRoom = () => {
     const maxOccupants: number = Number(occupantsRef.current!.value);
     const roomImage: File | undefined = roomImageRef.current!.files?.[0];
 
-    const roomPayload: UpdateRoomPayload = {
-      floor,
-      userID,
-      roomImage,
-      roomNumber,
-      _id: roomID!,
-      maxOccupants
-    };
+    const roomPayload: UpdateRoomPayload = { userID, _id: roomID! };
+
+    if (floor !== defaultFloor) roomPayload.floor = floor;
+    if (roomImageChanged) roomPayload.roomImage = roomImage;
+    if (roomNumber !== defaultRoomNumber) roomPayload.roomNumber = roomNumber;
+    if (maxOccupants !== defaultMaxOccupants) roomPayload.maxOccupants = maxOccupants;
+
+    if (Object.keys(roomPayload).length === 2) {
+      return showAlert({ msg: 'No changes made!' });
+    }
 
     updateRoom(roomPayload);
   };
@@ -111,7 +113,7 @@ const EditHostelRoom = () => {
       const imageTag: HTMLImageElement = roomImagePreviewRef.current!;
       imageTag.src = prefersDarkMode ? FaHotelDark : FaHotelLight;
 
-      showAlert({ msg: 'Room added successfully' });
+      showAlert({ msg: 'Room updated successfully' });
       formRef.current!.reset();
     }
   }, [isUpdateSuccess]);
@@ -145,12 +147,12 @@ const EditHostelRoom = () => {
           loading='lazy'
           ref={roomImagePreviewRef}
           src={roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
-          className={`mx-auto h-full ${roomImageChanged ? 'w-full' : 'w-2/5'}`}
+          className={`mx-auto h-full ${roomImageChanged || roomImageUrl ? 'w-full' : 'w-2/5'}`}
         />
       </label>
 
       <form onSubmit={handleUpdateRoom} ref={formRef}>
-        <h1 className='text-2xl font-semibold mt-4'>New Room information</h1>
+        <h1 className='text-2xl font-semibold mt-4'>Edit Room information</h1>
 
         <FormInput
           required
@@ -158,6 +160,7 @@ const EditHostelRoom = () => {
           autoComplete='off'
           label='Room Number'
           inputID='room-number'
+          key={defaultRoomNumber}
           inputName='room-number'
           inputRef={roomNumberRef}
           extraLabelClassNames='mt-[15px]'
@@ -171,8 +174,9 @@ const EditHostelRoom = () => {
           inputID='floor'
           inputName='floor'
           autoComplete='off'
-          label='Floor Number'
+          key={defaultFloor}
           inputRef={floorRef}
+          label='Floor Number'
           extraLabelClassNames='mt-[15px]'
           defaultValue={defaultFloor.toString()}
           formatRule={{ allowedChars: '0123456789' }}
@@ -185,6 +189,7 @@ const EditHostelRoom = () => {
           inputID='occupants'
           inputName='occupants'
           inputRef={occupantsRef}
+          key={defaultMaxOccupants}
           label='Maximum no. of occupants'
           extraLabelClassNames='mt-[15px]'
           defaultValue={defaultMaxOccupants.toString()}
@@ -216,19 +221,19 @@ const EditHostelRoom = () => {
         />
       </form>
 
-      <div className='col-start-1 col-end-3'>
-        <h1>Room Occupants</h1>
+      <div className='mt-10 col-start-1 col-end-3'>
+        <h1 className='mb-3'>Room Occupants</h1>
 
-        <div>
+        <ul>
           {occupants.length > 0 ? (
-            occupants.map(({ name, _id }) => (
-              <div className=' flex items-center justify-between'>
-                {name}
-                <MdDelete
-                  className='text-red-600'
-                  onClick={() => handleDeleteOccupant(_id, name)}
+            occupants.map(occupant => (
+              <li>
+                <OccupantTab
+                  key={occupant._id}
+                  occupant={occupant}
+                  onDeleteOccupant={() => handleDeleteOccupant(occupant._id, occupant.name)}
                 />
-              </div>
+              </li>
             ))
           ) : (
             <div className='flex flex-col gap-4 items-center justify-center'>
@@ -237,7 +242,7 @@ const EditHostelRoom = () => {
               <Button content='Check Reservations' onClick={() => navigate(RESERVATIONS)} />
             </div>
           )}
-        </div>
+        </ul>
       </div>
     </PageLayout>
   );

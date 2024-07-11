@@ -15,8 +15,13 @@ import ReservationTab from 'components/ReservationTab';
 import PaginationControls from 'components/PaginationControls';
 import ReservationSummaryCard from 'components/ReservationSummaryCard';
 
+import Constants from 'Constants';
+
 const Dashboard = () => {
   const MIN_PAGE_INDEX = 1;
+  const {
+    RESERVATION_STATUSES: { CONFIRMED }
+  } = Constants;
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(MIN_PAGE_INDEX);
@@ -26,13 +31,14 @@ const Dashboard = () => {
   useEffect(() => setPage(MIN_PAGE_INDEX), [limit]);
 
   const [getReservations] = useGetReservationsMutation();
-  const [getEntries, { data: entriesData = [] }] = useGetEntriesMutation();
+  const [getEntries, { data = [] }] = useGetEntriesMutation();
   const [getReservationsLength, { data: reservationsLength = 0 }] =
     useGetReservationsLengthMutation();
+  const entriesData = useMemo(() => data as Entry[], [data]);
 
   useEffect(() => {
     getEntries({});
-    getReservationsLength({});
+    getReservationsLength({ params: { status: CONFIRMED } });
   }, []);
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const Dashboard = () => {
           <ReservationSummaryCard
             title='Check-in'
             value={
-              (entriesData as Entry[]).filter(({ type, createdAt }) => {
+              entriesData.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
                 return type === 'CHECK_IN' && monthDate === todayDate;
               }).length
@@ -58,7 +64,7 @@ const Dashboard = () => {
           <ReservationSummaryCard
             title='Check-out'
             value={
-              (entriesData as Entry[]).filter(({ type, createdAt }) => {
+              entriesData.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
                 return type === 'CHECK_OUT' && monthDate === todayDate;
               }).length
@@ -75,7 +81,9 @@ const Dashboard = () => {
 
           <div>
             {paginatedReservations.length > 0 ? (
-              paginatedReservations.map(reservation => <ReservationTab reservation={reservation} />)
+              paginatedReservations.map(reservation => (
+                <ReservationTab key={reservation._id} reservation={reservation} />
+              ))
             ) : (
               <div className='mt-5 flex flex-col gap-4 items-center justify-center'>
                 <MdOutlineBallot className='w-10 h-10' />

@@ -1,11 +1,13 @@
 const multer = require('multer');
 const router = require('express').Router();
 const storage = require('../firebase-config');
+const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
+
 const Room = require('../models/room.model');
+const Rating = require('../models/rating.model');
 const { User, roles } = require('../models/user.model');
 const { Entry, entryStatuses } = require('../models/entry.model');
 const { Reservation, reservationStatuses } = require('../models/reservation.model');
-const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
 
 async function checkIfFileExists(filePath) {
   const storageRef = ref(storage, filePath);
@@ -118,8 +120,8 @@ router.route('/:id').patch(upload.any(), async (req, res) => {
 
 router.route('/reserve-space/:roomID').post(async (req, res) => {
   try {
-    const { userID } = req.body;
     const { roomID } = req.params;
+    const { userID, hostelID } = req.body;
 
     const user = await User.findOne({ _id: userID });
 
@@ -132,10 +134,16 @@ router.route('/reserve-space/:roomID').post(async (req, res) => {
     } else if (user.roomID) {
       return res.status(400).send('You already have a room');
     } else {
-      const newReservation = new Reservation({ roomID, userID });
-      user.reservationID = newReservation._id;
+      const newReservation = new Reservation({ roomID, userID, hostelID });
       await newReservation.save();
+
+      const room = await Room.findById(roomID);
+      room.reservations.push(newReservation._id);
+      await room.save();
+
+      user.reservationID = newReservation._id;
       const updatedUser = await user.save();
+
       return res.status(200).json(updatedUser);
     }
   } catch (err) {
@@ -144,12 +152,13 @@ router.route('/reserve-space/:roomID').post(async (req, res) => {
 });
 
 router.route('/confirm-reservation/:reservationID').post(async (req, res) => {
+  const { adminID } = req.body;
   const { reservationID } = req.params;
   const reservation = await Reservation.findById(reservationID);
   const { userID, roomID, status } = reservation;
 
   try {
-    const user = await User.findById(userID);
+    const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
       return res.status(401).send('You are not authorized to carry out this operation');
@@ -159,9 +168,10 @@ router.route('/confirm-reservation/:reservationID').post(async (req, res) => {
       reservation.status = reservationStatuses.CONFIRMED;
       await reservation.save();
 
-      user.roomID = roomID;
-      user.reservationID = '';
-      await user.save();
+      const userToBeUpdated = await User.findById(userID);
+      userToBeUpdated.roomID = roomID;
+      userToBeUpdated.reservationID = '';
+      await userToBeUpdated.save();
 
       const room = await Room.findById(roomID);
       room.occupants.push(userID);
@@ -178,12 +188,13 @@ router.route('/confirm-reservation/:reservationID').post(async (req, res) => {
 });
 
 router.route('/decline-reservation/:reservationID').post(async (req, res) => {
+  const { adminID } = req.body;
   const { reservationID } = req.params;
   const reservation = await Reservation.findById(reservationID);
   const { userID, status } = reservation;
 
   try {
-    const user = await User.findById(userID);
+    const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
       return res.status(401).send('You are not authorized to carry out this operation');
@@ -193,8 +204,9 @@ router.route('/decline-reservation/:reservationID').post(async (req, res) => {
       reservation.status = reservationStatuses.DECLINED;
       await reservation.save();
 
-      user.reservationID = '';
-      await user.save();
+      const userToBeUpdated = await User.findById(userID);
+      userToBeUpdated.reservationID = '';
+      await userToBeUpdated.save();
       return res.status(200).send('Room reservation declined');
     } else if (status === reservationStatuses.DECLINED) {
       return res.status(400).send('Room reservation already declined');
@@ -220,11 +232,11 @@ router.route('/check-in/:id').post(async (req, res) => {
     const userToBeCheckedIn = await User.findById(id);
     userToBeCheckedIn.checkedIn = true;
     userToBeCheckedIn.lastCheckedIn = new Date().toISOString();
+    await userToBeCheckedIn.save();
 
     const newEntry = new Entry({ type: entryStatuses.CHECK_IN, roomID, userID: id });
-
-    await userToBeCheckedIn.save();
     await newEntry.save();
+
     return res.status(200).send('Check in successful');
   } catch (err) {
     res.status(400).send(err.message);
@@ -245,13 +257,14 @@ router.route('/check-out/:id').post(async (req, res) => {
     const userToBeCheckedOut = await User.findById(id);
     userToBeCheckedOut.checkedIn = false;
     userToBeCheckedOut.lastCheckedOut = new Date().toISOString();
+    delete userToBeCheckedOut.roomID;
     await userToBeCheckedOut.save();
 
     const newEntry = new Entry({ type: entryStatuses.CHECK_OUT, roomID, userID: id });
     await newEntry.save();
 
     const room = await Room.findById(roomID);
-    room.occupants = room.occupants.filter(occupant => occupant !== userID);
+    room.occupants = room.occupants.filter(occupant => occupant != id);
     await room.save();
 
     return res.status(200).send('Check out successful');
@@ -358,6 +371,12 @@ router.route('/:id').delete(async (req, res) => {
     }
 
     await User.findByIdAndDelete(id);
+
+    await Room.updateOne({ occupants: id }, { $pull: { occupants: id } });
+
+    await Rating.deleteMany({ userID: id });
+
+    await Reservation.deleteOne({ userID: id });
 
     /* delete user image */
     const filePath = `users/${id}`;

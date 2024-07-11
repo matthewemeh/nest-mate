@@ -71,7 +71,7 @@ const VerifyOTP = () => {
   ] = useSendEmailMutation();
 
   const mailText = useMemo<string>(() => {
-    return `${mailPretext}\nYour OTP is: ${generatedOtp}\n\nBest regards,\nNest Mate,\nYour one-stop center for the latest books`;
+    return `${mailPretext}\nYour OTP is: ${generatedOtp}\n\nBest regards,\nNest Mate,\nYour #1 Hostel Management Platform`;
   }, [generatedOtp]);
 
   const handleSubmitOTP = () => {

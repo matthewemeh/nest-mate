@@ -71,9 +71,9 @@ UserSchema.pre('save', function (next) {
 });
 
 /* Before deleting a user, remove all ratings for that user */
-UserSchema.pre('remove', function (next) {
-  this.model('Rating').remove({ userID: this._id }, next);
-});
+// UserSchema.pre('remove', function (next) {
+//   this.model('Rating').remove({ userID: this._id }, next);
+// });
 
 const User = model('User', UserSchema);
 

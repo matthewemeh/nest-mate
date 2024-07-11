@@ -14,9 +14,11 @@ const HostelSchema = new Schema(
 HostelSchema.plugin(mongoosePaginate);
 
 /* Before deleting a hostel, remove all rooms in that hostel */
-HostelSchema.pre('remove', function (next) {
-  this.model('Room').remove({ hostelID: this._id }, next);
-});
+// HostelSchema.pre('findOneAndDelete', function (next) {
+// Room.deleteMany({ hostelID: this._id }, next);
+// console.log(this._id);
+// this.model('Room').deleteMany({ hostelID: this._id }, next);
+// });
 
 const Hostel = model('Hostel', HostelSchema);
 

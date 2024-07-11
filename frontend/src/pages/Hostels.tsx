@@ -56,7 +56,7 @@ const Hostels = () => {
         </div>
 
         {paginatedHostels.length > 0 && (
-          <div className='grid grid-cols-[1fr_1fr_auto] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
+          <div className='grid grid-cols-[repeat(2,1fr)_auto] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
             <p>Hostel Name</p>
             <p>Number of Rooms</p>
           </div>
