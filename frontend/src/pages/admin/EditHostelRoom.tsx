@@ -35,10 +35,8 @@ const EditHostelRoom = () => {
       isSuccess: isUpdateSuccess
     }
   ] = useUpdateRoomMutation();
-  const [
-    getRoom,
-    { data: room = {}, error: hostelError, isError: isHostelError, isLoading: isHostelLoading }
-  ] = useGetRoomMutation();
+  const [getRoom, { data: room = {}, error: hostelError, isError: isHostelError }] =
+    useGetRoomMutation();
 
   const {
     roomImageUrl,

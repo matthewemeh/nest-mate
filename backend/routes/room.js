@@ -176,6 +176,12 @@ router.route('/:id').delete(async (req, res) => {
       { $set: { roomID: null, checkedIn: false, lastCheckedOut: new Date().toISOString() } }
     );
 
+    const reservations = await Reservation.find({ roomID: id });
+
+    reservations.forEach(async ({ _id: reservationID }) => {
+      await User.updateOne({ reservationID }, { $set: { reservationID: '' } });
+    });
+
     await Rating.deleteMany({ roomID: id });
 
     await Reservation.deleteMany({ roomID: id });

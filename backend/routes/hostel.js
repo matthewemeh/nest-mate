@@ -148,6 +148,13 @@ router.route('/:id').delete(async (req, res) => {
 
       await Rating.deleteMany({ roomID });
     });
+
+    const reservations = await Reservation.find({ hostelID: id });
+
+    reservations.forEach(async ({ _id: reservationID }) => {
+      await User.updateOne({ reservationID }, { $set: { reservationID: '' } });
+    });
+
     await Reservation.deleteMany({ hostelID: id });
 
     await Room.deleteMany({ hostelID: id });
