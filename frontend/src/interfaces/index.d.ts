@@ -5,8 +5,9 @@ interface MongoInterface {
 }
 
 interface Entry extends MongoInterface {
-  roomID: string;
+  roomID: Room;
   userID: User;
+  hostelID: Hostel;
   type: EntryStatus;
 }
 

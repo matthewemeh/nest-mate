@@ -21,7 +21,8 @@ import Constants from 'Constants';
 const Dashboard = () => {
   const MIN_PAGE_INDEX = 1;
   const {
-    RESERVATION_STATUSES: { CONFIRMED }
+    RESERVATION_STATUSES: { CONFIRMED },
+    ENTRY_STATUSES: { CHECK_IN, CHECK_OUT }
   } = Constants;
 
   const [limit, setLimit] = useState<number>(10);
@@ -58,7 +59,7 @@ const Dashboard = () => {
             value={
               entries.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
-                return type === 'CHECK_IN' && monthDate === todayDate;
+                return type === CHECK_IN && monthDate === todayDate;
               }).length
             }
           />
@@ -67,7 +68,7 @@ const Dashboard = () => {
             value={
               entries.filter(({ type, createdAt }) => {
                 const { monthDate } = getDateProps(createdAt);
-                return type === 'CHECK_OUT' && monthDate === todayDate;
+                return type === CHECK_OUT && monthDate === todayDate;
               }).length
             }
           />

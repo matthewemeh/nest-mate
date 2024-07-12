@@ -116,7 +116,12 @@ const HostelRoom = () => {
           {occupants.length > 0 ? (
             occupants.map(occupant =>
               isAdmin ? (
-                <OccupantTabAdmin roomID={roomID!} key={occupant._id} occupant={occupant} />
+                <OccupantTabAdmin
+                  roomID={roomID!}
+                  key={occupant._id}
+                  occupant={occupant}
+                  hostelID={hostelID!}
+                />
               ) : (
                 <OccupantTab key={occupant._id} occupant={occupant} />
               )

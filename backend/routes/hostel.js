@@ -148,9 +148,9 @@ router.route('/:id').delete(async (req, res) => {
       );
 
       await Rating.deleteMany({ roomID });
-
-      await Entry.deleteMany({ roomID });
     });
+
+    await Entry.deleteMany({ hostelID: id });
 
     const reservations = await Reservation.find({ hostelID: id });
 

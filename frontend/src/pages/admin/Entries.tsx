@@ -6,8 +6,8 @@ import { handleReduxQueryError } from 'utils';
 import { useGetEntriesMutation } from 'services/apis/entryApi';
 
 import EntryTab from 'components/EntryTab';
+import EntriesHeader from 'components/EntriesHeader';
 import PaginationControls from 'components/PaginationControls';
-import ReservationsHeader from 'components/ReservationsHeader';
 
 const Entries = () => {
   const MIN_PAGE_INDEX = 1;
@@ -19,13 +19,17 @@ const Entries = () => {
   const [getEntries, { data = {}, error, isError, isLoading }] = useGetEntriesMutation();
   const entries: Entry[] = useMemo(() => {
     const paginatedData = data as PaginatedResponse<Entry>;
-    setPages(paginatedData.pages);
     return paginatedData.docs;
   }, [data]);
 
   useEffect(() => {
     getEntries({ params: { page, limit } });
   }, [page]);
+
+  useEffect(() => {
+    const paginatedData = data as PaginatedResponse<Entry>;
+    setPages(paginatedData.pages);
+  }, [data]);
 
   useEffect(() => {
     handleReduxQueryError(isError, error);
@@ -45,7 +49,7 @@ const Entries = () => {
           />
         </div>
 
-        {entries?.length > 0 && <ReservationsHeader />}
+        {entries?.length > 0 && <EntriesHeader />}
 
         <ul className='flex flex-col gap-4 mt-4'>
           {entries?.length > 0 ? (

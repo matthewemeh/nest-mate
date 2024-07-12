@@ -221,7 +221,7 @@ router.route('/decline-reservation/:reservationID').post(async (req, res) => {
 router.route('/check-in/:id').post(async (req, res) => {
   try {
     const { id } = req.params;
-    const { roomID, userID } = req.body;
+    const { roomID, userID, hostelID } = req.body;
 
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
@@ -234,7 +234,7 @@ router.route('/check-in/:id').post(async (req, res) => {
     userToBeCheckedIn.lastCheckedIn = new Date().toISOString();
     await userToBeCheckedIn.save();
 
-    const newEntry = new Entry({ type: entryStatuses.CHECK_IN, roomID, userID: id });
+    const newEntry = new Entry({ hostelID, roomID, type: entryStatuses.CHECK_IN, userID: id });
     await newEntry.save();
 
     return res.status(200).send('Check in successful');
@@ -246,7 +246,7 @@ router.route('/check-in/:id').post(async (req, res) => {
 router.route('/check-out/:id').post(async (req, res) => {
   try {
     const { id } = req.params;
-    const { roomID, userID } = req.body;
+    const { roomID, userID, hostelID } = req.body;
 
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
@@ -259,7 +259,7 @@ router.route('/check-out/:id').post(async (req, res) => {
       { $set: { checkedIn: false, lastCheckedOut: new Date().toISOString(), roomID: null } }
     );
 
-    const newEntry = new Entry({ type: entryStatuses.CHECK_OUT, roomID, userID: id });
+    const newEntry = new Entry({ hostelID, roomID, type: entryStatuses.CHECK_OUT, userID: id });
     await newEntry.save();
 
     const room = await Room.findById(roomID);

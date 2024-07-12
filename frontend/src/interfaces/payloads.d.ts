@@ -138,6 +138,7 @@ interface EntryPayload {
   _id: string;
   roomID: string;
   userID: string;
+  hostelID: string;
 }
 
 interface GetReservationsPayload {

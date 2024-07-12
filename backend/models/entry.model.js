@@ -8,7 +8,8 @@ const EntrySchema = new Schema(
   {
     type: { type: String, required: true },
     roomID: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
-    userID: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+    userID: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    hostelID: { type: Schema.Types.ObjectId, ref: 'Hostel', required: true }
   },
   { minimize: false, timestamps: true, versionKey: false, collection: 'entries' }
 );

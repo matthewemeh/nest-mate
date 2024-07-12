@@ -7,7 +7,7 @@ router.route('/').get(async (req, res) => {
     const limit = Number(req.query['limit']);
     const type = req.query['type'];
 
-    const populateFields = ['userID'];
+    const populateFields = ['userID', 'hostelID', 'roomID'];
 
     if (isNaN(page) || isNaN(limit)) {
       entries = type ? await Entry.find({ type }) : await Entry.find();

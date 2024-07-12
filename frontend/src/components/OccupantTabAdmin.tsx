@@ -22,9 +22,10 @@ import { handleReduxQueryError, showAlert } from 'utils';
 interface Props {
   roomID: string;
   occupant: User;
+  hostelID: string;
 }
 
-const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID }) => {
+const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
   const { ROLES } = Constants;
   const { _id, name, role, profileImageUrl, checkedIn } = occupant;
   const [newRole, setNewRole] = useState<string>(role);
@@ -121,8 +122,8 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID }) => {
 
   useEffect(() => {
     if (isCheckedIn !== checkedIn) {
-      if (isCheckedIn) checkIn({ _id, userID, roomID });
-      else checkOut({ _id, userID, roomID });
+      if (isCheckedIn) checkIn({ _id, userID, roomID, hostelID });
+      else checkOut({ _id, userID, roomID, hostelID });
     }
   }, [isCheckedIn]);
 
