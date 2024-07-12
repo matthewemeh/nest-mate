@@ -10,6 +10,7 @@ export const PATHS = {
   RESERVATIONS: '/reservations',
   VERIFY_OTP: '/auth/verify-otp',
   RESET_PASSWORD: '/auth/reset-password',
+  EDIT_HOSTEL: '/hostels/:hostelID/edit',
   HOSTEL_ROOMS: '/hostels/:hostelID/rooms',
   ROOM: '/hostels/:hostelID/rooms/:roomID',
   FORGOT_PASSWORD: '/auth/forgot-password',

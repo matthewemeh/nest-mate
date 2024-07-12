@@ -77,6 +77,7 @@ const HostelRooms = () => {
               disabled={isDeleteLoading}
               onClick={handleDeleteHostel}
             />
+            <Button content='Edit Hostel' onClick={() => navigate(`/hostels/${hostelID}/edit`)} />
             {rooms.length > 0 && (
               <Button
                 content='Add Room'

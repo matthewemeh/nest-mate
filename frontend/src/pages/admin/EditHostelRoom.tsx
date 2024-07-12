@@ -173,8 +173,8 @@ const EditHostelRoom = () => {
             inputRef={occupantsRef}
             label='Maximum no. of occupants'
             extraLabelClassNames='mt-[15px]'
-            defaultValue={defaultMaxOccupants.toString()}
             formatRule={{ allowedChars: '0123456789' }}
+            defaultValue={defaultMaxOccupants.toString()}
             extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
           />
 

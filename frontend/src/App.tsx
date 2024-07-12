@@ -15,12 +15,21 @@ import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 const Entries = lazy(() => import('pages/admin/Entries'));
 const AddHostel = lazy(() => import('pages/admin/AddHostel'));
 const Dashboard = lazy(() => import('pages/admin/Dashboard'));
+const EditHostel = lazy(() => import('pages/admin/EditHostel'));
 const Reservations = lazy(() => import('pages/admin/Reservations'));
 const AddHostelRoom = lazy(() => import('pages/admin/AddHostelRoom'));
 const EditHostelRoom = lazy(() => import('pages/admin/EditHostelRoom'));
 
 const App = () => {
-  const { DASHBOARD, RESERVATIONS, ADD_HOSTEL, ADD_HOSTEL_ROOM, EDIT_HOSTEL_ROOM, ENTRIES } = PATHS;
+  const {
+    ENTRIES,
+    DASHBOARD,
+    ADD_HOSTEL,
+    EDIT_HOSTEL,
+    RESERVATIONS,
+    ADD_HOSTEL_ROOM,
+    EDIT_HOSTEL_ROOM
+  } = PATHS;
 
   const dispatch = useAppDispatch();
   const isAuthorized: boolean = useAuth();
@@ -32,6 +41,7 @@ const App = () => {
         { path: ENTRIES, element: <Entries /> },
         { path: DASHBOARD, element: <Dashboard /> },
         { path: ADD_HOSTEL, element: <AddHostel /> },
+        { path: EDIT_HOSTEL, element: <EditHostel /> },
         { path: RESERVATIONS, element: <Reservations /> },
         { path: ADD_HOSTEL_ROOM, element: <AddHostelRoom /> },
         { path: EDIT_HOSTEL_ROOM, element: <EditHostelRoom /> }
