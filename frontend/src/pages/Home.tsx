@@ -9,7 +9,7 @@ import { PATHS } from 'routes/PathConstants';
 
 const Home = () => {
   const MIN_PAGE_INDEX = 1;
-  const { DASHBOARD } = PATHS;
+  const { DASHBOARD, HOSTELS } = PATHS;
   const navigate = useNavigate();
 
   const isAdmin = useAdmin();
@@ -19,7 +19,7 @@ const Home = () => {
   const { _id } = useAppSelector(state => state.userStore.currentUser);
 
   useEffect(() => {
-    if (isAdmin) navigate(DASHBOARD);
+    isAdmin ? navigate(DASHBOARD) : navigate(HOSTELS);
   }, []);
 
   useEffect(() => setPage(MIN_PAGE_INDEX), [limit]);

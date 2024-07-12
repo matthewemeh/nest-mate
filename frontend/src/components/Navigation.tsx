@@ -20,16 +20,12 @@ const Navigation = () => {
         prefersDarkMode && 'dark:text-zircon dark:bg-nile-blue-900'
       }`}>
       <ul className={`text-oslo-gray flex flex-col gap-2`}>
-        {isAuthorized ? (
+        {isAuthorized && (
           <li>
             <NavigationTab
               to={DASHBOARD}
               icon={<BsGridFill className='text-current text-[21px]' />}
             />
-          </li>
-        ) : (
-          <li>
-            <NavigationTab to={HOME} icon={<RiHome4Line className='text-current' />} />
           </li>
         )}
         <li>
