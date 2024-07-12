@@ -30,7 +30,7 @@ const OccupantTab: React.FC<Props> = ({ occupant }) => {
         {imageLoaded || (
           <RiUser3Line
             className={`absolute p-2 top-0 left-0 w-full h-full text-current border rounded-full ${
-              prefersDarkMode && 'dark:text-nile-blue-900'
+              prefersDarkMode && 'dark:text-lightning-yellow-900'
             }`}
           />
         )}

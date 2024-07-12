@@ -40,7 +40,7 @@ const Dropdown: React.FC<Props> = ({
       aria-expanded={dropdownActive}
       onBlur={() => setDropdownActive(false)}
       onClick={() => setDropdownActive(true)}
-      className={`relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-nile-blue-900 disabled:cursor-not-allowed ${extraDropdownButtonClassNames}`}>
+      className={`relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-lightning-yellow-900 disabled:cursor-not-allowed ${extraDropdownButtonClassNames}`}>
       <p className='cursor-[inherit]'>{selectedValue}</p>
       <img
         alt='chevron-image'

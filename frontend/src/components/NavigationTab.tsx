@@ -23,12 +23,16 @@ const NavigationTab: React.FC<Props> = ({ to, icon }) => {
       addClass(
         linkRef.current,
         'text-lightning-yellow-700',
+        `${prefersDarkMode && 'dark:bg-white'}`,
+        `${prefersDarkMode && 'dark:hover:border-transparent'}`,
         `${prefersDarkMode && 'dark:text-lightning-yellow-900'}`
       );
     else
       removeClass(
         linkRef.current,
         'text-lightning-yellow-700',
+        `${prefersDarkMode && 'dark:bg-white'}`,
+        `${prefersDarkMode && 'dark:hover:border-transparent'}`,
         `${prefersDarkMode && 'dark:text-lightning-yellow-900'}`
       );
   }, [pathname, linkRef]);

@@ -51,7 +51,10 @@ const ManageUsers = () => {
 
   return (
     <PageLayout>
-      <div className={`bg-swan-white p-8 rounded-lg ${prefersDarkMode && 'dark:bg-nile-blue-900'}`}>
+      <div
+        className={`bg-swan-white p-8 rounded-lg ${
+          prefersDarkMode && 'dark:bg-lightning-yellow-900'
+        }`}>
         <h1 className='text-3xl font-bold mb-5'>Manage Users</h1>
         {users.length > 0 && <PaginationControls page={page} pages={pages} setPage={setPage} />}
 

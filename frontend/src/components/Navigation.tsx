@@ -18,9 +18,9 @@ const Navigation = () => {
   return (
     <nav
       className={`row-start-1 row-end-3 p-3 pt-20 bg-swan-white ${
-        prefersDarkMode && 'dark:text-zircon dark:bg-nile-blue-900'
+        prefersDarkMode && 'dark:text-swan-white dark:bg-lightning-yellow-900'
       }`}>
-      <ul className={`text-oslo-gray flex flex-col gap-2`}>
+      <ul className={`text-oslo-gray flex flex-col gap-2 ${prefersDarkMode && 'text-white'}`}>
         {isAuthorized && (
           <li>
             <NavigationTab

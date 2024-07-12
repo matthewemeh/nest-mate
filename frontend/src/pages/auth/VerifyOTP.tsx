@@ -117,7 +117,7 @@ const VerifyOTP = () => {
       <div className='flex flex-col h-full items-center justify-center'>
         <h1 className='text-2xl font-semibold mb-10'>
           Please enter the OTP sent to
-          <span className='text-nile-blue-950 italic'> {email}</span>
+          <span className='text-lightning-yellow-950 italic'> {email}</span>
         </h1>
 
         <OtpInput otp={enteredOtp} setOtp={setEnteredOtp} numberOfDigits={NUMBER_OF_DIGITS} />
@@ -136,7 +136,7 @@ const VerifyOTP = () => {
           title={
             counter > 0 && isOtpSent ? `Resend OTP in ${secondsToMMSS(counter)}` : 'Resend OTP'
           }
-          extraClassNames='bg-transparent !text-nile-blue-900 border-transparent shadow-none w-fit'
+          extraClassNames='bg-transparent !text-lightning-yellow-900 border-transparent shadow-none w-fit'
         />
       </div>
     </section>

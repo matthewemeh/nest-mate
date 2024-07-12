@@ -26,7 +26,7 @@ const PaginationControls: React.FC<Props> = ({
             disabled={page === minPageIndex}
             onClick={() => setPage(prev => prev - 1)}
             className={`flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
-              prefersDarkMode && 'dark:bg-zircon dark:text-nile-blue-900'
+              prefersDarkMode && 'dark:bg-zircon dark:text-lightning-yellow-900'
             }`}>
             <FaArrowLeft />
             Previous
@@ -35,7 +35,7 @@ const PaginationControls: React.FC<Props> = ({
             disabled={page === pages}
             onClick={() => setPage(prev => prev + 1)}
             className={`flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
-              prefersDarkMode && 'dark:bg-zircon dark:text-nile-blue-900'
+              prefersDarkMode && 'dark:bg-zircon dark:text-lightning-yellow-900'
             }`}>
             Next
             <FaArrowRight />

@@ -30,7 +30,7 @@ const Profilebar: React.FC<Props> = ({ extraClassNames }) => {
   return (
     <div
       className={`px-4 flex items-center justify-between gap-5 bg-swan-white ${
-        prefersDarkMode && 'dark:bg-nile-blue-900 dark:text-nile-blue-900'
+        prefersDarkMode && 'dark:bg-lightning-yellow-900 dark:text-lightning-yellow-900'
       } ${extraClassNames}`}>
       <Link to={HOME} className='flex gap-3 items-center'>
         <FaHotel className='w-7 h-7 text-lightning-yellow-700' /> Nest Mate
@@ -70,7 +70,7 @@ const Profilebar: React.FC<Props> = ({ extraClassNames }) => {
           aria-labelledby='header-menu-button'
           onClick={() => setMenuOpened(false)}
           className={`text-[14px] text-center z-[5] bg-zircon overflow-hidden flex flex-col rounded-b w-[120px] absolute top-[calc(100%+10px)] right-0 shadow-[0_10px_20px_0_rgba(219,219,219,0.25)] duration-500 ${
-            prefersDarkMode && 'dark:bg-nile-blue-900 dark:shadow-lg dark:text-zircon'
+            prefersDarkMode && 'dark:bg-lightning-yellow-900 dark:shadow-lg dark:text-zircon'
           } ${menuOpened ? 'max-h-[300px]' : 'max-h-0'}`}>
           <Link role='menuitem' to={PROFILE} className='h-10 grid place-items-center shrink-0'>
             Profile

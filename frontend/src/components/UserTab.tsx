@@ -82,7 +82,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
   return (
     <div
       className={`grid mb-3 bg-zircon p-4 rounded-md items-center last:mb-0 ${
-        prefersDarkMode && 'dark:bg-nile-blue-950'
+        prefersDarkMode && 'dark:bg-lightning-yellow-950'
       } ${
         userRole === ROLES.SUPER_ADMIN ? 'grid-cols-[repeat(4,minmax(0,1fr))_30px]' : 'grid-cols-4'
       }`}>
@@ -97,7 +97,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
         {imageLoaded || (
           <RiUser3Line
             className={`absolute p-2 top-0 left-0 w-full h-full text-current border rounded-full ${
-              prefersDarkMode && 'dark:text-nile-blue-900'
+              prefersDarkMode && 'dark:text-lightning-yellow-900'
             }`}
           />
         )}

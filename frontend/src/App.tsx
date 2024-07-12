@@ -69,8 +69,8 @@ const App = () => {
 
   useEffect(() => {
     const body = document.querySelector('body');
-    if (prefersDarkMode) addClass(body, 'dark:bg-nile-blue-950', 'dark:text-zircon');
-    else removeClass(body, 'dark:bg-nile-blue-950', 'dark:text-zircon');
+    if (prefersDarkMode) addClass(body, 'dark:bg-lightning-yellow-950', 'dark:text-zircon');
+    else removeClass(body, 'dark:bg-lightning-yellow-950', 'dark:text-zircon');
   }, [prefersDarkMode]);
 
   const router = createBrowserRouter([

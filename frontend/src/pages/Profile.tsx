@@ -156,21 +156,21 @@ const Profile = () => {
     <PageLayout>
       <section
         className={`bg-swan-white p-8 rounded-lg flex flex-col items-center ${
-          prefersDarkMode && 'dark:bg-nile-blue-900'
+          prefersDarkMode && 'dark:bg-lightning-yellow-900'
         }`}>
         <label htmlFor='profile-image' className='relative cursor-pointer'>
           <img
             alt=''
             ref={profileImagePreviewRef}
             src={profileImageUrl || RiUser3Line}
-            className={`w-[100px] h-[100px] text-current rounded-half bg-zircon border-2 border-nile-blue-900 ${
+            className={`w-[100px] h-[100px] text-current rounded-half bg-zircon border-2 border-lightning-yellow-900 ${
               prefersDarkMode && 'dark:border-zircon'
             }`}
           />
           <button
             onClick={handleDeleteUserImage}
             disabled={isProfileImageLoading}
-            className={`text-nile-blue-900 absolute bottom-[4%] right-[4%] bg-zircon rounded-full p-1 ${
+            className={`text-lightning-yellow-900 absolute bottom-[4%] right-[4%] bg-zircon rounded-full p-1 ${
               profileImageUrl ? '' : 'opacity-0 invisible'
             }`}>
             <MdDelete />
@@ -189,7 +189,7 @@ const Profile = () => {
             defaultValue={email}
             autoComplete='username'
             extraLabelClassNames='mt-8'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
           />
 
           <FormInput
@@ -203,7 +203,7 @@ const Profile = () => {
             inputName='full-name'
             autoComplete='full-name'
             extraLabelClassNames='mt-[15px]'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
           />
 
           <FormInput
@@ -218,7 +218,7 @@ const Profile = () => {
             inputRef={profileImageRef}
             accept={ACCEPTED_IMAGE_TYPES}
             extraLabelClassNames='mt-[15px]'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
+            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
           />
 
           <AuthButton
@@ -228,7 +228,7 @@ const Profile = () => {
             isLoading={isUpdateLoading}
             extraClassNames={`${
               prefersDarkMode &&
-              'dark:bg-zircon dark:text-nile-blue-900 dark:hover:bg-transparent dark:hover:text-zircon'
+              'dark:bg-zircon dark:text-lightning-yellow-900 dark:hover:bg-transparent dark:hover:text-zircon'
             }`}
           />
 

@@ -45,7 +45,7 @@ const ForgotPassword = () => {
         <AuthButton type='submit' title='Submit' />
         <span className='text-[15px] leading-5 text-center mt-2'>
           Already have an account?{' '}
-          <Link to={LOGIN} className='underline text-nile-blue-700'>
+          <Link to={LOGIN} className='underline text-lightning-yellow-700'>
             Sign in
           </Link>
         </span>
