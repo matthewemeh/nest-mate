@@ -1,7 +1,8 @@
 import { ImEnter } from 'react-icons/im';
+import { FaUsers } from 'react-icons/fa';
 import { BsGridFill } from 'react-icons/bs';
 import { MdOutlineBallot } from 'react-icons/md';
-import { RiHome4Line, RiUser3Line, RiHotelLine } from 'react-icons/ri';
+import { RiUser3Line, RiHotelLine } from 'react-icons/ri';
 
 import NavigationTab from './NavigationTab';
 
@@ -12,7 +13,7 @@ import { useAppSelector } from 'hooks/useRootStorage';
 const Navigation = () => {
   const isAuthorized: boolean = useAuth();
   const { prefersDarkMode } = useAppSelector(state => state.userData);
-  const { HOME, PROFILE, HOSTELS, RESERVATIONS, DASHBOARD, ENTRIES } = PATHS;
+  const { PROFILE, HOSTELS, RESERVATIONS, DASHBOARD, ENTRIES, MANAGE_USERS } = PATHS;
 
   return (
     <nav
@@ -41,6 +42,12 @@ const Navigation = () => {
             </li>
             <li>
               <NavigationTab to={ENTRIES} icon={<ImEnter className='text-current text-[21px]' />} />
+            </li>
+            <li>
+              <NavigationTab
+                to={MANAGE_USERS}
+                icon={<FaUsers className='text-current text-[21px]' />}
+              />
             </li>
           </>
         )}

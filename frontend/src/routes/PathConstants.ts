@@ -4,6 +4,7 @@ export const PATHS = {
   ENTRIES: '/entries',
   HOSTELS: '/hostels',
   PROFILE: '/profile',
+  MANAGE_USERS: '/users',
   DASHBOARD: '/dashboard',
   REGISTER: '/auth/register',
   ADD_HOSTEL: '/hostels/add',
