@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useAppSelector } from 'hooks/useRootStorage';
 import {
@@ -18,9 +18,11 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
   const { hostelID, roomID, userID, status, _id: reservationID } = reservation;
   const { _id: adminID } = useAppSelector(state => state.userStore.currentUser);
 
-  const { name: userName } = userID;
   const { name: hostelName } = hostelID;
+  const { name: userName, _id } = userID;
   const { roomNumber, maxOccupants, occupants } = roomID;
+
+  const isYou = useMemo(() => _id === adminID, [_id, adminID]);
 
   const [
     confirmReservation,
@@ -59,7 +61,7 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
 
   return (
     <div className='grid items-center grid-cols-[repeat(5,minmax(0,1fr))_82.5469px_80.3438px] gap-4 px-4 py-2'>
-      <p className='overflow-hidden whitespace-nowrap text-ellipsis'>{userName}</p>
+      <p className='overflow-hidden whitespace-nowrap text-ellipsis'>{isYou ? 'You' : userName}</p>
       <p className='overflow-hidden whitespace-nowrap text-ellipsis'>{hostelName}</p>
       <p>{roomNumber}</p>
       <p>{maxOccupants}</p>
