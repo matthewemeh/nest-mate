@@ -364,8 +364,8 @@ router.route('/:id').delete(async (req, res) => {
   try {
     const { userID } = req.body;
     const user = await User.findById(userID);
-    const isOwnerOrAdmin = user && (user.role !== roles.USER || user._id == id);
-    if (!isOwnerOrAdmin) {
+    const isOwnerOrSuperAdmin = user && (user.role === roles.SUPER_ADMIN || user._id == id);
+    if (!isOwnerOrSuperAdmin) {
       return res.status(401).send('You are not authorized to carry out this operation');
     }
 

@@ -42,7 +42,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
     const isDeleteConfirmed: boolean = window.confirm(
       `Are you sure you want to delete ${name}'s account?`
     );
-    if (isDeleteConfirmed) deleteUser({ _id, userID: _id });
+    if (isDeleteConfirmed) deleteUser({ _id, userID });
   };
 
   useEffect(() => {
@@ -117,7 +117,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
         <MdDelete
           onClick={handleDeleteUser}
           className={`w-full h-full cursor-pointer text-red-600 ${
-            isDeleteLoading && 'opacity-0 invisible'
+            (isDeleteLoading || isDeleteSuccess) && 'opacity-0 invisible'
           }`}
         />
       )}
