@@ -53,7 +53,7 @@ const Dropdown: React.FC<Props> = ({
         id='dropdown-list'
         aria-labelledby='dropdown-button'
         className={`absolute z-[1] top-[calc(100%+5px)] w-full max-h-[150px] h-fit rounded-b-lg bg-swan-white shadow-md border border-[rgba(0,0,0,0.1)] flex flex-col overflow-y-auto duration-300 ${
-          prefersDarkMode && 'dark:bg-nile-blue-900'
+          prefersDarkMode && 'dark:bg-lightning-yellow-900'
         } ${extraDropdownListClassNames} ${dropdownActive || 'opacity-0 invisible'}`}>
         {list.map((item, index) => (
           <li
@@ -61,8 +61,8 @@ const Dropdown: React.FC<Props> = ({
             role='menuitem'
             className={`cursor-pointer py-1.5 ${
               item === selectedValue &&
-              `bg-nile-blue-900 text-zircon ${
-                prefersDarkMode && 'dark:text-nile-blue-900 dark:bg-zircon'
+              `bg-lightning-yellow-900 text-zircon ${
+                prefersDarkMode && 'dark:text-lightning-yellow-900 dark:bg-zircon'
               }`
             }`}
             onClick={e => {
