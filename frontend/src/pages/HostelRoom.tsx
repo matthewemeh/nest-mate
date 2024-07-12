@@ -98,6 +98,7 @@ const HostelRoom = () => {
             <Rating
               transition
               allowFraction
+              disableFillHover
               initialValue={value}
               SVGclassName='inline'
               onClick={handleRating}
