@@ -14,6 +14,7 @@ import { useGetRoomMutation, useDeleteRoomMutation } from 'services/apis/roomApi
 import RatingTab from 'components/RatingTab';
 import Button from 'components/buttons/Button';
 import OccupantTab from 'components/OccupantTab';
+import SectionHeading1 from 'components/SectionHeading1';
 import OccupantTabAdmin from 'components/OccupantTabAdmin';
 
 const HostelRoom = () => {
@@ -85,7 +86,7 @@ const HostelRoom = () => {
 
   return (
     <div>
-      <h1 className='font-bold text-3xl'>Occupants {roomNumber ? `in Room ${roomNumber}` : ''}</h1>
+      <SectionHeading1>Occupants {roomNumber ? `in Room ${roomNumber}` : ''}</SectionHeading1>
 
       <section className='mt-5 bg-swan-white rounded py-5 px-4'>
         <div className='mb-5 flex items-center justify-between'>

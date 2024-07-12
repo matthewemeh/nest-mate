@@ -6,6 +6,7 @@ import { handleReduxQueryError, showAlert } from 'utils';
 
 import RoomTab from 'components/RoomTab';
 import Button from 'components/buttons/Button';
+import SectionHeading1 from 'components/SectionHeading1';
 
 import useAdmin from 'hooks/useAdmin';
 import {
@@ -67,7 +68,7 @@ const HostelRooms = () => {
 
   return (
     <div>
-      <h1 className='font-bold text-3xl'>Rooms {name ? `in ${name}` : ''}</h1>
+      <SectionHeading1>Rooms{name ? ` in ${name}` : ''}</SectionHeading1>
 
       <section className='mt-5 bg-swan-white rounded py-5 px-4'>
         {isAdmin && (
