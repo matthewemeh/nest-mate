@@ -31,7 +31,7 @@ const Reservations = () => {
     <div>
       <h1 className='font-bold text-3xl'>Reservations</h1>
 
-      <section className='mt-5 bg-swan-white rounded py-5 px-4'>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
         <div className='mb-5 flex items-center justify-between'>
           <PaginationControls
             page={page}
