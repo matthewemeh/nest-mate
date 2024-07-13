@@ -147,6 +147,13 @@ router.route('/:id').delete(async (req, res) => {
         { $set: { roomID: null, checkedIn: false, lastCheckedOut: new Date().toISOString() } }
       );
     });
+
+    const ratings = await Rating.find({ hostelID: id });
+
+    ratings.forEach(async ({ _id: ratingID }) => {
+      await User.updateOne({ ratings: ratingID }, { $pull: { ratings: ratingID } });
+    });
+
     await Rating.deleteMany({ hostelID: id });
 
     await Entry.deleteMany({ hostelID: id });
