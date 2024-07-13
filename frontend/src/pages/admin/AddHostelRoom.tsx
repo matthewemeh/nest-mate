@@ -84,88 +84,84 @@ const AddHostelRoom = () => {
   }, [error, isError]);
 
   return (
-    <PageLayout
-      extraClassNames={`pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5 ${
-        prefersDarkMode && 'dark:bg-nile-blue-900'
-      }`}>
-      <label
-        htmlFor='room-image'
-        className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
-          roomImageChanged || 'border-4'
-        }`}>
-        <img
-          alt=''
-          loading='lazy'
-          ref={roomImagePreviewRef}
-          src={prefersDarkMode ? FaHotelDark : FaHotelLight}
-          className={`mx-auto h-full ${roomImageChanged ? 'w-full' : 'w-2/5'}`}
-        />
-      </label>
+    <PageLayout>
+      <section className='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
+        <label
+          htmlFor='room-image'
+          className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
+            roomImageChanged || 'border-4'
+          }`}>
+          <img
+            alt=''
+            loading='lazy'
+            ref={roomImagePreviewRef}
+            src={prefersDarkMode ? FaHotelDark : FaHotelLight}
+            className={`mx-auto h-full ${roomImageChanged ? 'w-full' : 'w-2/5'}`}
+          />
+        </label>
 
-      <form onSubmit={handleAddRoom} ref={formRef}>
-        <h1 className='text-2xl font-semibold mt-4'>New Room information</h1>
+        <form onSubmit={handleAddRoom} ref={formRef}>
+          <h1 className='text-2xl font-semibold mt-4'>New Room information</h1>
 
-        <FormInput
-          required
-          type='text'
-          autoComplete='off'
-          label='Room Number'
-          inputID='room-number'
-          inputName='room-number'
-          inputRef={roomNumberRef}
-          extraLabelClassNames='mt-[15px]'
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            required
+            type='text'
+            autoComplete='off'
+            label='Room Number'
+            inputID='room-number'
+            inputName='room-number'
+            inputRef={roomNumberRef}
+            extraLabelClassNames='mt-[15px]'
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames='mod-1'
+          />
 
-        <FormInput
-          type='text'
-          inputID='floor'
-          inputName='floor'
-          autoComplete='off'
-          label='Floor Number'
-          inputRef={floorRef}
-          extraLabelClassNames='mt-[15px]'
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='text'
+            inputID='floor'
+            inputName='floor'
+            autoComplete='off'
+            label='Floor Number'
+            inputRef={floorRef}
+            extraLabelClassNames='mt-[15px]'
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames='mod-1'
+          />
 
-        <FormInput
-          type='text'
-          defaultValue='6'
-          autoComplete='off'
-          inputID='occupants'
-          inputName='occupants'
-          inputRef={occupantsRef}
-          label='Maximum no. of occupants'
-          extraLabelClassNames='mt-[15px]'
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='text'
+            defaultValue='6'
+            autoComplete='off'
+            inputID='occupants'
+            inputName='occupants'
+            inputRef={occupantsRef}
+            label='Maximum no. of occupants'
+            extraLabelClassNames='mt-[15px]'
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames='mod-1'
+          />
 
-        <FormInput
-          type='file'
-          label='Room Image'
-          inputID='room-image'
-          inputName='room-image'
-          inputRef={roomImageRef}
-          accept={ACCEPTED_IMAGE_TYPES}
-          extraLabelClassNames='mt-[15px]'
-          onChange={e => updatePreviewImage(e.target.files?.[0])}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-nile-blue-950'}`}
-        />
+          <FormInput
+            type='file'
+            label='Room Image'
+            inputID='room-image'
+            inputName='room-image'
+            inputRef={roomImageRef}
+            accept={ACCEPTED_IMAGE_TYPES}
+            extraLabelClassNames='mt-[15px]'
+            onChange={e => updatePreviewImage(e.target.files?.[0])}
+            extraInputClassNames='mod-1'
+          />
 
-        <AuthButton
-          type='submit'
-          title='Add Room'
-          disabled={isLoading}
-          isLoading={isLoading}
-          extraClassNames={`!w-1/2 mx-auto ${
-            prefersDarkMode &&
-            'dark:bg-zircon dark:text-nile-blue-900 dark:hover:bg-transparent dark:hover:text-zircon'
-          }`}
-        />
-      </form>
+          <AuthButton
+            type='submit'
+            title='Add Room'
+            disabled={isLoading}
+            isLoading={isLoading}
+            extraClassNames='mod-1 !w-1/2 mx-auto'
+          />
+        </form>
+      </section>
     </PageLayout>
   );
 };

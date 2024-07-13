@@ -6,10 +6,6 @@ interface PaginationContext {
   setLimit: React.Dispatch<React.SetStateAction<number>>;
 }
 
-interface AppContext {
-  prefersDarkMode: boolean;
-}
-
 interface AuthContext {
   mailSubject: string;
   mailPretext: string;

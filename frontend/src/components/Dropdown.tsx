@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import CaretDownImage from 'assets/caret-down-fill.svg';
 
-import { useAppSelector } from 'hooks/useRootStorage';
-
 interface Props {
   list: string[];
   disabled?: boolean;
@@ -27,7 +25,6 @@ const Dropdown: React.FC<Props> = ({
   extraDropdownButtonClassNames
 }) => {
   const [dropdownActive, setDropdownActive] = useState(false);
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
 
   return (
     <button
@@ -40,8 +37,8 @@ const Dropdown: React.FC<Props> = ({
       aria-expanded={dropdownActive}
       onBlur={() => setDropdownActive(false)}
       onClick={() => setDropdownActive(true)}
-      className={`relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-lightning-yellow-900 disabled:cursor-not-allowed ${extraDropdownButtonClassNames}`}>
-      <p className='cursor-[inherit]'>{selectedValue}</p>
+      className={`dropdown relative cursor-pointer w-[135px] border p-2 rounded-md flex items-center justify-center gap-0.5 text-[14px] font-normal -tracking-[0.165px] focus:border-lightning-yellow-900 disabled:cursor-not-allowed ${extraDropdownButtonClassNames}`}>
+      <p className='!text-woodsmoke cursor-[inherit]'>{selectedValue}</p>
       <img
         alt='chevron-image'
         className='w-5 cursor-[inherit]'
@@ -52,19 +49,14 @@ const Dropdown: React.FC<Props> = ({
         role='menu'
         id='dropdown-list'
         aria-labelledby='dropdown-button'
-        className={`absolute z-[1] top-[calc(100%+5px)] w-full max-h-[150px] h-fit rounded-b-lg bg-swan-white shadow-md border border-[rgba(0,0,0,0.1)] flex flex-col overflow-y-auto duration-300 ${
-          prefersDarkMode && 'dark:bg-lightning-yellow-900'
-        } ${extraDropdownListClassNames} ${dropdownActive || 'opacity-0 invisible'}`}>
+        className={`absolute z-[1] top-[calc(100%+5px)] w-full max-h-[150px] h-fit rounded-b-lg bg-swan-white shadow-md border border-[rgba(0,0,0,0.1)] flex flex-col overflow-y-auto duration-300 ${extraDropdownListClassNames} ${
+          dropdownActive || 'opacity-0 invisible'
+        }`}>
         {list.map((item, index) => (
           <li
             key={index}
             role='menuitem'
-            className={`cursor-pointer py-1.5 ${
-              item === selectedValue &&
-              `bg-lightning-yellow-900 text-zircon ${
-                prefersDarkMode && 'dark:text-lightning-yellow-900 dark:bg-zircon'
-              }`
-            }`}
+            className={`menu-item cursor-pointer py-1.5 ${item === selectedValue && 'selected'}`}
             onClick={e => {
               setSelectedItem(item);
               setDropdownActive(false);

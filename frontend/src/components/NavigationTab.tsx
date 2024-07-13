@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { PATHS } from 'routes/PathConstants';
 import { addClass, removeClass } from '../utils';
-import { useAppSelector } from 'hooks/useRootStorage';
 
 type AppRoute = (typeof PATHS)[keyof typeof PATHS];
 
@@ -16,25 +15,10 @@ const NavigationTab: React.FC<Props> = ({ to, icon }) => {
   const NAV_LINK = 'nav-link';
   const { pathname } = useLocation();
   const linkRef = useRef<HTMLAnchorElement>(null);
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
 
   useEffect(() => {
-    if (pathname === to)
-      addClass(
-        linkRef.current,
-        'text-lightning-yellow-700',
-        `${prefersDarkMode && 'dark:bg-white'}`,
-        `${prefersDarkMode && 'dark:hover:border-transparent'}`,
-        `${prefersDarkMode && 'dark:text-lightning-yellow-900'}`
-      );
-    else
-      removeClass(
-        linkRef.current,
-        'text-lightning-yellow-700',
-        `${prefersDarkMode && 'dark:bg-white'}`,
-        `${prefersDarkMode && 'dark:hover:border-transparent'}`,
-        `${prefersDarkMode && 'dark:text-lightning-yellow-900'}`
-      );
+    if (pathname === to) addClass(linkRef.current, 'active');
+    else removeClass(linkRef.current, 'active');
   }, [pathname, linkRef]);
 
   return (

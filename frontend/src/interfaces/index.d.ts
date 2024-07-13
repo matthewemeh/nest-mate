@@ -20,8 +20,9 @@ interface Reservation extends MongoInterface {
 
 interface Rating extends MongoInterface {
   userID: User;
+  roomID: Room;
   value: number;
-  roomID: string;
+  hostelID: Hostel;
 }
 
 interface User extends MongoInterface {

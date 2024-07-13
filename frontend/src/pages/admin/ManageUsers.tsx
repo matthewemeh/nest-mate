@@ -13,7 +13,6 @@ import { useGetUsersMutation } from 'services/apis/userApi/userStoreApi';
 const ManageUsers = () => {
   const MIN_PAGE_INDEX = 1;
 
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { paginatedUsers, currentUser, pages } = useAppSelector(state => state.userStore);
   const { _id, role } = currentUser;
 
@@ -51,10 +50,7 @@ const ManageUsers = () => {
 
   return (
     <PageLayout>
-      <div
-        className={`bg-swan-white p-8 rounded-lg ${
-          prefersDarkMode && 'dark:bg-lightning-yellow-900'
-        }`}>
+      <section className='mod-1 bg-swan-white p-8 rounded-lg'>
         <h1 className='text-3xl font-bold mb-5'>Manage Users</h1>
         {users.length > 0 && <PaginationControls page={page} pages={pages} setPage={setPage} />}
 
@@ -68,7 +64,7 @@ const ManageUsers = () => {
             <span className='text-lg font-medium'>No users to manage.</span>
           </div>
         )}
-      </div>
+      </section>
     </PageLayout>
   );
 };

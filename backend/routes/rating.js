@@ -6,7 +6,7 @@ const Room = require('../models/room.model');
 /* update room rating */
 router.route('/').post(async (req, res) => {
   try {
-    const { value, roomID, userID } = req.body;
+    const { value, roomID, userID, hostelID } = req.body;
 
     const rating = await Rating.findOne({ roomID, userID });
 
@@ -14,7 +14,7 @@ router.route('/').post(async (req, res) => {
       rating.value = value;
       await rating.save();
     } else {
-      const newRating = new Rating({ roomID, userID, value });
+      const newRating = new Rating({ roomID, userID, value, hostelID });
       await newRating.save();
 
       const user = await User.findById(userID);

@@ -29,11 +29,15 @@ const Profilebar: React.FC<Props> = ({ extraClassNames }) => {
 
   return (
     <div
-      className={`px-4 flex items-center justify-between gap-5 bg-swan-white ${
-        prefersDarkMode && 'dark:bg-lightning-yellow-900 dark:text-lightning-yellow-900'
-      } ${extraClassNames}`}>
-      <Link to={HOME} className='flex gap-3 items-center'>
-        <FaHotel className='w-7 h-7 text-lightning-yellow-700' /> Nest Mate
+      className={`profile-bar px-4 flex items-center justify-between gap-5 bg-swan-white ${extraClassNames}`}>
+      <Link
+        to={HOME}
+        id='profile-bar-logo'
+        className='flex gap-3 items-center text-lightning-yellow-700'>
+        <FaHotel className='w-7 h-7' />
+        <p id='profile-bar-app-name' className='text-woodsmoke'>
+          Nest Mate
+        </p>
       </Link>
       <button
         className='w-11 h-11 p-2 bg-zircon rounded-half ml-auto'
@@ -69,9 +73,9 @@ const Profilebar: React.FC<Props> = ({ extraClassNames }) => {
           id='portal-menu'
           aria-labelledby='header-menu-button'
           onClick={() => setMenuOpened(false)}
-          className={`text-[14px] text-center z-[5] bg-zircon overflow-hidden flex flex-col rounded-b w-[120px] absolute top-[calc(100%+10px)] right-0 shadow-[0_10px_20px_0_rgba(219,219,219,0.25)] duration-500 ${
-            prefersDarkMode && 'dark:bg-lightning-yellow-900 dark:shadow-lg dark:text-zircon'
-          } ${menuOpened ? 'max-h-[300px]' : 'max-h-0'}`}>
+          className={`text-[14px] text-center z-[5] bg-zircon overflow-hidden flex flex-col rounded-b w-[120px] absolute top-[calc(100%+10px)] right-0 shadow-lg duration-500 ${
+            menuOpened ? 'max-h-80' : 'max-h-0'
+          }`}>
           <Link role='menuitem' to={PROFILE} className='h-10 grid place-items-center shrink-0'>
             Profile
           </Link>

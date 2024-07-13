@@ -31,7 +31,6 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
   const [newRole, setNewRole] = useState<string>(role);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [isCheckedIn, setIsCheckedIn] = useState<boolean>(checkedIn);
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { _id: userID, role: userRole } = useAppSelector(state => state.userStore.currentUser);
 
   const isYou = useMemo<boolean>(() => _id === userID, [_id, userID]);
@@ -150,7 +149,7 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
   return (
     <div
       key={_id}
-      className={`grid gap-10 items-center px-4 py-2.5 bg-lightning-yellow-100 rounded-md shadow-md ${
+      className={`occupant-tab grid gap-10 items-center px-4 py-2.5 bg-lightning-yellow-100 rounded-md shadow-md ${
         userRole === ROLES.SUPER_ADMIN
           ? 'grid-cols-[auto_repeat(1,minmax(0,1fr))_120px_auto_auto_50px]'
           : 'grid-cols-[auto_repeat(1,minmax(0,1fr))_120px_auto_auto]'
@@ -164,15 +163,11 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
           className={`w-full h-full rounded-half ${imageLoaded || 'opacity-0 invisible'}`}
         />
         {imageLoaded || (
-          <RiUser3Line
-            className={`absolute p-2 top-0 left-0 w-full h-full text-current border rounded-full ${
-              prefersDarkMode && 'dark:text-nile-lightning-yellow-900'
-            }`}
-          />
+          <RiUser3Line className='text-lightning-yellow-900 absolute p-2 top-0 left-0 w-full h-full text-current border rounded-full' />
         )}
       </div>
 
-      <p>{isYou ? 'You' : name}</p>
+      <p className='!text-woodsmoke'>{isYou ? 'You' : name}</p>
 
       <SwitchInput
         width={48}
@@ -206,7 +201,7 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
         disabled={isYou || isUpdateRoomLoading || isUpdateRoomSuccess}
         content={
           <>
-            <GiExitDoor className='text-red-600 cursor-pointer' />
+            <GiExitDoor className='!text-red-600 cursor-pointer' />
             Evict
           </>
         }
@@ -217,7 +212,7 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
           onClick={handleDeleteUser}
           extraClassNames='w-full h-full'
           disabled={isDeleteLoading || isDeleteSuccess}
-          content={<MdDelete className='w-full h-full text-red-600' />}
+          content={<MdDelete className='w-full h-full !text-red-600' />}
         />
       )}
     </div>

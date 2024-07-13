@@ -98,7 +98,7 @@ const EditHostel = () => {
     if (isUpdateSuccess) {
       setHostelImageChanged(false);
       const imageTag: HTMLImageElement = hostelImagePreviewRef.current!;
-      imageTag.src = prefersDarkMode ? FaHotelDark : FaHotelLight;
+      imageTag.src = hostelImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight);
 
       showAlert({ msg: 'Hostel updated successfully' });
       formRef.current!.reset();
@@ -115,81 +115,79 @@ const EditHostel = () => {
   }, [hostelError, isHostelError]);
 
   return (
-    <PageLayout
-      extraClassNames={`pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5 ${
-        prefersDarkMode && 'dark:bg-lightning-yellow-900'
-      }`}>
-      <label
-        htmlFor='hostel-image'
-        className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
-          hostelImageChanged || 'border-4'
-        }`}>
-        <img
-          alt=''
-          loading='lazy'
-          ref={hostelImagePreviewRef}
-          src={hostelImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
-          className={`mx-auto h-full ${hostelImageChanged || hostelImageUrl ? 'w-full' : 'w-2/5'}`}
-        />
-      </label>
-
-      {isHostelLoading ? (
-        <Loading />
-      ) : (
-        <form onSubmit={handleUpdateHostel} ref={formRef}>
-          <h1 className='text-2xl font-semibold mt-4'>Edit Hostel information</h1>
-
-          <FormInput
-            required
-            type='text'
-            autoComplete='off'
-            spellCheck={false}
-            label='Hostel Name'
-            inputID='hostel-name'
-            inputName='hostel-name'
-            inputRef={hostelNameRef}
-            defaultValue={defaultName}
-            extraLabelClassNames='mt-8'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
-          />
-
-          <FormInput
-            type='text'
-            inputID='floors'
-            inputName='floors'
-            autoComplete='off'
-            inputRef={floorsRef}
-            label='Number of Floors'
-            extraLabelClassNames='mt-[15px]'
-            defaultValue={defaultFloors.toString()}
-            formatRule={{ allowedChars: '0123456789' }}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
-          />
-
-          <FormInput
-            type='file'
-            label='Hostel Image'
-            inputID='hostel-image'
-            inputName='hostel-image'
-            inputRef={hostelImageRef}
-            accept={ACCEPTED_IMAGE_TYPES}
-            extraLabelClassNames='mt-[15px]'
-            onChange={e => updatePreviewImage(e.target.files?.[0])}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
-          />
-
-          <AuthButton
-            type='submit'
-            title='Update Hostel'
-            disabled={isUpdateLoading}
-            isLoading={isUpdateLoading}
-            extraClassNames={`!w-1/2 mx-auto ${
-              prefersDarkMode &&
-              'dark:bg-zircon dark:text-lightning-yellow-900 dark:hover:bg-transparent dark:hover:text-zircon'
+    <PageLayout>
+      <section className='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
+        <label
+          htmlFor='hostel-image'
+          className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
+            hostelImageChanged || 'border-4'
+          }`}>
+          <img
+            alt=''
+            loading='lazy'
+            ref={hostelImagePreviewRef}
+            src={hostelImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
+            className={`mx-auto h-full ${
+              hostelImageChanged || hostelImageUrl ? 'w-full' : 'w-2/5'
             }`}
           />
-        </form>
-      )}
+        </label>
+
+        {isHostelLoading ? (
+          <Loading />
+        ) : (
+          <form onSubmit={handleUpdateHostel} ref={formRef}>
+            <h1 className='text-2xl font-semibold mt-4'>Edit Hostel information</h1>
+
+            <FormInput
+              required
+              type='text'
+              autoComplete='off'
+              spellCheck={false}
+              label='Hostel Name'
+              inputID='hostel-name'
+              inputName='hostel-name'
+              inputRef={hostelNameRef}
+              defaultValue={defaultName}
+              extraLabelClassNames='mt-8'
+              extraInputClassNames='mod-1'
+            />
+
+            <FormInput
+              type='text'
+              inputID='floors'
+              inputName='floors'
+              autoComplete='off'
+              inputRef={floorsRef}
+              label='Number of Floors'
+              extraLabelClassNames='mt-[15px]'
+              defaultValue={defaultFloors.toString()}
+              formatRule={{ allowedChars: '0123456789' }}
+              extraInputClassNames='mod-1'
+            />
+
+            <FormInput
+              type='file'
+              label='Hostel Image'
+              inputID='hostel-image'
+              inputName='hostel-image'
+              inputRef={hostelImageRef}
+              accept={ACCEPTED_IMAGE_TYPES}
+              extraLabelClassNames='mt-[15px]'
+              onChange={e => updatePreviewImage(e.target.files?.[0])}
+              extraInputClassNames='mod-1'
+            />
+
+            <AuthButton
+              type='submit'
+              title='Update Hostel'
+              disabled={isUpdateLoading}
+              isLoading={isUpdateLoading}
+              extraClassNames='!w-1/2 mx-auto mod-1'
+            />
+          </form>
+        )}
+      </section>
     </PageLayout>
   );
 };

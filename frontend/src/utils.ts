@@ -22,7 +22,7 @@ export const showAlert = ({
   duration = 3000
 }: AlertProps) => {
   const alertDiv: HTMLDivElement = document.createElement('div');
-  alertDiv.id = 'alert';
+  alertDiv.className = 'alert';
   addClass(
     alertDiv,
     'p-4',
@@ -46,10 +46,6 @@ export const showAlert = ({
     'tracking-[0.04em]',
     'bg-lightning-yellow-900'
   );
-  const persistRoot = JSON.parse(localStorage.getItem('persist:root') ?? '{}');
-  const persistRootObject = JSON.parse(persistRoot.userData ?? '{}');
-  const { prefersDarkMode } = persistRootObject;
-  prefersDarkMode && addClass(alertDiv, 'dark:bg-zircon', 'dark:text-lightning-yellow-900');
 
   alertDiv.style.bottom = '-150px';
   document.body.appendChild(alertDiv);
@@ -299,3 +295,5 @@ export const handleReduxQueryError = (
     console.error(error);
   }
 };
+
+export const isDarkMode = () => window.matchMedia?.('(prefers-color-scheme: dark)').matches;

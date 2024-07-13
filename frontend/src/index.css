@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 * {
-  border-color: #263a53;
-  outline-color: #263a53;
+  @apply border-lightning-yellow-700 outline-lightning-yellow-700;
 }
 
 body {
@@ -15,4 +14,100 @@ body {
 a,
 button {
   cursor: pointer;
+}
+
+path {
+  @apply !text-inherit;
+}
+
+[data-theme='dark'] {
+  @apply bg-lightning-yellow-950 text-swan-white;
+}
+
+[data-theme='dark'] .alert {
+  @apply bg-zircon text-lightning-yellow-900;
+}
+
+[data-theme='dark'] .dropdown #dropdown-list {
+  @apply bg-lightning-yellow-900;
+}
+
+[data-theme='light'] .dropdown .menu-item.selected {
+  @apply text-swan-white bg-lightning-yellow-900;
+}
+
+[data-theme='dark'] .dropdown .menu-item.selected {
+  @apply text-lightning-yellow-900 bg-swan-white;
+}
+
+[data-theme='dark'] nav {
+  @apply text-swan-white bg-lightning-yellow-900;
+}
+
+[data-theme='dark'] nav ul {
+  @apply text-swan-white;
+}
+
+[data-theme='light'] .nav-link.active {
+  @apply text-lightning-yellow-700;
+}
+
+[data-theme='dark'] .nav-link.active {
+  @apply bg-swan-white text-lightning-yellow-900 hover:border-transparent;
+}
+
+[data-theme='dark'] .auth-btn.mod-1 {
+  @apply bg-transparent text-swan-white hover:bg-swan-white hover:text-lightning-yellow-900;
+}
+
+[data-theme='dark'] .auth-btn.mod-2 {
+  @apply !text-zircon;
+}
+
+[data-theme='dark'] .auth-btn.mod-3 {
+  @apply !border-transparent;
+}
+
+[data-theme='dark'] .profile-bar {
+  @apply bg-lightning-yellow-900 text-lightning-yellow-700;
+}
+
+[data-theme='dark'] #portal-menu {
+  @apply bg-lightning-yellow-900 text-swan-white;
+}
+
+[data-theme='dark'] #profile-bar-logo {
+  @apply text-swan-white;
+}
+
+[data-theme='dark'] #profile-bar-app-name {
+  @apply text-inherit;
+}
+
+[data-theme='dark'] .app-ui-button {
+  @apply !text-swan-white;
+}
+
+[data-theme='dark'] .user-tab {
+  @apply !bg-lightning-yellow-100;
+}
+
+[data-theme='light'] #delete-button {
+  @apply !text-swan-white;
+}
+
+[data-theme='dark'] :is(.hostel-tab, .hostels-header, .hostel-rooms-header) {
+  @apply !bg-lightning-yellow-700;
+}
+
+[data-theme='dark'] #user-profile-image {
+  @apply border-swan-white;
+}
+
+[data-theme='dark'] section.mod-1 {
+  @apply !bg-lightning-yellow-900;
+}
+
+[data-theme='dark'] .form-input.mod-1 {
+  @apply bg-lightning-yellow-950;
 }

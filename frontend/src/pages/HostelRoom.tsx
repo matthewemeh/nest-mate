@@ -14,7 +14,6 @@ import { useGetRoomMutation, useDeleteRoomMutation } from 'services/apis/roomApi
 import RatingTab from 'components/RatingTab';
 import Button from 'components/buttons/Button';
 import OccupantTab from 'components/OccupantTab';
-import SectionHeading1 from 'components/SectionHeading1';
 import OccupantTabAdmin from 'components/OccupantTabAdmin';
 
 const HostelRoom = () => {
@@ -51,7 +50,7 @@ const HostelRoom = () => {
   }, [roomNumber]);
 
   const handleRating = (rate: number) => {
-    setRating({ userID, value: rate, roomID: roomID! });
+    setRating({ userID, value: rate, roomID: roomID!, hostelID: hostelID! });
   };
 
   useEffect(() => {
@@ -86,12 +85,20 @@ const HostelRoom = () => {
 
   return (
     <div>
-      <SectionHeading1>Occupants {roomNumber ? `in Room ${roomNumber}` : ''}</SectionHeading1>
+      <h1 className='text-3xl font-bold mt-2'>
+        Occupants{roomNumber ? ` in Room ${roomNumber}` : ''}
+      </h1>
 
-      <section className='mt-5 bg-swan-white rounded py-5 px-4'>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
         <div className='mb-5 flex items-center justify-between'>
           {isAdmin && (
-            <Button content='Delete Room' disabled={isDeleteLoading} onClick={handleDeleteRoom} />
+            <Button
+              id='delete-button'
+              content='Delete Room'
+              disabled={isDeleteLoading}
+              onClick={handleDeleteRoom}
+              extraClassNames='!bg-red-600'
+            />
           )}
 
           <div className='flex flex-col items-center justify-center mx-auto'>
@@ -139,7 +146,7 @@ const HostelRoom = () => {
 
       <h2 className='font-bold text-3xl mt-10'>Room Ratings</h2>
 
-      <section className='mt-5 bg-swan-white rounded py-5 px-4'>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
         <ul className='flex flex-col gap-3 mt-4'>
           {ratings.length > 0 ? (
             ratings.map(rating => <RatingTab key={rating._id} rating={rating} />)

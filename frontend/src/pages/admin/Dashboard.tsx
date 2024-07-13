@@ -51,8 +51,8 @@ const Dashboard = () => {
     <PageLayout extraClassNames='p-4'>
       <h1 className='font-bold text-3xl'>Dashboard</h1>
 
-      <section className='mt-5 bg-swan-white rounded py-2 px-4'>
-        <p>Reservation Summary</p>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-2 px-4'>
+        <p className='text-lg'>Reservation Summary</p>
         <div className='mt-4 flex items-center gap-4 flex-wrap'>
           <ReservationSummaryCard
             title='Check-in'
@@ -75,9 +75,9 @@ const Dashboard = () => {
           <ReservationSummaryCard value={reservationsLength} title='Confirmed Reservations' />
         </div>
 
-        <section className='mt-5 bg-swan-white rounded py-2 px-4'>
+        <section className='mod-1 mt-5 bg-swan-white rounded py-2'>
           <div className='flex items-center justify-between'>
-            <p>Reservation List</p>
+            <p className='text-lg'>Reservation List</p>
             <PaginationControls page={page} setPage={setPage} pages={pages} />
           </div>
 

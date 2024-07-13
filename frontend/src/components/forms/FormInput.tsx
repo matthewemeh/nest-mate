@@ -112,7 +112,7 @@ const FormInput: React.FC<Props> = ({
           autoComplete={autoComplete}
           defaultValue={defaultValue}
           type={isPasswordField ? (passwordVisible ? 'text' : 'password') : type}
-          className={`font-normal flex gap-2 items-center self-stretch border shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] w-full rounded-lg py-2.5 phones:tracking-[0.9px] focus:border-lightning-yellow-900 disabled:opacity-50 ${
+          className={`form-input font-normal flex gap-2 items-center self-stretch border shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] w-full rounded-lg py-2.5 phones:tracking-[0.9px] focus:border-lightning-yellow-900 disabled:opacity-50 ${
             isPasswordField || isEmailField ? 'px-10' : 'px-3'
           } ${extraInputClassNames}`}
         />

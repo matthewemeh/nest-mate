@@ -8,51 +8,55 @@ import NavigationTab from './NavigationTab';
 
 import useAuth from 'hooks/useAuth';
 import { PATHS } from 'routes/PathConstants';
-import { useAppSelector } from 'hooks/useRootStorage';
 
 const Navigation = () => {
   const isAuthorized: boolean = useAuth();
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
   const { PROFILE, HOSTELS, RESERVATIONS, DASHBOARD, ENTRIES, MANAGE_USERS } = PATHS;
 
   return (
-    <nav
-      className={`row-start-1 row-end-3 p-3 pt-20 bg-swan-white ${
-        prefersDarkMode && 'dark:text-swan-white dark:bg-lightning-yellow-900'
-      }`}>
-      <ul className={`text-oslo-gray flex flex-col gap-2 ${prefersDarkMode && 'text-white'}`}>
+    <nav className='row-start-1 row-end-3 p-3 pt-20 bg-swan-white'>
+      <ul className='text-oslo-gray flex flex-col gap-2'>
         {isAuthorized && (
           <li>
             <NavigationTab
               to={DASHBOARD}
-              icon={<BsGridFill className='text-current text-[21px]' />}
+              icon={<BsGridFill className='!text-inherit text-[21px]' />}
             />
           </li>
         )}
         <li>
-          <NavigationTab to={HOSTELS} icon={<RiHotelLine className='text-current text-[21px]' />} />
+          <NavigationTab
+            to={HOSTELS}
+            icon={<RiHotelLine className='!text-inherit text-[21px]' />}
+          />
         </li>
         {isAuthorized && (
           <>
             <li>
               <NavigationTab
                 to={RESERVATIONS}
-                icon={<MdOutlineBallot className='text-current text-[21px]' />}
+                icon={<MdOutlineBallot className='!text-inherit text-[21px]' />}
               />
             </li>
             <li>
-              <NavigationTab to={ENTRIES} icon={<ImEnter className='text-current text-[21px]' />} />
+              <NavigationTab
+                to={ENTRIES}
+                icon={<ImEnter className='!text-inherit text-[21px]' />}
+              />
             </li>
             <li>
               <NavigationTab
                 to={MANAGE_USERS}
-                icon={<FaUsers className='text-current text-[21px]' />}
+                icon={<FaUsers className='!text-inherit text-[21px]' />}
               />
             </li>
           </>
         )}
         <li>
-          <NavigationTab to={PROFILE} icon={<RiUser3Line className='text-current text-[21px]' />} />
+          <NavigationTab
+            to={PROFILE}
+            icon={<RiUser3Line className='!text-inherit text-[21px]' />}
+          />
         </li>
       </ul>
     </nav>

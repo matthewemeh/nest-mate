@@ -42,8 +42,8 @@ router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   try {
     const room = await Room.findById(id).populate([
-      { path: 'ratings', populate: { path: 'userID' } },
-      'occupants'
+      'occupants',
+      { path: 'ratings', populate: { path: ['userID', 'roomID', 'hostelID'] } }
     ]);
 
     res.status(200).json(room);

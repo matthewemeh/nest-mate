@@ -4,7 +4,7 @@ interface Props {
 }
 
 const PageLayout: React.FC<Props> = ({ children, extraClassNames }) => {
-  return <div className={`min-h-full relative ${extraClassNames}`}>{children}</div>;
+  return <div className={`page-layout min-h-full relative ${extraClassNames}`}>{children}</div>;
 };
 
 export default PageLayout;

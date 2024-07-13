@@ -6,6 +6,7 @@ const RatingSchema = new Schema(
   {
     roomID: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
     userID: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    hostelID: { type: Schema.Types.ObjectId, ref: 'Hostel', required: true },
     value: { type: Number, required: [true, 'is required'], min: 0, max: 5 }
   },
   { minimize: false, timestamps: true, versionKey: false, collection: 'ratings' }

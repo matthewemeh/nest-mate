@@ -121,6 +121,7 @@ interface RatingUpdatePayload {
   value: number;
   roomID: string;
   userID: string;
+  hostelID: string;
 }
 
 interface ReserveSpacePayload {

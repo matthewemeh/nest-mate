@@ -60,7 +60,6 @@ const Profile = () => {
   const { _id, name, email, profileImageUrl } = useAppSelector(
     state => state.userStore.currentUser
   );
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
 
   const handleUpdateUser = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -154,24 +153,20 @@ const Profile = () => {
 
   return (
     <PageLayout>
-      <section
-        className={`bg-swan-white p-8 rounded-lg flex flex-col items-center ${
-          prefersDarkMode && 'dark:bg-lightning-yellow-900'
-        }`}>
+      <section className='mod-1 bg-swan-white p-8 rounded-lg flex flex-col items-center'>
         <label htmlFor='profile-image' className='relative cursor-pointer'>
           <img
             alt=''
+            id='user-profile-image'
             ref={profileImagePreviewRef}
             src={profileImageUrl || RiUser3Line}
-            className={`w-[100px] h-[100px] text-current rounded-half bg-zircon border-2 border-lightning-yellow-900 ${
-              prefersDarkMode && 'dark:border-zircon'
-            }`}
+            className='w-[100px] h-[100px] text-current rounded-half bg-zircon border-2 border-lightning-yellow-900'
           />
           <button
             onClick={handleDeleteUserImage}
             disabled={isProfileImageLoading}
-            className={`text-lightning-yellow-900 absolute bottom-[4%] right-[4%] bg-zircon rounded-full p-1 ${
-              profileImageUrl ? '' : 'opacity-0 invisible'
+            className={`shadow-lg text-lightning-yellow-900 absolute bottom-[4%] right-[4%] bg-zircon rounded-full p-1 ${
+              profileImageUrl || 'opacity-0 invisible'
             }`}>
             <MdDelete />
           </button>
@@ -189,7 +184,7 @@ const Profile = () => {
             defaultValue={email}
             autoComplete='username'
             extraLabelClassNames='mt-8'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <FormInput
@@ -203,7 +198,7 @@ const Profile = () => {
             inputName='full-name'
             autoComplete='full-name'
             extraLabelClassNames='mt-[15px]'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <FormInput
@@ -218,7 +213,7 @@ const Profile = () => {
             inputRef={profileImageRef}
             accept={ACCEPTED_IMAGE_TYPES}
             extraLabelClassNames='mt-[15px]'
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <AuthButton
@@ -226,19 +221,14 @@ const Profile = () => {
             title='Update'
             disabled={isUpdateLoading}
             isLoading={isUpdateLoading}
-            extraClassNames={`${
-              prefersDarkMode &&
-              'dark:bg-zircon dark:text-lightning-yellow-900 dark:hover:bg-transparent dark:hover:text-zircon'
-            }`}
+            extraClassNames='mod-1'
           />
 
           <AuthButton
             type='button'
             title='Reset Password?'
             onClick={handleResetPassword}
-            extraClassNames={`!bg-transparent !text-lightning-yellow-700 !border-transparent h-0 shadow-none w-max mx-auto ${
-              prefersDarkMode && 'dark:!text-zircon'
-            }`}
+            extraClassNames='mod-2 !bg-transparent !text-lightning-yellow-700 !border-transparent h-0 shadow-none w-max mx-auto'
           />
 
           <AuthButton
@@ -247,9 +237,7 @@ const Profile = () => {
             onClick={handleDeleteUser}
             disabled={isDeleteLoading}
             isLoading={isDeleteLoading}
-            extraClassNames={`!bg-red-600 !text-swan-white h-0 ${
-              prefersDarkMode && 'dark:!border-transparent'
-            }`}
+            extraClassNames='mod-3 !bg-red-600 !text-swan-white h-0'
           />
         </form>
       </section>

@@ -98,7 +98,7 @@ const EditHostelRoom = () => {
     if (isUpdateSuccess) {
       setRoomImageChanged(false);
       const imageTag: HTMLImageElement = roomImagePreviewRef.current!;
-      imageTag.src = prefersDarkMode ? FaHotelDark : FaHotelLight;
+      imageTag.src = roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight);
 
       showAlert({ msg: 'Room updated successfully' });
       formRef.current!.reset();
@@ -114,10 +114,7 @@ const EditHostelRoom = () => {
   }, [hostelError, isHostelError]);
 
   return (
-    <PageLayout
-      extraClassNames={`pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5 ${
-        prefersDarkMode && 'dark:bg-lightning-yellow-900'
-      }`}>
+    <PageLayout extraClassNames='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
       <label
         htmlFor='room-image'
         className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
@@ -149,7 +146,7 @@ const EditHostelRoom = () => {
             extraLabelClassNames='mt-[15px]'
             defaultValue={defaultRoomNumber.toString()}
             formatRule={{ allowedChars: '0123456789' }}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <FormInput
@@ -162,7 +159,7 @@ const EditHostelRoom = () => {
             extraLabelClassNames='mt-[15px]'
             defaultValue={defaultFloor.toString()}
             formatRule={{ allowedChars: '0123456789' }}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <FormInput
@@ -175,7 +172,7 @@ const EditHostelRoom = () => {
             extraLabelClassNames='mt-[15px]'
             formatRule={{ allowedChars: '0123456789' }}
             defaultValue={defaultMaxOccupants.toString()}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <FormInput
@@ -187,7 +184,7 @@ const EditHostelRoom = () => {
             accept={ACCEPTED_IMAGE_TYPES}
             extraLabelClassNames='mt-[15px]'
             onChange={e => updatePreviewImage(e.target.files?.[0])}
-            extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+            extraInputClassNames='mod-1'
           />
 
           <AuthButton
@@ -195,10 +192,7 @@ const EditHostelRoom = () => {
             title='Update Room'
             disabled={isUpdateLoading}
             isLoading={isUpdateLoading}
-            extraClassNames={`!w-1/2 mx-auto ${
-              prefersDarkMode &&
-              'dark:bg-zircon dark:text-lightning-yellow-900 dark:hover:bg-transparent dark:hover:text-zircon'
-            }`}
+            extraClassNames='mod-1 !w-1/2 mx-auto'
           />
         </form>
       )}

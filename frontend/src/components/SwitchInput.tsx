@@ -41,7 +41,7 @@ const SwitchInput: React.FC<Props> = ({
     <label
       htmlFor={switchID}
       className={`cursor-pointer flex items-center justify-between ${extraClassNames}`}>
-      {label && <span>{label}</span>}
+      {label && <span className='!text-woodsmoke'>{label}</span>}
       <Switch
         checked={checked}
         onChange={() => {

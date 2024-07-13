@@ -6,7 +6,7 @@ import { handleReduxQueryError, showAlert } from 'utils';
 
 import RoomTab from 'components/RoomTab';
 import Button from 'components/buttons/Button';
-import SectionHeading1 from 'components/SectionHeading1';
+import HostelRoomsHeader from 'components/HostelRoomsHeader';
 
 import useAdmin from 'hooks/useAdmin';
 import {
@@ -68,9 +68,9 @@ const HostelRooms = () => {
 
   return (
     <div>
-      <SectionHeading1>Rooms{name ? ` in ${name}` : ''}</SectionHeading1>
+      <h1 className='font-bold text-3xl'>Rooms{name ? ` in ${name}` : ''}</h1>
 
-      <section className='mt-5 bg-swan-white rounded py-5 px-4'>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
         {isAdmin && (
           <div className='mb-5 flex items-center justify-between'>
             <Button
@@ -88,20 +88,7 @@ const HostelRooms = () => {
           </div>
         )}
 
-        {rooms.length > 0 && (
-          <div
-            className={`grid gap-4 px-4 py-2.5 bg-lightning-yellow-100 rounded ${
-              isAdmin
-                ? 'grid-cols-[repeat(3,minmax(0,1fr))_106.344px]'
-                : 'grid-cols-[repeat(3,minmax(0,1fr))_106.344px_128.734px]'
-            }`}>
-            <p>Room Number</p>
-            <p>Room Floor</p>
-            <p>No. of Occupants</p>
-            <p></p>
-            {isAdmin || <p></p>}
-          </div>
-        )}
+        {rooms.length > 0 && <HostelRoomsHeader isAdmin={isAdmin} />}
 
         <div className='flex flex-col gap-3 mt-4'>
           {rooms.length > 0 ? (

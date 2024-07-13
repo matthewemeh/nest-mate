@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import HostelTab from 'components/HostelTab';
 import Button from 'components/buttons/Button';
+import HostelsHeader from 'components/HostelsHeader';
 import PaginationControls from 'components/PaginationControls';
 
 import useAdmin from 'hooks/useAdmin';
@@ -39,7 +40,7 @@ const Hostels = () => {
     <div>
       <h1 className='font-bold text-3xl'>Hostels</h1>
 
-      <section className='mt-5 bg-swan-white rounded py-5 px-4'>
+      <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
         <div className='mb-5 flex items-center justify-between'>
           {isAdmin && paginatedHostels.length > 0 && (
             <Button content='Add Hostel' onClick={() => navigate(ADD_HOSTEL)} />
@@ -52,12 +53,7 @@ const Hostels = () => {
           />
         </div>
 
-        {paginatedHostels.length > 0 && (
-          <div className='grid grid-cols-[repeat(2,1fr)_auto] px-4 py-2.5 bg-lightning-yellow-100 rounded'>
-            <p>Hostel Name</p>
-            <p>Number of Rooms</p>
-          </div>
-        )}
+        {paginatedHostels.length > 0 && <HostelsHeader />}
 
         <div className='flex flex-col gap-3 mt-4'>
           {paginatedHostels.length > 0 ? (

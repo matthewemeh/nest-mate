@@ -1,4 +1,3 @@
-import { useAppSelector } from 'hooks/useRootStorage';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 interface Props {
@@ -16,8 +15,6 @@ const PaginationControls: React.FC<Props> = ({
   extraClassNames,
   minPageIndex = 1
 }) => {
-  const { prefersDarkMode } = useAppSelector(state => state.userData);
-
   return (
     <header className={`flex mb-5 items-center justify-between gap-3 ${extraClassNames}`}>
       {pages > 0 && (
@@ -25,18 +22,14 @@ const PaginationControls: React.FC<Props> = ({
           <button
             disabled={page === minPageIndex}
             onClick={() => setPage(prev => prev - 1)}
-            className={`flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
-              prefersDarkMode && 'dark:bg-zircon dark:text-lightning-yellow-900'
-            }`}>
+            className='pagination-control-button border border-swan-white flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50'>
             <FaArrowLeft />
             Previous
           </button>
           <button
             disabled={page === pages}
             onClick={() => setPage(prev => prev + 1)}
-            className={`flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
-              prefersDarkMode && 'dark:bg-zircon dark:text-lightning-yellow-900'
-            }`}>
+            className='pagination-control-button border border-swan-white flex items-center justify-between gap-3 bg-lightning-yellow-700 text-zircon rounded-3xl py-2 px-4 ease-in-out duration-300 disabled:cursor-not-allowed disabled:opacity-50'>
             Next
             <FaArrowRight />
           </button>

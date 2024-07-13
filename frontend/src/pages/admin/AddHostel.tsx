@@ -73,10 +73,7 @@ const AddHostel = () => {
   }, [error, isError]);
 
   return (
-    <PageLayout
-      extraClassNames={`pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5 ${
-        prefersDarkMode && 'dark:bg-lightning-yellow-900'
-      }`}>
+    <PageLayout extraClassNames='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
       <label
         htmlFor='hostel-image'
         className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
@@ -104,7 +101,7 @@ const AddHostel = () => {
           inputName='hostel-name'
           inputRef={hostelNameRef}
           extraLabelClassNames='mt-8'
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+          extraInputClassNames='mod-1'
         />
 
         <FormInput
@@ -116,7 +113,7 @@ const AddHostel = () => {
           label='Number of Floors'
           extraLabelClassNames='mt-[15px]'
           formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+          extraInputClassNames='mod-1'
         />
 
         <FormInput
@@ -128,7 +125,7 @@ const AddHostel = () => {
           accept={ACCEPTED_IMAGE_TYPES}
           extraLabelClassNames='mt-[15px]'
           onChange={e => updatePreviewImage(e.target.files?.[0])}
-          extraInputClassNames={`${prefersDarkMode && 'dark:bg-lightning-yellow-950'}`}
+          extraInputClassNames='mod-1'
         />
 
         <AuthButton
@@ -136,10 +133,7 @@ const AddHostel = () => {
           title='Add Hostel'
           disabled={isLoading}
           isLoading={isLoading}
-          extraClassNames={`!w-1/2 mx-auto ${
-            prefersDarkMode &&
-            'dark:bg-zircon dark:text-lightning-yellow-900 dark:hover:bg-transparent dark:hover:text-zircon'
-          }`}
+          extraClassNames='mod-1 !w-1/2 mx-auto'
         />
       </form>
     </PageLayout>
