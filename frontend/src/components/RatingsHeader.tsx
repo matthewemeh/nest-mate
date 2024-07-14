@@ -5,7 +5,7 @@ interface Props {
 const RatingsHeader: React.FC<Props> = ({ view = 'ROOM' }) => {
   return (
     <div
-      className={`grid gap-4 px-4 py-2.5 bg-lightning-yellow-100 rounded ${
+      className={`grid gap-4 px-4 py-2.5 bg-lightning-yellow-100 text-woodsmoke rounded ${
         view === 'USER' ? 'grid-cols-4' : 'grid-cols-2'
       }`}>
       <p>Username</p>

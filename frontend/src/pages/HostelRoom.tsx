@@ -14,6 +14,7 @@ import { useGetRoomMutation, useDeleteRoomMutation } from 'services/apis/roomApi
 import RatingTab from 'components/RatingTab';
 import Button from 'components/buttons/Button';
 import OccupantTab from 'components/OccupantTab';
+import RatingsHeader from 'components/RatingsHeader';
 import OccupantTabAdmin from 'components/OccupantTabAdmin';
 
 const HostelRoom = () => {
@@ -147,6 +148,8 @@ const HostelRoom = () => {
       <h2 className='font-bold text-3xl mt-10'>Room Ratings</h2>
 
       <section className='mod-1 mt-5 bg-swan-white rounded py-5 px-4'>
+        {ratings.length > 0 && <RatingsHeader />}
+
         <ul className='flex flex-col gap-3 mt-4'>
           {ratings.length > 0 ? (
             ratings.map(rating => <RatingTab key={rating._id} rating={rating} />)

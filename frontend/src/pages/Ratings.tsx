@@ -9,13 +9,15 @@ const Ratings = () => {
   const { ratings } = useAppSelector(state => state.userStore.currentUser);
 
   return (
-    <section className='mod-1 mt-5 bg-swan-white rounded py-2'>
+    <section className='mod-1 mt-5 bg-swan-white rounded py-2 px-4'>
+      <h1 className='text-3xl font-bold mt-2 mb-5'>Your ratings</h1>
+
       {ratings.length > 0 && <RatingsHeader view='USER' />}
 
       <ul className='flex flex-col gap-4 mt-4'>
         {ratings.length > 0 ? (
           ratings.map(rating => (
-            <li key={rating._id} className='border-t border-lightning-yellow-700 last:border-b'>
+            <li key={rating._id} className='border-lightning-yellow-700'>
               <RatingTab view='USER' rating={rating} />
             </li>
           ))
