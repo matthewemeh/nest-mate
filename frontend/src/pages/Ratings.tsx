@@ -22,7 +22,7 @@ const Ratings = () => {
             </li>
           ))
         ) : (
-          <div className='mt-5 flex flex-col gap-4 items-center justify-center'>
+          <div className='mt-5 mb-3 flex flex-col gap-4 items-center justify-center'>
             <MdOutlineStarOutline className='w-10 h-10' />
             No Ratings made
           </div>
