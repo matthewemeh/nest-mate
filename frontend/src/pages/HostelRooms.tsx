@@ -92,9 +92,7 @@ const HostelRooms = () => {
 
         <div className='flex flex-col gap-3 mt-4'>
           {rooms.length > 0 ? (
-            [...rooms]
-              .sort((a, b) => a.roomNumber - b.roomNumber)
-              .map(room => <RoomTab key={room._id} room={room} />)
+            rooms.map(room => <RoomTab key={room._id} room={room} />)
           ) : (
             <div className='flex flex-col gap-4 items-center justify-center'>
               <FaBed className='w-10 h-10' />

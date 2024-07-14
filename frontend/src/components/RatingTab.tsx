@@ -19,7 +19,10 @@ const RatingTab: React.FC<Props> = ({ rating, view = 'ROOM' }) => {
   const isYou = useMemo<boolean>(() => _id === userID, [_id, userID]);
 
   return (
-    <div className='flex items-center justify-between px-4 py-2.5 bg-lightning-yellow-100 text-xl font-medium text-woodsmoke rounded-md shadow-md'>
+    <div
+      className={`grid items-center px-4 py-2.5 bg-lightning-yellow-100 text-xl font-medium text-woodsmoke rounded-md shadow-md ${
+        view === 'USER' ? 'grid-cols-4' : 'grid-cols-2'
+      }`}>
       <p>{isYou ? 'You' : userName}</p>
 
       {view === 'USER' && (

@@ -23,9 +23,9 @@ router.route('/').get(async (req, res) => {
     let hostels;
 
     if (isNaN(page) || isNaN(limit)) {
-      hostels = await Hostel.find().populate('rooms');
+      hostels = await Hostel.find().sort({ name: 1 });
     } else {
-      hostels = await Hostel.paginate({}, { page, limit });
+      hostels = await Hostel.paginate({}, { page, limit, sort: { name: 1 } });
     }
 
     res.status(200).json(hostels);
@@ -38,7 +38,10 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   try {
-    const hostel = await Hostel.findById(id).populate('rooms');
+    const hostel = await Hostel.findById(id).populate({
+      path: 'rooms',
+      options: { sort: { roomNumber: 1 } }
+    });
     res.status(200).json(hostel);
   } catch (err) {
     res.status(400).send(err.message);

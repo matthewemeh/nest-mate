@@ -40,7 +40,8 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   if (!user) throw new Error('User not found');
 
   const passwordMatches = bcrypt.compareSync(password, user.password);
-  if (passwordMatches) return user.populate('ratings');
+  if (passwordMatches)
+    return user.populate({ path: 'ratings', populate: ['userID', 'roomID', 'hostelID'] });
   throw new Error('Invalid credentials');
 };
 
