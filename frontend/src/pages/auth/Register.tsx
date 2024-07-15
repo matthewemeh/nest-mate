@@ -66,12 +66,12 @@ const Register = () => {
           alt=''
           src={RiUser3Line}
           ref={profileImagePreviewRef}
-          className='w-[100px] h-[100px] text-current rounded-half bg-zircon border-2 p-1.5'
+          className='w-[100px] h-[100px] text-current rounded-half bg-swan-white border-2 p-1.5'
         />
       </label>
-      <h1 className='text-2xl font-semibold'>Get Started</h1>
+      <h1 className='text-2xl font-semibold text-woodsmoke'>Get Started</h1>
 
-      <form onSubmit={handleRegister} className='flex flex-col'>
+      <form onSubmit={handleRegister} className='flex flex-col text-woodsmoke'>
         <FormInput
           required
           autoFocus
@@ -123,8 +123,8 @@ const Register = () => {
 
         <AuthButton type='submit' title='Register' disabled={isLoading} isLoading={isLoading} />
         <span className='text-[15px] leading-5 text-center mt-2'>
-          Already have an account?{' '}
-          <Link to={LOGIN} className='text-lightning-yellow-700 underline'>
+          Already have an account?
+          <Link to={LOGIN} className='ml-1.5 text-lightning-yellow-800 underline'>
             Sign in
           </Link>
         </span>

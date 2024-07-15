@@ -73,69 +73,71 @@ const AddHostel = () => {
   }, [error, isError]);
 
   return (
-    <PageLayout extraClassNames='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
-      <label
-        htmlFor='hostel-image'
-        className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
-          hostelImageChanged || 'border-4'
-        }`}>
-        <img
-          alt=''
-          loading='lazy'
-          ref={hostelImagePreviewRef}
-          src={prefersDarkMode ? FaHotelDark : FaHotelLight}
-          className={`mx-auto h-full ${hostelImageChanged ? 'w-full' : 'w-2/5'}`}
-        />
-      </label>
+    <PageLayout>
+      <section className='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
+        <label
+          htmlFor='hostel-image'
+          className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
+            hostelImageChanged || 'border-4'
+          }`}>
+          <img
+            alt=''
+            loading='lazy'
+            ref={hostelImagePreviewRef}
+            src={prefersDarkMode ? FaHotelDark : FaHotelLight}
+            className={`mx-auto h-full ${hostelImageChanged ? 'w-full' : 'w-2/5'}`}
+          />
+        </label>
 
-      <form onSubmit={handleAddHostel} ref={formRef}>
-        <h1 className='text-2xl font-semibold mt-4'>New Hostel information</h1>
+        <form onSubmit={handleAddHostel} ref={formRef}>
+          <h1 className='text-2xl font-semibold mt-4'>New Hostel information</h1>
 
-        <FormInput
-          required
-          type='text'
-          autoComplete='off'
-          spellCheck={false}
-          label='Hostel Name'
-          inputID='hostel-name'
-          inputName='hostel-name'
-          inputRef={hostelNameRef}
-          extraLabelClassNames='mt-8'
-          extraInputClassNames='mod-1'
-        />
+          <FormInput
+            required
+            type='text'
+            autoComplete='off'
+            spellCheck={false}
+            label='Hostel Name'
+            inputID='hostel-name'
+            inputName='hostel-name'
+            inputRef={hostelNameRef}
+            extraLabelClassNames='mt-8'
+            extraInputClassNames='mod-1'
+          />
 
-        <FormInput
-          type='text'
-          inputID='floors'
-          inputName='floors'
-          autoComplete='off'
-          inputRef={floorsRef}
-          label='Number of Floors'
-          extraLabelClassNames='mt-[15px]'
-          formatRule={{ allowedChars: '0123456789' }}
-          extraInputClassNames='mod-1'
-        />
+          <FormInput
+            type='text'
+            inputID='floors'
+            inputName='floors'
+            autoComplete='off'
+            inputRef={floorsRef}
+            label='Number of Floors'
+            extraLabelClassNames='mt-[15px]'
+            formatRule={{ allowedChars: '0123456789' }}
+            extraInputClassNames='mod-1'
+          />
 
-        <FormInput
-          type='file'
-          label='Hostel Image'
-          inputID='hostel-image'
-          inputName='hostel-image'
-          inputRef={hostelImageRef}
-          accept={ACCEPTED_IMAGE_TYPES}
-          extraLabelClassNames='mt-[15px]'
-          onChange={e => updatePreviewImage(e.target.files?.[0])}
-          extraInputClassNames='mod-1'
-        />
+          <FormInput
+            type='file'
+            label='Hostel Image'
+            inputID='hostel-image'
+            inputName='hostel-image'
+            inputRef={hostelImageRef}
+            accept={ACCEPTED_IMAGE_TYPES}
+            extraLabelClassNames='mt-[15px]'
+            onChange={e => updatePreviewImage(e.target.files?.[0])}
+            extraInputClassNames='mod-1'
+          />
 
-        <AuthButton
-          type='submit'
-          title='Add Hostel'
-          disabled={isLoading}
-          isLoading={isLoading}
-          extraClassNames='mod-1 !w-1/2 mx-auto'
-        />
-      </form>
+          <AuthButton
+            type='submit'
+            title='Add Hostel'
+            disabled={isLoading}
+            isLoading={isLoading}
+            extraClassNames='mod-1 !w-1/2 mx-auto'
+          />
+        </form>
+      </section>
     </PageLayout>
   );
 };

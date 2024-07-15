@@ -73,7 +73,7 @@ const FormInput: React.FC<Props> = ({
       className={`flex flex-col items-start gap-y-1.5 self-stretch text-topaz ${extraLabelClassNames}`}>
       <label
         htmlFor={inputID}
-        className={`cursor-pointer text-[14px] leading-[21px] font-medium after:text-coral-red after:pl-1 ${
+        className={`cursor-pointer text-[14px] leading-[21px] font-medium after:!text-red-600 after:pl-1 ${
           required && "after:content-['*']"
         }`}>
         {label}
@@ -81,10 +81,10 @@ const FormInput: React.FC<Props> = ({
 
       <div className='relative w-full'>
         {isPasswordField && (
-          <HiLockClosed className='absolute top-1/2 -translate-y-1/2 left-3.5 bg-[url(./assets/lock.svg)] bg-no-repeat bg-contain w-5 h-5 outline-none' />
+          <HiLockClosed className='absolute top-1/2 -translate-y-1/2 left-3.5 w-5 h-5 outline-none' />
         )}
         {isEmailField && (
-          <AiOutlineMail className='absolute top-1/2 -translate-y-1/2 left-3.5 bg-[url(./assets/email.svg)] bg-no-repeat bg-contain w-5 h-5 outline-none' />
+          <AiOutlineMail className='absolute top-1/2 -translate-y-1/2 left-3.5 w-5 h-5 outline-none' />
         )}
         <input
           ref={ref}

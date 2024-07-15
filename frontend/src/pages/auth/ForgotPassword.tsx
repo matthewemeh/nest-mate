@@ -26,9 +26,9 @@ const ForgotPassword = () => {
   return (
     <section className='flex flex-col h-full items-center justify-center'>
       <FaHotel className='w-[100px] h-[100px] text-current' />
-      <h1 className='text-2xl font-semibold'>Forgot Password</h1>
+      <h1 className='text-2xl font-semibold text-woodsmoke'>Forgot Password</h1>
 
-      <form onSubmit={handleSubmit} className='flex flex-col'>
+      <form onSubmit={handleSubmit} className='flex flex-col text-woodsmoke'>
         <FormInput
           required
           autoFocus
@@ -44,8 +44,8 @@ const ForgotPassword = () => {
 
         <AuthButton type='submit' title='Submit' />
         <span className='text-[15px] leading-5 text-center mt-2'>
-          Already have an account?{' '}
-          <Link to={LOGIN} className='underline text-lightning-yellow-700'>
+          Already have an account?
+          <Link to={LOGIN} className='ml-1.5 underline text-lightning-yellow-700'>
             Sign in
           </Link>
         </span>

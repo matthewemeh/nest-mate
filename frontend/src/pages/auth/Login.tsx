@@ -44,10 +44,10 @@ const Login = () => {
   return (
     <div className='flex flex-col h-full items-center justify-center'>
       <FaHotel className='w-[100px] h-[100px] text-current' />
-      <h1 className='text-2xl font-semibold'>Welcome back</h1>
-      <p className='text-base'>Please enter your details</p>
+      <h1 className='text-2xl font-semibold text-woodsmoke'>Welcome back</h1>
+      <p className='text-base text-woodsmoke'>Please enter your details</p>
 
-      <form onSubmit={handleLogin} className='flex flex-col'>
+      <form onSubmit={handleLogin} className='flex flex-col text-woodsmoke'>
         <FormInput
           required
           autoFocus
@@ -75,14 +75,14 @@ const Login = () => {
             dispatch(logout());
             dispatch(resetUserData());
           }}
-          className='text-right text-lightning-yellow-700 text-sm mt-2 block whitespace-nowrap'>
+          className='text-right text-lightning-yellow-800 text-sm mt-2 block whitespace-nowrap'>
           Forgot password?
         </Link>
 
         <AuthButton type='submit' title='Log in' disabled={isLoading} isLoading={isLoading} />
-        <span className='text-[15px] leading-5 text-center mt-2'>
-          Don't have an account?{' '}
-          <Link to={REGISTER} className='underline text-lightning-yellow-700'>
+        <span className='text-[15px] leading-5 text-center mt-2 text-woodsmoke'>
+          Don't have an account?
+          <Link to={REGISTER} className='ml-1.5 underline text-lightning-yellow-800'>
             Sign up
           </Link>
         </span>

@@ -70,7 +70,7 @@ const OtpInput: React.FC<Props> = ({
             onKeyUp={updateFocus}
             autoFocus={isFirstInput}
             value={otp!.charAt(digitIndex)}
-            className='caret-transparent w-[47px] h-16 flex items-center self-stretch shrink-0 gap-2 p-2 rounded-lg text-[40px] leading-[60px] text-lightning-yellow-900 font-semibold border border-lightning-yellow-700 shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] text-center outline-none focus:border-4 focus:border-lightning-yellow-500 400px:w-[14%]'
+            className='caret-transparent w-[47px] h-16 flex items-center self-stretch shrink-0 gap-2 p-2 rounded-lg text-[40px] leading-[60px] text-lightning-yellow-900 font-semibold border border-lightning-yellow-700 shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] text-center outline-none focus:border-4 focus:border-lightning-yellow-800 400px:w-[14%]'
           />
         );
       })}

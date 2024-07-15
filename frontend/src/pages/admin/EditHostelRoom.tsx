@@ -44,7 +44,6 @@ const EditHostelRoom = () => {
 
   const [roomImageChanged, setRoomImageChanged] = useState<boolean>(false);
 
-  const formRef = useRef<HTMLFormElement>(null);
   const floorRef = useRef<HTMLInputElement>(null);
   const occupantsRef = useRef<HTMLInputElement>(null);
   const roomImageRef = useRef<HTMLInputElement>(null);
@@ -101,7 +100,6 @@ const EditHostelRoom = () => {
       imageTag.src = roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight);
 
       showAlert({ msg: 'Room updated successfully' });
-      formRef.current!.reset();
     }
   }, [isUpdateSuccess]);
 
@@ -114,88 +112,90 @@ const EditHostelRoom = () => {
   }, [hostelError, isHostelError]);
 
   return (
-    <PageLayout extraClassNames='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
-      <label
-        htmlFor='room-image'
-        className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
-          roomImageChanged || 'border-4'
-        }`}>
-        <img
-          alt=''
-          loading='lazy'
-          ref={roomImagePreviewRef}
-          src={roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
-          className={`mx-auto h-full ${roomImageChanged || roomImageUrl ? 'w-full' : 'w-2/5'}`}
-        />
-      </label>
-
-      {isHostelLoading ? (
-        <Loading />
-      ) : (
-        <form onSubmit={handleUpdateRoom} ref={formRef}>
-          <h1 className='text-2xl font-semibold mt-4'>Edit Room information</h1>
-
-          <FormInput
-            required
-            type='text'
-            autoComplete='off'
-            label='Room Number'
-            inputID='room-number'
-            inputName='room-number'
-            inputRef={roomNumberRef}
-            extraLabelClassNames='mt-[15px]'
-            defaultValue={defaultRoomNumber.toString()}
-            formatRule={{ allowedChars: '0123456789' }}
-            extraInputClassNames='mod-1'
+    <PageLayout>
+      <section className='mod-1 pl-[1.5%] pr-10 bg-swan-white p-8 rounded-lg grid grid-cols-[40%_60%] gap-5'>
+        <label
+          htmlFor='room-image'
+          className={`cursor-pointer h-[80vh] shadow rounded-md overflow-hidden border-current ${
+            roomImageChanged || 'border-4'
+          }`}>
+          <img
+            alt=''
+            loading='lazy'
+            ref={roomImagePreviewRef}
+            src={roomImageUrl || (prefersDarkMode ? FaHotelDark : FaHotelLight)}
+            className={`mx-auto h-full ${roomImageChanged || roomImageUrl ? 'w-full' : 'w-2/5'}`}
           />
+        </label>
 
-          <FormInput
-            type='text'
-            inputID='floor'
-            inputName='floor'
-            autoComplete='off'
-            inputRef={floorRef}
-            label='Floor Number'
-            extraLabelClassNames='mt-[15px]'
-            defaultValue={defaultFloor.toString()}
-            formatRule={{ allowedChars: '0123456789' }}
-            extraInputClassNames='mod-1'
-          />
+        {isHostelLoading ? (
+          <Loading />
+        ) : (
+          <form onSubmit={handleUpdateRoom}>
+            <h1 className='text-2xl font-semibold mt-4'>Edit Room information</h1>
 
-          <FormInput
-            type='text'
-            autoComplete='off'
-            inputID='occupants'
-            inputName='occupants'
-            inputRef={occupantsRef}
-            label='Maximum no. of occupants'
-            extraLabelClassNames='mt-[15px]'
-            formatRule={{ allowedChars: '0123456789' }}
-            defaultValue={defaultMaxOccupants.toString()}
-            extraInputClassNames='mod-1'
-          />
+            <FormInput
+              required
+              type='text'
+              autoComplete='off'
+              label='Room Number'
+              inputID='room-number'
+              inputName='room-number'
+              inputRef={roomNumberRef}
+              extraLabelClassNames='mt-[15px]'
+              defaultValue={defaultRoomNumber.toString()}
+              formatRule={{ allowedChars: '0123456789' }}
+              extraInputClassNames='mod-1'
+            />
 
-          <FormInput
-            type='file'
-            label='Room Image'
-            inputID='room-image'
-            inputName='room-image'
-            inputRef={roomImageRef}
-            accept={ACCEPTED_IMAGE_TYPES}
-            extraLabelClassNames='mt-[15px]'
-            onChange={e => updatePreviewImage(e.target.files?.[0])}
-            extraInputClassNames='mod-1'
-          />
+            <FormInput
+              type='text'
+              inputID='floor'
+              inputName='floor'
+              autoComplete='off'
+              inputRef={floorRef}
+              label='Floor Number'
+              extraLabelClassNames='mt-[15px]'
+              defaultValue={defaultFloor.toString()}
+              formatRule={{ allowedChars: '0123456789' }}
+              extraInputClassNames='mod-1'
+            />
 
-          <AuthButton
-            type='submit'
-            title='Update Room'
-            disabled={isUpdateLoading}
-            isLoading={isUpdateLoading}
-            extraClassNames='mod-1 !w-1/2 mx-auto'
-          />
-        </form>
-      )}
+            <FormInput
+              type='text'
+              autoComplete='off'
+              inputID='occupants'
+              inputName='occupants'
+              inputRef={occupantsRef}
+              label='Maximum no. of occupants'
+              extraLabelClassNames='mt-[15px]'
+              formatRule={{ allowedChars: '0123456789' }}
+              defaultValue={defaultMaxOccupants.toString()}
+              extraInputClassNames='mod-1'
+            />
+
+            <FormInput
+              type='file'
+              label='Room Image'
+              inputID='room-image'
+              inputName='room-image'
+              inputRef={roomImageRef}
+              accept={ACCEPTED_IMAGE_TYPES}
+              extraLabelClassNames='mt-[15px]'
+              onChange={e => updatePreviewImage(e.target.files?.[0])}
+              extraInputClassNames='mod-1'
+            />
+
+            <AuthButton
+              type='submit'
+              title='Update Room'
+              disabled={isUpdateLoading}
+              isLoading={isUpdateLoading}
+              extraClassNames='mod-1 !w-1/2 mx-auto'
+            />
+          </form>
+        )}
+      </section>
     </PageLayout>
   );
 };

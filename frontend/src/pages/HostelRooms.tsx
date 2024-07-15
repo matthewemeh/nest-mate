@@ -77,6 +77,7 @@ const HostelRooms = () => {
               content='Delete Hostel'
               disabled={isDeleteLoading}
               onClick={handleDeleteHostel}
+              extraClassNames='delete-btn !bg-red-500'
             />
             <Button content='Edit Hostel' onClick={() => navigate(`/hostels/${hostelID}/edit`)} />
             {rooms.length > 0 && (

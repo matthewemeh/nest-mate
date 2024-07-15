@@ -92,8 +92,20 @@ path {
   @apply !bg-lightning-yellow-100;
 }
 
-[data-theme='light'] #delete-button {
+[data-theme='light'] .delete-btn {
   @apply !text-swan-white;
+}
+
+.delete-btn:hover {
+  @apply !bg-red-600;
+}
+
+.delete-btn:active {
+  @apply !bg-red-700;
+}
+
+:is([data-theme='light'], [data-theme='dark']) .delete-btn:disabled {
+  @apply !bg-red-950 !text-red-500;
 }
 
 [data-theme='dark'] :is(.hostel-tab, .hostels-header, .hostel-rooms-header) {

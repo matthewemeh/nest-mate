@@ -115,9 +115,9 @@ const VerifyOTP = () => {
   return (
     <section className='max-w-[400px] mx-auto flex flex-col h-full items-center justify-center'>
       <div className='flex flex-col h-full items-center justify-center'>
-        <h1 className='text-2xl font-semibold mb-10'>
+        <h1 className='text-2xl font-semibold mb-10 text-woodsmoke'>
           Please enter the OTP sent to
-          <span className='text-lightning-yellow-950 italic'> {email}</span>
+          <span className='text-lightning-yellow-900 italic'> {email}</span>
         </h1>
 
         <OtpInput otp={enteredOtp} setOtp={setEnteredOtp} numberOfDigits={NUMBER_OF_DIGITS} />

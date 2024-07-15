@@ -94,11 +94,10 @@ const HostelRoom = () => {
         <div className='mb-5 flex items-center justify-between'>
           {isAdmin && (
             <Button
-              id='delete-button'
               content='Delete Room'
               disabled={isDeleteLoading}
               onClick={handleDeleteRoom}
-              extraClassNames='!bg-red-600'
+              extraClassNames='delete-btn !bg-red-500'
             />
           )}
 

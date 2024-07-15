@@ -79,9 +79,9 @@ const ResetPassword = () => {
   return (
     <section className='flex flex-col h-full items-center justify-center'>
       <FaHotel className='w-[100px] h-[100px] text-current' />
-      <h1 className='text-2xl font-semibold'>Reset Password</h1>
+      <h1 className='text-2xl font-semibold text-woodsmoke'>Reset Password</h1>
 
-      <form onSubmit={handleSubmit} className='flex flex-col'>
+      <form onSubmit={handleSubmit} className='flex flex-col text-woodsmoke'>
         <FormInput
           readOnly
           type='email'
