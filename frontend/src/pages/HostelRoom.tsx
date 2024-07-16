@@ -8,6 +8,7 @@ import { handleReduxQueryError, showAlert } from 'utils';
 
 import useAdmin from 'hooks/useAdmin';
 import { useAppSelector } from 'hooks/useRootStorage';
+import { useGetUserMutation } from 'services/apis/userApi/userStoreApi';
 import { useGetRatingMutation, useUpdateRatingMutation } from 'services/apis/ratingApi';
 import { useGetRoomMutation, useDeleteRoomMutation } from 'services/apis/roomApi/roomStoreApi';
 
@@ -21,7 +22,7 @@ const HostelRoom = () => {
   const isAdmin = useAdmin();
   const navigate = useNavigate();
   const { hostelID, roomID } = useParams();
-  const { _id: userID } = useAppSelector(state => state.userStore.currentUser);
+  const { _id: userID, token } = useAppSelector(state => state.userStore.currentUser);
 
   const [
     deleteRoom,
@@ -32,6 +33,8 @@ const HostelRoom = () => {
       isSuccess: isDeleteSuccess
     }
   ] = useDeleteRoomMutation();
+
+  const [getUser] = useGetUserMutation();
 
   const [getRoom, { data: room = {}, error: getError, isError: isGetError }] = useGetRoomMutation();
   const { ratings = [], occupants = [], roomNumber } = useMemo(() => room as Room, [room]);
@@ -73,12 +76,14 @@ const HostelRoom = () => {
 
   useEffect(() => {
     if (isRatingSuccess) {
+      getUser({ _id: userID, token });
       showAlert({ msg: 'Rating updated successfully' });
     }
   }, [isRatingSuccess]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
+      getUser({ _id: userID, token });
       showAlert({ msg: 'Room deleted successfully' });
       navigate(`/hostels/${hostelID}/rooms`);
     }

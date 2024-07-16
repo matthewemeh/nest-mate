@@ -14,7 +14,7 @@ const ManageUsers = () => {
   const MIN_PAGE_INDEX = 1;
 
   const { paginatedUsers, currentUser, pages } = useAppSelector(state => state.userStore);
-  const { _id, role } = currentUser;
+  const { role, token } = currentUser;
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(MIN_PAGE_INDEX);
@@ -23,11 +23,11 @@ const ManageUsers = () => {
   useEffect(() => setPage(MIN_PAGE_INDEX), [limit]);
 
   useEffect(() => {
-    getUsers({ userID: _id, params: { page, limit } }); // updates `paginatedUsers` and `pages` in state
+    getUsers({ token, params: { page, limit } }); // updates `paginatedUsers` and `pages` in state
   }, [page]);
 
   useEffect(() => {
-    getUsers({ userID: _id }); // updates `allUsers` in state
+    getUsers({ token }); // updates `allUsers` in state
   }, []);
 
   useEffect(() => {

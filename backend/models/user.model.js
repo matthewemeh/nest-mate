@@ -2,12 +2,15 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
+const { createToken } = require('../utils/tokenUtils');
+
 const { Schema, model } = mongoose;
 
 const roles = { ADMIN: 'ADMIN', SUPER_ADMIN: 'SUPER_ADMIN', USER: 'USER' };
 
 const UserSchema = new Schema(
   {
+    token: { type: String, default: '' },
     role: { type: String, default: roles.USER },
     checkedIn: { type: Boolean, default: false },
     lastCheckedIn: { type: String, default: '' },
@@ -37,11 +40,19 @@ UserSchema.plugin(mongoosePaginate);
 
 UserSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
+
   if (!user) throw new Error('User not found');
 
+  const tokenData = { email, userID: user._id };
+  const token = createToken(tokenData);
+
+  user.token = token;
+  await user.save();
+
   const passwordMatches = bcrypt.compareSync(password, user.password);
-  if (passwordMatches)
+  if (passwordMatches) {
     return user.populate({ path: 'ratings', populate: ['userID', 'roomID', 'hostelID'] });
+  }
   throw new Error('Invalid credentials');
 };
 

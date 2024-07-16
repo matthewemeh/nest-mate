@@ -27,7 +27,7 @@ const RoomTab: React.FC<Props> = ({ room }) => {
   ] = useReserveSpaceMutation();
   const { roomNumber, floor, hostelID, occupants, _id: roomID } = room;
   const {
-    _id: userID,
+    token,
     reservationID,
     roomID: userRoomID
   } = useAppSelector(state => state.userStore.currentUser);
@@ -59,7 +59,7 @@ const RoomTab: React.FC<Props> = ({ room }) => {
       {isAdmin || (
         <Button
           content='Reserve Space'
-          onClick={() => reserveSpace({ userID, roomID, hostelID })}
+          onClick={() => reserveSpace({ token, roomID, hostelID })}
           disabled={
             isReserveLoading ||
             reservationID.length > 0 ||

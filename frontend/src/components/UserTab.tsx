@@ -19,7 +19,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const { name, role, profileImageUrl, createdAt, _id } = user;
   const { currentUser, allUsers, paginatedUsers } = useAppSelector(state => state.userStore);
-  const { _id: userID, role: userRole } = currentUser;
+  const { role: userRole, token } = currentUser;
 
   const [newRole, setNewRole] = useState<string>(role);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
     const isDeleteConfirmed: boolean = window.confirm(
       `Are you sure you want to delete ${name}'s account?`
     );
-    if (isDeleteConfirmed) deleteUser({ _id, userID });
+    if (isDeleteConfirmed) deleteUser({ _id, token });
   };
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const UserTab: React.FC<Props> = ({ user }) => {
   }, [isDeleteSuccess]);
 
   useEffect(() => {
-    if (newRole !== role) updateUser({ _id, userID, role: newRole as Role });
+    if (newRole !== role) updateUser({ _id, token, role: newRole as Role });
   }, [newRole]);
 
   return (

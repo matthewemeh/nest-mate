@@ -10,7 +10,7 @@ interface UserUpdatePayload {
   _id: string;
   role?: Role;
   name?: string;
-  userID: string;
+  token: string;
   roomID?: string;
   password?: string;
   profileImage?: File;
@@ -23,23 +23,24 @@ interface UserLoginPayload {
 }
 
 interface GetUsersPayload {
-  userID: string;
+  token: string;
   params?: Record<string, any>;
 }
 
 interface GetUserPayload {
   _id: string;
+  token: string;
   params?: Record<string, any>;
 }
 
 interface DeleteUserPayload {
   _id: string;
-  userID: string;
+  token: string;
 }
 
 interface DeleteProfileImagePayload {
   _id: string;
-  userID: string;
+  token: string;
 }
 
 interface CreateRoomPayload {
@@ -125,20 +126,20 @@ interface RatingUpdatePayload {
 }
 
 interface ReserveSpacePayload {
-  userID: string;
+  token: string;
   roomID: string;
   hostelID: string;
 }
 
 interface ReservationPayload {
-  adminID: string;
+  token: string;
   reservationID: string;
 }
 
 interface EntryPayload {
   _id: string;
+  token: string;
   roomID: string;
-  userID: string;
   hostelID: string;
 }
 

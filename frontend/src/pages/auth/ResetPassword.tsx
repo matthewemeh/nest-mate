@@ -26,7 +26,7 @@ const ResetPassword = () => {
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const [passwordSubmitted, setPasswordSubmitted] = useState(false);
 
-  const { email } = useAppSelector(state => state.userStore.currentUser);
+  const { email, token } = useAppSelector(state => state.userStore.currentUser);
   const { isOtpVerified, isAuthenticated } = useAppSelector(state => state.userData);
   const [updateUser, { error, isError, isLoading, isSuccess }] = useUpdateUserMutation();
 
@@ -42,12 +42,12 @@ const ResetPassword = () => {
     setPasswordSubmitted(true);
 
     axios
-      .get(`${USERS}/id`, { params: { email } })
+      .get(`${USERS}/id`, { params: { email }, headers: { 'x-access-token': token } })
       .then(res => {
         setPasswordSubmitted(false);
         const user = res.data as User | null;
         if (user) {
-          updateUser({ _id: user._id, userID: user._id, password });
+          updateUser({ _id: user._id, token, password });
         } else {
           showAlert({ msg: `The account with email: ${email} does not exist` });
           navigate(REGISTER);

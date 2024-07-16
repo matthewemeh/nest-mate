@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { createContext, Suspense, useCallback, useMemo } from 'react';
+import { createContext, Suspense, useCallback, useEffect, useMemo } from 'react';
 
 import Loading from 'components/Loading';
 import { PATHS } from 'routes/PathConstants';
@@ -15,7 +15,11 @@ const AuthLayout = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.userData);
-  const { _id } = useAppSelector(state => state.userStore.currentUser);
+  const { _id, token } = useAppSelector(state => state.userStore.currentUser);
+
+  useEffect(() => {
+    if (!token) navigate(LOGIN);
+  }, [token]);
 
   const mailSubject = useMemo(() => {
     if (_id) {

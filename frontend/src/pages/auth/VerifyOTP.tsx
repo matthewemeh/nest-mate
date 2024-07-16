@@ -20,11 +20,11 @@ const VerifyOTP = () => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(THREE_MINUTES);
   const { isAuthenticated } = useAppSelector(state => state.userData);
-  const { email, emailValidated } = useAppSelector(state => state.userStore.currentUser);
+  const { _id, email, emailValidated } = useAppSelector(state => state.userStore.currentUser);
 
   useEffect(() => {
     if (!email) navigate(LOGIN);
-    if (emailValidated) {
+    if (_id && emailValidated) {
       isAuthenticated ? navigate(HOME) : navigate(LOGIN);
     }
   }, [emailValidated, isAuthenticated, email]);

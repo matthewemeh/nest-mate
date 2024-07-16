@@ -7,6 +7,7 @@ const { User, roles } = require('../models/user.model');
 const { Entry, entryStatuses } = require('../models/entry.model');
 const { Reservation, reservationStatuses } = require('../models/reservation.model');
 
+const { createToken } = require('../utils/tokenUtils');
 const { checkIfFileExists } = require('../utils/firebase.utils');
 
 /* Multipart key information */
@@ -54,7 +55,8 @@ const updateUser = async (req, res) => {
       req.files.find(({ fieldname }) => fieldname === USER_PAYLOAD_KEY).buffer
     );
     const { id } = req.params;
-    const { name, password, role, emailValidated, roomID, userID, checkedIn } = userPayload;
+    const { userID } = req.currentUser;
+    const { name, password, role, emailValidated, roomID, checkedIn } = userPayload;
 
     const user = await User.findById(userID);
     const isOwner = user && user._id == id;
@@ -103,7 +105,8 @@ const updateUser = async (req, res) => {
 const reserveSpace = async (req, res) => {
   try {
     const { roomID } = req.params;
-    const { userID, hostelID } = req.body;
+    const { hostelID } = req.body;
+    const { userID } = req.currentUser;
 
     const user = await User.findOne({ _id: userID });
 
@@ -134,12 +137,12 @@ const reserveSpace = async (req, res) => {
 };
 
 const confirmReservation = async (req, res) => {
-  const { adminID } = req.body;
-  const { reservationID } = req.params;
-  const reservation = await Reservation.findById(reservationID);
-  const { userID, roomID, status } = reservation;
-
   try {
+    const { reservationID } = req.params;
+    const { userID: adminID } = req.currentUser;
+    const reservation = await Reservation.findById(reservationID);
+    const { userID, roomID, status } = reservation;
+
     const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
@@ -170,12 +173,12 @@ const confirmReservation = async (req, res) => {
 };
 
 const declineReservation = async (req, res) => {
-  const { adminID } = req.body;
-  const { reservationID } = req.params;
-  const reservation = await Reservation.findById(reservationID);
-  const { userID, status } = reservation;
-
   try {
+    const { reservationID } = req.params;
+    const { userID: adminID } = req.currentUser;
+    const reservation = await Reservation.findById(reservationID);
+    const { userID, status } = reservation;
+
     const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
@@ -203,7 +206,8 @@ const declineReservation = async (req, res) => {
 const checkIn = async (req, res) => {
   try {
     const { id } = req.params;
-    const { roomID, userID, hostelID } = req.body;
+    const { userID } = req.currentUser;
+    const { roomID, hostelID } = req.body;
 
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
@@ -228,7 +232,8 @@ const checkIn = async (req, res) => {
 const checkOut = async (req, res) => {
   try {
     const { id } = req.params;
-    const { roomID, userID, hostelID } = req.body;
+    const { userID } = req.currentUser;
+    const { roomID, hostelID } = req.body;
 
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
@@ -244,9 +249,7 @@ const checkOut = async (req, res) => {
     const newEntry = new Entry({ hostelID, roomID, type: entryStatuses.CHECK_OUT, userID: id });
     await newEntry.save();
 
-    const room = await Room.findById(roomID);
-    room.occupants = room.occupants.filter(occupant => occupant != id);
-    await room.save();
+    await Room.updateOne({ _id: roomID }, { $pull: { occupants: id } });
 
     return res.status(200).json('Check out successful');
   } catch (err) {
@@ -257,7 +260,7 @@ const checkOut = async (req, res) => {
 const deleteProfileImage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userID } = req.body;
+    const { userID } = req.currentUser;
 
     const user = await User.findById(userID);
     const isOwner = user && user._id == id;
@@ -286,16 +289,19 @@ const deleteProfileImage = async (req, res) => {
   }
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
-  User.findByCredentials(email, password)
-    .then(user => res.json(user))
-    .catch(err => res.status(400).json(err.message));
+  try {
+    const user = await User.findByCredentials(email, password);
+    res.json(user);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
 };
 
 const getUsers = async (req, res) => {
-  const { userID } = req.params;
+  const { userID } = req.currentUser;
 
   try {
     const user = await User.findById(userID);
@@ -320,9 +326,17 @@ const getUsers = async (req, res) => {
   }
 };
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
   const { id } = req.params;
   const email = req.query['email'];
+
+  const { userID } = req.currentUser;
+
+  const user = await User.findById(userID);
+  const isOwnerOrAdmin = user && (user.role !== roles.USER || user._id == id);
+  if (!isOwnerOrAdmin) {
+    return res.status(401).json('You are not authorized to carry out this operation');
+  }
 
   if (email) {
     return User.findOne({ email })
@@ -331,6 +345,7 @@ const getUser = (req, res) => {
   }
 
   User.findById(id)
+    .populate({ path: 'ratings', populate: ['userID', 'roomID', 'hostelID'] })
     .then(user => res.status(200).json(user))
     .catch(err => res.status(400).json(err.message));
 };
@@ -339,7 +354,7 @@ const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const { userID } = req.body;
+    const { userID } = req.currentUser;
     const user = await User.findById(userID);
     const isOwnerOrSuperAdmin = user && (user.role === roles.SUPER_ADMIN || user._id == id);
     if (!isOwnerOrSuperAdmin) {

@@ -28,6 +28,7 @@ interface Rating extends MongoInterface {
 interface User extends MongoInterface {
   role: Role;
   name: string;
+  token: string;
   email: string;
   roomID?: string;
   ratings: Rating[];

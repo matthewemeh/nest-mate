@@ -7,9 +7,9 @@ import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
 import { PATHS } from 'routes/PathConstants';
-import { logout } from 'services/apis/userApi/userStoreSlice';
 import { resetUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
+import { logout, updateUser as updateCurrentUser } from 'services/apis/userApi/userStoreSlice';
 import {
   useDeleteUserMutation,
   useUpdateUserMutation,
@@ -57,7 +57,7 @@ const Profile = () => {
       isSuccess: isDeleteSuccess
     }
   ] = useDeleteUserMutation();
-  const { _id, name, email, profileImageUrl } = useAppSelector(
+  const { _id, name, email, profileImageUrl, token } = useAppSelector(
     state => state.userStore.currentUser
   );
 
@@ -66,7 +66,7 @@ const Profile = () => {
     const newName: string = nameRef.current!.value;
     const profileImage: File | undefined = profileImageRef.current!.files?.[0];
 
-    const userPayload: UserUpdatePayload = { _id, userID: _id };
+    const userPayload: UserUpdatePayload = { _id, token };
 
     if (name !== newName) userPayload.name = newName;
     if (profileImageChanged) userPayload.profileImage = profileImage;
@@ -96,7 +96,7 @@ const Profile = () => {
   };
 
   const handleResetPassword = () => {
-    dispatch(logout());
+    dispatch(updateCurrentUser({ _id: '' }));
     dispatch(resetUserData());
     navigate(FORGOT_PASSWORD);
   };
@@ -105,14 +105,14 @@ const Profile = () => {
     const isDeleteConfirmed: boolean = window.confirm(
       'Are you sure you want to delete your account?'
     );
-    if (isDeleteConfirmed) deleteUser({ _id, userID: _id });
+    if (isDeleteConfirmed) deleteUser({ _id, token });
   };
 
   const handleDeleteUserImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     const isDeleteImageConfirmed: boolean = window.confirm(
       'Are you sure you want to delete your profile picture?'
     );
-    if (isDeleteImageConfirmed) deleteProfileImage({ _id, userID: _id });
+    if (isDeleteImageConfirmed) deleteProfileImage({ _id, token });
     e.stopPropagation();
   };
 

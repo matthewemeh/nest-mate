@@ -16,7 +16,7 @@ interface Props {
 
 const ReservationTab: React.FC<Props> = ({ reservation }) => {
   const { hostelID, roomID, userID, status, _id: reservationID } = reservation;
-  const { _id: adminID } = useAppSelector(state => state.userStore.currentUser);
+  const { _id: adminID, token } = useAppSelector(state => state.userStore.currentUser);
 
   const { name: hostelName } = hostelID;
   const { name: userName, _id } = userID;
@@ -70,13 +70,13 @@ const ReservationTab: React.FC<Props> = ({ reservation }) => {
         <>
           <Button
             content='Confirm'
-            onClick={() => confirmReservation({ reservationID, adminID })}
+            onClick={() => confirmReservation({ reservationID, token })}
             disabled={isConfirmLoading || isConfirmSuccess || isDeclineSuccess}
           />
           <Button
             type='outline'
             content='Decline'
-            onClick={() => declineReservation({ reservationID, adminID })}
+            onClick={() => declineReservation({ reservationID, token })}
             disabled={isDeclineLoading || isConfirmSuccess || isDeclineSuccess}
           />
         </>

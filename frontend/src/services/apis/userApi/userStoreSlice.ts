@@ -8,6 +8,7 @@ const initialState: UserStore = {
   currentUser: {
     _id: '',
     name: '',
+    token: '',
     email: '',
     roomID: '',
     ratings: [],
@@ -84,6 +85,7 @@ export const userStoreSlice = createSlice({
   extraReducers: builder => {
     // these are backend routes(endpoints) which when fufilled, return payloads that updates User object globally
     builder.addMatcher(userStoreApi.endpoints.login.matchFulfilled, updateAction);
+    builder.addMatcher(userStoreApi.endpoints.getUser.matchFulfilled, updateAction);
     builder.addMatcher(userStoreApi.endpoints.register.matchFulfilled, updateAction);
     builder.addMatcher(userStoreApi.endpoints.getUsers.matchFulfilled, refreshAction);
     builder.addMatcher(userStoreApi.endpoints.updateUser.matchFulfilled, updateAction);

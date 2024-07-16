@@ -31,7 +31,11 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
   const [newRole, setNewRole] = useState<string>(role);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [isCheckedIn, setIsCheckedIn] = useState<boolean>(checkedIn);
-  const { _id: userID, role: userRole } = useAppSelector(state => state.userStore.currentUser);
+  const {
+    token,
+    _id: userID,
+    role: userRole
+  } = useAppSelector(state => state.userStore.currentUser);
 
   const isYou = useMemo<boolean>(() => _id === userID, [_id, userID]);
 
@@ -59,7 +63,7 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
     const isDeleteConfirmed: boolean = window.confirm(
       `Are you sure you want to delete ${name}'s account?`
     );
-    if (isDeleteConfirmed) deleteUser({ _id, userID: _id });
+    if (isDeleteConfirmed) deleteUser({ _id, token });
   };
 
   const handleEvictOccupant = (occupantID: string, occupantName: string) => {
@@ -116,13 +120,13 @@ const OccupantTabAdmin: React.FC<Props> = ({ occupant, roomID, hostelID }) => {
   }, [isCheckOutSuccess]);
 
   useEffect(() => {
-    if (newRole !== role) updateUser({ _id, userID, role: newRole as Role });
+    if (newRole !== role) updateUser({ _id, token, role: newRole as Role });
   }, [newRole]);
 
   useEffect(() => {
     if (isCheckedIn !== checkedIn) {
-      if (isCheckedIn) checkIn({ _id, userID, roomID, hostelID });
-      else checkOut({ _id, userID, roomID, hostelID });
+      if (isCheckedIn) checkIn({ _id, token, roomID, hostelID });
+      else checkOut({ _id, token, roomID, hostelID });
     }
   }, [isCheckedIn]);
 

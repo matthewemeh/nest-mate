@@ -55,34 +55,43 @@ export const userStoreApi = createApi({
         formData.append(USER_PAYLOAD_KEY, documentBlob);
         formData.append(PROFILE_IMAGE_KEY, profileImage as Blob);
 
-        return { body: formData, method: 'PATCH', url: `${USERS}/${body._id}` };
+        return {
+          body: formData,
+          method: 'PATCH',
+          url: `${USERS}/${body._id}`,
+          headers: { 'x-access-token': body.token }
+        };
       }
     }),
     getUsers: builder.mutation({
       query: (body: GetUsersPayload) => ({
         method: 'GET',
+        url: GET_USERS,
         params: body.params,
-        url: `${GET_USERS}/${body.userID}`
+        headers: { 'x-access-token': body.token }
       })
     }),
     getUser: builder.mutation({
       query: (body: GetUserPayload) => ({
         method: 'GET',
         params: body.params,
-        url: `${USERS}/${body._id}`
+        url: `${USERS}/${body._id}`,
+        headers: { 'x-access-token': body.token }
       })
     }),
     deleteUser: builder.mutation({
       query: (body: DeleteUserPayload) => ({
         body,
         method: 'DELETE',
-        url: `${USERS}/${body._id}`
+        url: `${USERS}/${body._id}`,
+        headers: { 'x-access-token': body.token }
       })
     }),
     deleteProfileImage: builder.mutation({
       query: (body: DeleteProfileImagePayload) => ({
         body,
         method: 'PATCH',
+        headers: { 'x-access-token': body.token },
         url: `${DELETE_PROFILE_IMAGE}/${body._id}`
       })
     }),
@@ -90,13 +99,15 @@ export const userStoreApi = createApi({
       query: (body: ReserveSpacePayload) => ({
         body,
         method: 'POST',
-        url: `${RESERVE_SPACE}/${body.roomID}`
+        url: `${RESERVE_SPACE}/${body.roomID}`,
+        headers: { 'x-access-token': body.token }
       })
     }),
     confirmReservation: builder.mutation({
       query: (body: ReservationPayload) => ({
         body,
         method: 'POST',
+        headers: { 'x-access-token': body.token },
         url: `${CONFIRM_RESERVATION}/${body.reservationID}`
       })
     }),
@@ -104,6 +115,7 @@ export const userStoreApi = createApi({
       query: (body: ReservationPayload) => ({
         body,
         method: 'POST',
+        headers: { 'x-access-token': body.token },
         url: `${DECLINE_RESERVATION}/${body.reservationID}`
       })
     }),
@@ -111,14 +123,16 @@ export const userStoreApi = createApi({
       query: (body: EntryPayload) => ({
         body,
         method: 'POST',
-        url: `${USER_CHECK_IN}/${body._id}`
+        url: `${USER_CHECK_IN}/${body._id}`,
+        headers: { 'x-access-token': body.token }
       })
     }),
     userCheckOut: builder.mutation({
       query: (body: EntryPayload) => ({
         body,
         method: 'POST',
-        url: `${USER_CHECK_OUT}/${body._id}`
+        url: `${USER_CHECK_OUT}/${body._id}`,
+        headers: { 'x-access-token': body.token }
       })
     })
   })

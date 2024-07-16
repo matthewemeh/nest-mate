@@ -16,7 +16,7 @@ const NavLayout = () => {
   const [transparent, setTransparent] = useState<boolean>(true);
 
   const { isAuthenticated } = useAppSelector(state => state.userData);
-  const { emailValidated } = useAppSelector(state => state.userStore.currentUser);
+  const { emailValidated, token } = useAppSelector(state => state.userStore.currentUser);
 
   const watchContentScroll = useCallback(() => {
     const scrollYPos = contentRef.current!.scrollTop;
@@ -27,6 +27,10 @@ const NavLayout = () => {
   useEffect(() => {
     contentRef.current!.addEventListener('scroll', watchContentScroll);
   }, []);
+
+  useEffect(() => {
+    if (!token) navigate(LOGIN);
+  }, [token]);
 
   useEffect(() => {
     if (!isAuthenticated) navigate(LOGIN);
