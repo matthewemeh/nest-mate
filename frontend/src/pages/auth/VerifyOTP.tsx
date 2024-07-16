@@ -86,7 +86,7 @@ const VerifyOTP = () => {
           title='Submit'
           onClick={() => verifyOtp({ email, otp })}
           disabled={isOtpLoading || isVerifyLoading || isVerified}
-          isLoading={isOtpLoading || isVerifyLoading || isVerified}
+          isLoading={isOtpLoading || isVerifyLoading}
         />
 
         <AuthButton

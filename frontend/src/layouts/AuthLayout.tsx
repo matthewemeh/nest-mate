@@ -37,7 +37,10 @@ const AuthLayout = () => {
       : () => {
           // for resetting password
           dispatch(updateUserData({ isOtpVerified: true }));
-          setTimeout(() => navigate(RESET_PASSWORD), 2000);
+          setTimeout(() => {
+            navigate(RESET_PASSWORD);
+            window.location.reload();
+          }, 2000);
         },
     [isAuthenticated, _id]
   );
