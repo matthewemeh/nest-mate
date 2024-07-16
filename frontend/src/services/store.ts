@@ -7,15 +7,16 @@ import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } fro
 import userDataSlice from './userData/userDataSlice';
 import userStoreSlice from './apis/userApi/userStoreSlice';
 import roomStoreSlice from './apis/roomApi/roomStoreSlice';
+import hostelStoreSlice from './apis/hostelApi/hostelStoreSlice';
 import reservationStoreSlice from './apis/reservationApi/reservationStoreSlice';
 
+import otpApi from './apis/otpApi';
 import entryApi from './apis/entryApi';
 import emailApi from './apis/emailApi';
 import ratingApi from './apis/ratingApi';
 import userStoreApi from './apis/userApi/userStoreApi';
 import roomStoreApi from './apis/roomApi/roomStoreApi';
 import hostelStoreApi from './apis/hostelApi/hostelStoreApi';
-import hostelStoreSlice from './apis/hostelApi/hostelStoreSlice';
 import reservationStoreApi from './apis/reservationApi/reservationStoreApi';
 
 /* reducers */
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   roomStore: roomStoreSlice,
   hostelStore: hostelStoreSlice,
   reservationStore: reservationStoreSlice,
+  [otpApi.reducerPath]: otpApi.reducer,
   [entryApi.reducerPath]: entryApi.reducer,
   [emailApi.reducerPath]: emailApi.reducer,
   [ratingApi.reducerPath]: ratingApi.reducer,
@@ -38,6 +40,7 @@ const persistConfig = {
   storage,
   key: 'root',
   blackList: [
+    otpApi.reducerPath,
     emailApi.reducerPath,
     entryApi.reducerPath,
     ratingApi.reducerPath,
@@ -60,6 +63,7 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
     }).concat(
+      otpApi.middleware,
       entryApi.middleware,
       emailApi.middleware,
       ratingApi.middleware,

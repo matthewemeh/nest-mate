@@ -1,109 +1,61 @@
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import OtpInput from 'components/forms/OtpInput';
+import { AuthContext } from 'layouts/AuthLayout';
 import AuthButton from 'components/forms/AuthButton';
 
 import { PATHS } from 'routes/PathConstants';
-import { AuthContext } from 'layouts/AuthLayout';
 import { useAppSelector } from 'hooks/useRootStorage';
-import { useSendEmailMutation } from 'services/apis/emailApi';
-import {
-  showAlert,
-  generateOTP,
-  validateOTP,
-  decryptString,
-  secondsToMMSS,
-  handleReduxQueryError
-} from 'utils';
+import { useSendOtpMutation, useVerifyOtpMutation } from 'services/apis/otpApi';
+
+import { showAlert, secondsToMMSS, handleReduxQueryError } from 'utils';
 
 const VerifyOTP = () => {
-  const NUMBER_OF_DIGITS = 6;
   const THREE_MINUTES = 3 * 60;
   const { LOGIN, HOME } = PATHS;
-  const FIVE_MINUTES = 5 * 60 * 1000;
-  const { OTP_DETAILS_KEY, onOtpValidated, mailPretext, mailSubject } = useContext(AuthContext);
+  const { onOtpValidated, mailSubject } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const [enteredOtp, setEnteredOtp] = useState<string>('');
-  const [otpDetails, setOtpDetails] = useState<OtpDetails>();
+  const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(THREE_MINUTES);
-  const generatedOtp: string | undefined = useMemo(() => otpDetails?.otp, [otpDetails]);
-  const encryptedOtp: string | undefined = useMemo(() => otpDetails?.encryptedOtp, [otpDetails]);
-
   const { isAuthenticated } = useAppSelector(state => state.userData);
   const { email, emailValidated } = useAppSelector(state => state.userStore.currentUser);
 
-  const setStoredOtp = () => {
-    const newGeneratedOtp: OtpDetails = generateOTP(NUMBER_OF_DIGITS);
-    const newOtpDetails: StoredOtpDetails = {
-      otp: newGeneratedOtp.encryptedOtp,
-      expiresAt: Date.now() + FIVE_MINUTES
-    };
-    setOtpDetails(newGeneratedOtp);
-    localStorage.setItem(OTP_DETAILS_KEY!, JSON.stringify(newOtpDetails));
-  };
-
-  const initOtpDetails = useCallback(
-    (refresh?: boolean) => {
-      if (!email) navigate(LOGIN);
-      if (emailValidated) {
-        isAuthenticated ? navigate(HOME) : navigate(LOGIN);
-      }
-
-      // check localStorage for otp details first
-      const storedOtpDetails: StoredOtpDetails = JSON.parse(
-        localStorage.getItem(OTP_DETAILS_KEY!) ?? `{ "otp": "", "expiresAt": "" }`
-      );
-      if (!refresh && storedOtpDetails.otp) {
-        const hasNotExpired: boolean = storedOtpDetails.expiresAt > Date.now();
-        if (hasNotExpired) {
-          const { otp } = storedOtpDetails;
-          setOtpDetails({ encryptedOtp: otp, otp: decryptString(otp) });
-        } else {
-          setStoredOtp();
-        }
-      } else {
-        setStoredOtp();
-      }
-    },
-    [email, emailValidated]
-  );
-
-  useEffect(() => initOtpDetails(), [emailValidated, isAuthenticated, email]);
+  useEffect(() => {
+    if (!email) navigate(LOGIN);
+    if (emailValidated) {
+      isAuthenticated ? navigate(HOME) : navigate(LOGIN);
+    }
+  }, [emailValidated, isAuthenticated, email]);
 
   const [
-    sendEmail,
+    sendOtp,
     { error: otpError, isError: isOtpError, isLoading: isOtpLoading, isSuccess: isOtpSent }
-  ] = useSendEmailMutation();
+  ] = useSendOtpMutation();
 
-  const mailText = useMemo<string>(() => {
-    return `${mailPretext}\nYour OTP is: ${generatedOtp}\n\nBest regards,\nNest Mate,\nYour #1 Hostel Management Platform`;
-  }, [generatedOtp]);
-
-  const handleSubmitOTP = () => {
-    if (encryptedOtp) {
-      const isOtpValidated: boolean = validateOTP(enteredOtp, encryptedOtp);
-      if (isOtpValidated) {
-        onOtpValidated?.();
-      } else {
-        showAlert({ msg: 'Wrong OTP provided!' });
-        setEnteredOtp('');
-      }
+  const [
+    verifyOtp,
+    {
+      data: verifiedData,
+      error: verifyError,
+      isSuccess: isVerified,
+      isError: isVerifyError,
+      isLoading: isVerifyLoading
     }
-  };
-
-  useEffect(() => {
-    if (generatedOtp) sendEmail({ to: email, subject: mailSubject, text: mailText });
-  }, [generatedOtp]);
-
-  useEffect(() => {
-    handleReduxQueryError(isOtpError, otpError);
-  }, [otpError, isOtpError]);
+  ] = useVerifyOtpMutation();
 
   useEffect(() => {
     if (isOtpSent) setCounter(THREE_MINUTES);
+    else sendOtp({ to: email, subject: mailSubject });
   }, [isOtpSent]);
+
+  useEffect(() => {
+    if (verifiedData) {
+      showAlert({ msg: verifiedData });
+      onOtpValidated?.();
+    }
+  }, [verifiedData, onOtpValidated]);
 
   useEffect(() => {
     if (counter === 0 || !isOtpSent) return;
@@ -111,6 +63,14 @@ const VerifyOTP = () => {
     const timer = setInterval(() => setCounter(prev => prev - 1), 1000);
     return () => clearInterval(timer);
   }, [counter, isOtpSent]);
+
+  useEffect(() => {
+    handleReduxQueryError(isOtpError, otpError);
+  }, [otpError, isOtpError]);
+
+  useEffect(() => {
+    handleReduxQueryError(isVerifyError, verifyError, () => setOtp(''));
+  }, [verifyError, isVerifyError]);
 
   return (
     <section className='max-w-[400px] mx-auto flex flex-col h-full items-center justify-center'>
@@ -120,23 +80,23 @@ const VerifyOTP = () => {
           <span className='text-lightning-yellow-900 italic'> {email}</span>
         </h1>
 
-        <OtpInput otp={enteredOtp} setOtp={setEnteredOtp} numberOfDigits={NUMBER_OF_DIGITS} />
+        <OtpInput otp={otp} setOtp={setOtp} />
         <AuthButton
           type='submit'
           title='Submit'
-          disabled={isOtpLoading}
-          isLoading={isOtpLoading}
-          onClick={handleSubmitOTP}
+          onClick={() => verifyOtp({ email, otp })}
+          disabled={isOtpLoading || isVerifyLoading || verifiedData}
+          isLoading={isOtpLoading || isVerifyLoading || verifiedData}
         />
 
         <AuthButton
           type='button'
-          onClick={() => initOtpDetails(true)}
           disabled={counter > 0 || isOtpLoading}
+          onClick={() => sendOtp({ to: email, subject: mailSubject })}
           title={
             counter > 0 && isOtpSent ? `Resend OTP in ${secondsToMMSS(counter)}` : 'Resend OTP'
           }
-          extraClassNames='bg-transparent !text-lightning-yellow-900 border-transparent shadow-none w-fit'
+          extraClassNames='!bg-transparent !text-lightning-yellow-900 border-transparent shadow-none !w-fit'
         />
       </div>
     </section>

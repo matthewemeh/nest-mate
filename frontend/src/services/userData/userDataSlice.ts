@@ -10,10 +10,10 @@ export const userDataSlice = createSlice({
   name: 'userData',
   initialState,
   reducers: {
+    resetUserData: () => initialState,
     updateUserData: (state, action: PayloadAction<Partial<UserData>>) => {
       state = Object.assign(state, action.payload);
-    },
-    resetUserData: () => initialState
+    }
   }
 });
 

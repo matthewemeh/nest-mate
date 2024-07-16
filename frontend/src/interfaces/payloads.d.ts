@@ -153,3 +153,12 @@ interface GetReservationsLengthPayload {
 interface GetEntriesPayload {
   params?: Record<string, any>;
 }
+
+interface SendOtpPayload extends Omit<EmailSendPayload, 'text' | 'html'> {
+  duration?: number;
+}
+
+interface VerifyOtpPayload {
+  otp: string;
+  email: string;
+}

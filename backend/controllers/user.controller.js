@@ -21,14 +21,14 @@ const registerUser = async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).send('This email has already been used');
+      return res.status(400).json('This email has already been used');
     }
     const superAdminExists = await User.findOne({ role: roles.SUPER_ADMIN });
     const isInvalidRole = role !== undefined && !Object.values(roles).includes(role);
     if (isInvalidRole) {
-      return res.status(400).send('Invalid role');
+      return res.status(400).json('Invalid role');
     } else if (role === roles.SUPER_ADMIN && superAdminExists) {
-      return res.status(400).send('A SUPER ADMIN already exists');
+      return res.status(400).json('A SUPER ADMIN already exists');
     }
 
     const profileImageFile = req.files.find(({ fieldname }) => fieldname === PROFILE_IMAGE_KEY);
@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -60,12 +60,12 @@ const updateUser = async (req, res) => {
     const isOwner = user && user._id == id;
     const isAdmin = user && user.role !== roles.USER;
     if (!(isAdmin || isOwner)) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const userToBeUpdated = await User.findById(id);
     if (!userToBeUpdated) {
-      return res.status(500).send('User does not exist');
+      return res.status(500).json('User does not exist');
     }
 
     if (isAdmin) {
@@ -96,7 +96,7 @@ const updateUser = async (req, res) => {
     const updatedUser = await userToBeUpdated.save();
     res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -108,13 +108,13 @@ const reserveSpace = async (req, res) => {
     const user = await User.findOne({ _id: userID });
 
     if (!user) {
-      return res.status(500).send('User not found');
+      return res.status(500).json('User not found');
     }
 
     if (user.reservationID) {
-      return res.status(400).send('You have already made a reservation');
+      return res.status(400).json('You have already made a reservation');
     } else if (user.roomID) {
-      return res.status(400).send('You already have a room');
+      return res.status(400).json('You already have a room');
     } else {
       const newReservation = new Reservation({ roomID, userID, hostelID });
       await newReservation.save();
@@ -129,7 +129,7 @@ const reserveSpace = async (req, res) => {
       return res.status(200).json(updatedUser);
     }
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -143,7 +143,7 @@ const confirmReservation = async (req, res) => {
     const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     if (status === reservationStatuses.PENDING) {
@@ -158,14 +158,14 @@ const confirmReservation = async (req, res) => {
       const room = await Room.findById(roomID);
       room.occupants.push(userID);
       await room.save();
-      return res.status(200).send('Room reservation confirmed');
+      return res.status(200).json('Room reservation confirmed');
     } else if (status === reservationStatuses.DECLINED) {
-      return res.status(400).send('Room reservation already declined');
+      return res.status(400).json('Room reservation already declined');
     } else if (status === reservationStatuses.CONFIRMED) {
-      return res.status(400).send('Room reservation already confirmed');
+      return res.status(400).json('Room reservation already confirmed');
     }
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -179,7 +179,7 @@ const declineReservation = async (req, res) => {
     const user = await User.findById(adminID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     if (status === reservationStatuses.PENDING) {
@@ -189,14 +189,14 @@ const declineReservation = async (req, res) => {
       const userToBeUpdated = await User.findById(userID);
       userToBeUpdated.reservationID = '';
       await userToBeUpdated.save();
-      return res.status(200).send('Room reservation declined');
+      return res.status(200).json('Room reservation declined');
     } else if (status === reservationStatuses.DECLINED) {
-      return res.status(400).send('Room reservation already declined');
+      return res.status(400).json('Room reservation already declined');
     } else if (status === reservationStatuses.CONFIRMED) {
-      return res.status(400).send('Room reservation already confirmed');
+      return res.status(400).json('Room reservation already confirmed');
     }
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -208,7 +208,7 @@ const checkIn = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const userToBeCheckedIn = await User.findById(id);
@@ -219,9 +219,9 @@ const checkIn = async (req, res) => {
     const newEntry = new Entry({ hostelID, roomID, type: entryStatuses.CHECK_IN, userID: id });
     await newEntry.save();
 
-    return res.status(200).send('Check in successful');
+    return res.status(200).json('Check in successful');
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -233,7 +233,7 @@ const checkOut = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     await User.updateOne(
@@ -248,9 +248,9 @@ const checkOut = async (req, res) => {
     room.occupants = room.occupants.filter(occupant => occupant != id);
     await room.save();
 
-    return res.status(200).send('Check out successful');
+    return res.status(200).json('Check out successful');
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -262,12 +262,12 @@ const deleteProfileImage = async (req, res) => {
     const user = await User.findById(userID);
     const isOwner = user && user._id == id;
     if (!isOwner) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const userToBeUpdated = await User.findById(id);
     if (!userToBeUpdated) {
-      return res.status(500).send('User does not exist');
+      return res.status(500).json('User does not exist');
     }
 
     /* delete user image */
@@ -282,7 +282,7 @@ const deleteProfileImage = async (req, res) => {
     const updatedUser = await userToBeUpdated.save();
     res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -291,7 +291,7 @@ const login = (req, res) => {
 
   User.findByCredentials(email, password)
     .then(user => res.json(user))
-    .catch(err => res.status(400).send(err.message));
+    .catch(err => res.status(400).json(err.message));
 };
 
 const getUsers = async (req, res) => {
@@ -301,7 +301,7 @@ const getUsers = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const page = Number(req.query['page']);
@@ -316,7 +316,7 @@ const getUsers = async (req, res) => {
 
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -327,12 +327,12 @@ const getUser = (req, res) => {
   if (email) {
     return User.findOne({ email })
       .then(user => res.status(200).json(user))
-      .catch(err => res.status(400).send(err.message));
+      .catch(err => res.status(400).json(err.message));
   }
 
   User.findById(id)
     .then(user => res.status(200).json(user))
-    .catch(err => res.status(400).send(err.message));
+    .catch(err => res.status(400).json(err.message));
 };
 
 const deleteUser = async (req, res) => {
@@ -343,7 +343,7 @@ const deleteUser = async (req, res) => {
     const user = await User.findById(userID);
     const isOwnerOrSuperAdmin = user && (user.role === roles.SUPER_ADMIN || user._id == id);
     if (!isOwnerOrSuperAdmin) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     await User.findByIdAndDelete(id);
@@ -370,9 +370,9 @@ const deleteUser = async (req, res) => {
       await deleteObject(fileRef);
     }
 
-    res.status(200).send('User removed');
+    res.status(200).json('User removed');
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 

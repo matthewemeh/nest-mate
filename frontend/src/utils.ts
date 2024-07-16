@@ -1,4 +1,3 @@
-import { encrypt, decrypt } from 'n-krypta';
 import { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
@@ -86,65 +85,9 @@ export const formatInputText = ({
   return newValue;
 };
 
-export const swapElements = (array: any[], index1: number, index2: number) => {
-  try {
-    [array[index1], array[index2]] = [array[index2], array[index1]];
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const rearrangeElements = (array: any[], sourceIndex: number, destinationIndex: number) => {
-  const blockDifference: number = sourceIndex - destinationIndex;
-  const isBlockMovingUp: boolean = blockDifference > 0;
-  const isBlockMovingDown: boolean = blockDifference < 0;
-
-  if (isBlockMovingDown) {
-    for (let i = sourceIndex; i < destinationIndex; i++) {
-      swapElements(array, i, i + 1);
-    }
-  } else if (isBlockMovingUp) {
-    for (let i = sourceIndex; i > destinationIndex; i--) {
-      swapElements(array, i, i - 1);
-    }
-  }
-};
-
 export const getRndInteger = (min: number, max: number): number => {
   // returns a random integer from min to (max - 1)
   return Math.floor(Math.random() * (max - min)) + min;
-};
-
-export const getOtp = (digits: number): string => {
-  let otp = '';
-  for (let i = 0; i < digits; i++) otp += getRndInteger(0, 10).toString();
-  return otp;
-};
-
-export const generateOTP = (n: number): OtpDetails => {
-  const otp: string = getOtp(n);
-  const secret: string = process.env.REACT_APP_OTP_SECRET_KEY!;
-  const ENCRYPTION_CYCLE: number = Number(process.env.REACT_APP_OTP_ENCRYPTION_CYCLE!);
-
-  const encryptedOtp = encrypt(otp, secret, ENCRYPTION_CYCLE);
-  return { otp, encryptedOtp };
-};
-
-export const decryptString = (encryptedString: string): string => {
-  const secret: string = process.env.REACT_APP_OTP_SECRET_KEY!;
-  const ENCRYPTION_CYCLE: number = Number(process.env.REACT_APP_OTP_ENCRYPTION_CYCLE!);
-
-  let decryptedString = encryptedString;
-  for (let i = 0; i < ENCRYPTION_CYCLE; i++) {
-    decryptedString = decrypt(decryptedString, secret);
-  }
-  return decryptedString;
-};
-
-export const validateOTP = (enteredOtp: string, encryptedOtp: string): boolean => {
-  let decryptedString = decryptString(encryptedOtp);
-
-  return enteredOtp === decryptedString;
 };
 
 export const secondsToMMSS = (seconds: number) => {
@@ -235,36 +178,6 @@ export const getDateProps = (date?: string | number | Date): DateProps => {
   };
 };
 
-export const minifyViews = (views: number): string => {
-  const oneBillion = 1_000_000_000;
-  const hundredMillion = 100_000_000;
-  const tenMillion = 10_000_000;
-  const oneMillion = 1_000_000;
-  const hundredThousand = 100_000;
-  const tenThousand = 10_000;
-  const oneThousand = 1_000;
-
-  const viewsString: string = views.toString();
-
-  if (views >= oneBillion) {
-    return `${viewsString.substring(0, 1)}.${viewsString.substring(1, 2)}B`;
-  } else if (views >= hundredMillion && views < oneBillion) {
-    return `${viewsString.substring(0, 3)}M`;
-  } else if (views >= tenMillion && views < hundredMillion) {
-    return `${viewsString.substring(0, 2)}M`;
-  } else if (views >= oneMillion && views < tenMillion) {
-    return `${viewsString.substring(0, 1)}.${viewsString.substring(1, 2)}M`;
-  } else if (views >= hundredThousand && views < oneMillion) {
-    return `${viewsString.substring(0, 3)}K`;
-  } else if (views >= tenThousand && views < hundredThousand) {
-    return `${viewsString.substring(0, 2)}K`;
-  } else if (views >= oneThousand && views < tenThousand) {
-    return `${viewsString.substring(0, 1)}.${viewsString.substring(1, 2)}K`;
-  } else {
-    return views.toLocaleString('en');
-  }
-};
-
 export const checkArrayEquality = (array1: any[], array2: any[]): boolean => {
   let arraysAreSameLength: boolean = array1.length === array2.length;
 
@@ -288,11 +201,13 @@ export const checkArrayEquality = (array1: any[], array2: any[]): boolean => {
 
 export const handleReduxQueryError = (
   isError: boolean,
-  error?: FetchBaseQueryError | SerializedError
+  error?: FetchBaseQueryError | SerializedError,
+  onError?: () => void
 ) => {
   if (isError && error && 'status' in error) {
     showAlert({ msg: `${error.data ?? ''}` });
     console.error(error);
+    onError?.();
   }
 };
 

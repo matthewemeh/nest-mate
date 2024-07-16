@@ -19,7 +19,7 @@ const getRooms = async (req, res) => {
     let rooms;
 
     if (!hostelID) {
-      return res.status(400).send('No hostelID query specified');
+      return res.status(400).json('No hostelID query specified');
     } else if (isNaN(page) || isNaN(limit)) {
       rooms = await Room.find({ hostelID });
     } else {
@@ -28,7 +28,7 @@ const getRooms = async (req, res) => {
 
     res.status(200).json(rooms);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -42,7 +42,7 @@ const getRoom = async (req, res) => {
 
     res.status(200).json(room);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -56,12 +56,12 @@ const createRoom = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const hostel = await Hostel.findById(hostelID);
     if (!hostel) {
-      return res.status(404).send('Hostel not found');
+      return res.status(404).json('Hostel not found');
     }
 
     const newRoom = new Room({ floor, maxOccupants, roomNumber, hostelID });
@@ -90,7 +90,7 @@ const createRoom = async (req, res) => {
     }
     res.status(201).json(rooms);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -105,7 +105,7 @@ const updateRoom = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const room = await Room.findById(id);
@@ -142,7 +142,7 @@ const updateRoom = async (req, res) => {
 
     res.status(200).json(room);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -156,12 +156,12 @@ const deleteRoom = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const hostel = await Hostel.findById(hostelID);
     if (!hostel) {
-      return res.status(404).send('Hostel not found');
+      return res.status(404).json('Hostel not found');
     }
 
     await Room.findByIdAndDelete(id);
@@ -200,7 +200,7 @@ const deleteRoom = async (req, res) => {
 
     res.status(200).json(rooms);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 

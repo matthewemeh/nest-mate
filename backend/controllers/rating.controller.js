@@ -20,9 +20,9 @@ const updateRoomRating = async (req, res) => {
       await Room.updateOne({ _id: roomID }, { $push: { ratings: newRating._id } });
     }
 
-    res.status(200).send('Rating updated!');
+    res.status(200).json('Rating updated!');
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -35,10 +35,10 @@ const getUserRoomRating = async (req, res) => {
     if (rating) {
       res.status(200).json(rating);
     } else {
-      res.status(200).send('No user rating for this room');
+      res.status(200).json('No user rating for this room');
     }
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 

@@ -15,6 +15,7 @@ mongoose.connect(uri);
 const { connection } = mongoose;
 connection.once('open', () => console.log('MongoDB database connection established successfully'));
 
+const otpRoutes = require('./routes/otp');
 const roomRoutes = require('./routes/room');
 const userRoutes = require('./routes/user');
 const entryRoutes = require('./routes/entry');
@@ -23,6 +24,7 @@ const hostelRoutes = require('./routes/hostel');
 const ratingRoutes = require('./routes/rating');
 const reservationRoutes = require('./routes/reservation');
 
+app.use('/otp', otpRoutes);
 app.use('/users', userRoutes);
 app.use('/rooms', roomRoutes);
 app.use('/email', emailRoutes);

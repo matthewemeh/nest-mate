@@ -13,7 +13,6 @@
     "@types/react-dom": "^18.3.0",
     "axios": "^1.7.2",
     "firebase": "^10.12.2",
-    "n-krypta": "^1.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",

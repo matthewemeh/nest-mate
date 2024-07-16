@@ -21,7 +21,7 @@ const getReservations = async (req, res) => {
 
     res.status(200).json(reservations);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -33,7 +33,7 @@ const getReservationsLength = async (req, res) => {
 
     res.status(200).json(reservations.length);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 

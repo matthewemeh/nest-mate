@@ -25,7 +25,7 @@ const getHostels = async (req, res) => {
 
     res.status(200).json(hostels);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -38,7 +38,7 @@ const getHostel = async (req, res) => {
     });
     res.status(200).json(hostel);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -52,7 +52,7 @@ const createHostel = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const newHostel = new Hostel({ floors, name });
@@ -78,7 +78,7 @@ const createHostel = async (req, res) => {
     }
     res.status(201).json(hostels);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -93,7 +93,7 @@ const updateHostel = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     const hostel = await Hostel.findById(id);
@@ -114,7 +114,7 @@ const updateHostel = async (req, res) => {
 
     res.status(200).json(hostel);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -128,7 +128,7 @@ const deleteHostel = async (req, res) => {
     const user = await User.findById(userID);
     const isUser = !user || user.role === roles.USER;
     if (isUser) {
-      return res.status(401).send('You are not authorized to carry out this operation');
+      return res.status(401).json('You are not authorized to carry out this operation');
     }
 
     await Hostel.findByIdAndDelete(id);
@@ -171,7 +171,7 @@ const deleteHostel = async (req, res) => {
 
     res.status(200).json(hostels);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 

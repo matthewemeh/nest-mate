@@ -42,7 +42,7 @@ const updateAction: ActionHandler<User> = (state, { payload }) => {
   const userToUpdateID: string = payload._id;
   let newState = { ...state };
 
-  if (payload._id === state.currentUser._id || !state.currentUser._id) {
+  if (userToUpdateID === state.currentUser._id || !state.currentUser._id) {
     newState.currentUser = payload;
   }
 
@@ -75,13 +75,10 @@ export const userStoreSlice = createSlice({
   reducers: {
     logout: () => initialState,
     updateUser: (state, action: PayloadAction<Partial<User>>) => {
-      state = Object.assign(state, {
-        ...state,
-        currentUser: { ...state.currentUser, ...action.payload }
-      });
+      state = Object.assign(state, { currentUser: { ...state.currentUser, ...action.payload } });
     },
     updateUsers: (state, action: PayloadAction<Partial<Omit<UserStore, 'currentUser'>>>) => {
-      state = Object.assign(state, { ...state, ...action.payload });
+      state = Object.assign(state, action.payload);
     }
   },
   extraReducers: builder => {

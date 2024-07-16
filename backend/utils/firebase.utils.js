@@ -1,3 +1,4 @@
+const storage = require('../config/firebase.config');
 const { ref, getDownloadURL } = require('firebase/storage');
 
 async function checkIfFileExists(filePath) {

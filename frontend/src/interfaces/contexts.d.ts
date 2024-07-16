@@ -8,7 +8,5 @@ interface PaginationContext {
 
 interface AuthContext {
   mailSubject: string;
-  mailPretext: string;
-  OTP_DETAILS_KEY: string;
   onOtpValidated: () => void;
 }

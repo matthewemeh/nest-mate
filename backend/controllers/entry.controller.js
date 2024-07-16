@@ -18,7 +18,7 @@ const getEntries = async (req, res) => {
 
     res.status(200).json(entries);
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
