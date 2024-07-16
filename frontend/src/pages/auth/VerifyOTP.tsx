@@ -51,11 +51,11 @@ const VerifyOTP = () => {
   }, [isOtpSent]);
 
   useEffect(() => {
-    if (verifiedData) {
+    if (isVerified) {
       showAlert({ msg: verifiedData });
       onOtpValidated?.();
     }
-  }, [verifiedData, onOtpValidated]);
+  }, [isVerified]);
 
   useEffect(() => {
     if (counter === 0 || !isOtpSent) return;
@@ -85,8 +85,8 @@ const VerifyOTP = () => {
           type='submit'
           title='Submit'
           onClick={() => verifyOtp({ email, otp })}
-          disabled={isOtpLoading || isVerifyLoading || verifiedData}
-          isLoading={isOtpLoading || isVerifyLoading || verifiedData}
+          disabled={isOtpLoading || isVerifyLoading || isVerified}
+          isLoading={isOtpLoading || isVerifyLoading || isVerified}
         />
 
         <AuthButton
