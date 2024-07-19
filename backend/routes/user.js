@@ -24,8 +24,6 @@ const upload = multer();
 
 router.route('/register').post(upload.any(), registerUser);
 
-router.route('/:id').patch(upload.any(), verifyToken, updateUser);
-
 router.route('/reset-password').patch(resetPassword);
 
 router.route('/verify-email').patch(verifyEmail);
@@ -49,5 +47,7 @@ router.route('/fetch').get(verifyToken, getUsers);
 router.route('/:id').get(verifyToken, getUser);
 
 router.route('/:id').delete(verifyToken, deleteUser);
+
+router.route('/:id').patch(upload.any(), verifyToken, updateUser);
 
 module.exports = router;
