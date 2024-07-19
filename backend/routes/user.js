@@ -11,8 +11,10 @@ const {
   checkOut,
   deleteUser,
   updateUser,
+  verifyEmail,
   registerUser,
   reserveSpace,
+  resetPassword,
   confirmReservation,
   declineReservation,
   deleteProfileImage
@@ -23,6 +25,10 @@ const upload = multer();
 router.route('/register').post(upload.any(), registerUser);
 
 router.route('/:id').patch(upload.any(), verifyToken, updateUser);
+
+router.route('/reset-password').patch(resetPassword);
+
+router.route('/verify-email').patch(verifyEmail);
 
 router.route('/reserve-space/:roomID').post(verifyToken, reserveSpace);
 

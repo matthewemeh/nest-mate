@@ -89,6 +89,7 @@ export const userStoreSlice = createSlice({
     builder.addMatcher(userStoreApi.endpoints.register.matchFulfilled, updateAction);
     builder.addMatcher(userStoreApi.endpoints.getUsers.matchFulfilled, refreshAction);
     builder.addMatcher(userStoreApi.endpoints.updateUser.matchFulfilled, updateAction);
+    builder.addMatcher(userStoreApi.endpoints.verifyEmail.matchFulfilled, updateAction);
     builder.addMatcher(userStoreApi.endpoints.reserveSpace.matchFulfilled, updateAction);
     builder.addMatcher(userStoreApi.endpoints.deleteProfileImage.matchFulfilled, updateAction);
   }

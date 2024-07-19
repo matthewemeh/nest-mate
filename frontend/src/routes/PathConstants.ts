@@ -10,7 +10,7 @@ export const PATHS = {
   REGISTER: '/auth/register',
   ADD_HOSTEL: '/hostels/add',
   RESERVATIONS: '/reservations',
-  VERIFY_OTP: '/auth/verify-otp',
+  VERIFY_EMAIL: '/auth/verify-email',
   RESET_PASSWORD: '/auth/reset-password',
   EDIT_HOSTEL: '/hostels/:hostelID/edit',
   HOSTEL_ROOMS: '/hostels/:hostelID/rooms',

@@ -1,61 +1,55 @@
-import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { BaseQueryFn } from '@reduxjs/toolkit/query';
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {
+  FetchArgs,
+  MutationDefinition,
+  FetchBaseQueryMeta,
+  FetchBaseQueryError
+} from '@reduxjs/toolkit/query';
 
 import OtpInput from 'components/forms/OtpInput';
-import { AuthContext } from 'layouts/AuthLayout';
 import AuthButton from 'components/forms/AuthButton';
 
-import { PATHS } from 'routes/PathConstants';
 import { useAppSelector } from 'hooks/useRootStorage';
-import { useSendOtpMutation, useVerifyOtpMutation } from 'services/apis/otpApi';
+import { useSendOtpMutation } from 'services/apis/otpApi';
 
-import { showAlert, secondsToMMSS, handleReduxQueryError } from 'utils';
+import { secondsToMMSS, handleReduxQueryError } from 'utils';
 
-const VerifyOTP = () => {
+interface Props {
+  otp: string;
+  mailSubject: string;
+  isVerifyLoading: boolean;
+  setOtp: React.Dispatch<React.SetStateAction<string>>;
+  verifyOtp: MutationTrigger<
+    MutationDefinition<
+      VerifyOtpPayload,
+      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>,
+      never,
+      any,
+      'otpApi'
+    >
+  >;
+}
+
+const VerifyOTP: React.FC<Props> = ({ otp, setOtp, verifyOtp, mailSubject, isVerifyLoading }) => {
   const THREE_MINUTES = 3 * 60;
-  const { LOGIN, HOME } = PATHS;
-  const { onOtpValidated, mailSubject } = useContext(AuthContext);
 
-  const navigate = useNavigate();
-  const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(THREE_MINUTES);
-  const { isAuthenticated } = useAppSelector(state => state.userData);
-  const { _id, email, emailValidated } = useAppSelector(state => state.userStore.currentUser);
-
-  useEffect(() => {
-    if (!email) navigate(LOGIN);
-    if (_id && emailValidated) {
-      isAuthenticated ? navigate(HOME) : navigate(LOGIN);
-    }
-  }, [emailValidated, isAuthenticated, email]);
+  const { email } = useAppSelector(state => state.userStore.currentUser);
 
   const [
     sendOtp,
     { error: otpError, isError: isOtpError, isLoading: isOtpLoading, isSuccess: isOtpSent }
   ] = useSendOtpMutation();
 
-  const [
-    verifyOtp,
-    {
-      data: verifiedData,
-      error: verifyError,
-      isSuccess: isVerified,
-      isError: isVerifyError,
-      isLoading: isVerifyLoading
-    }
-  ] = useVerifyOtpMutation();
+  useEffect(() => {
+    sendOtp({ to: email, subject: mailSubject });
+  }, []);
 
   useEffect(() => {
     if (isOtpSent) setCounter(THREE_MINUTES);
-    else sendOtp({ to: email, subject: mailSubject });
   }, [isOtpSent]);
-
-  useEffect(() => {
-    if (isVerified) {
-      showAlert({ msg: verifiedData });
-      onOtpValidated?.();
-    }
-  }, [isVerified]);
 
   useEffect(() => {
     if (counter === 0 || !isOtpSent) return;
@@ -67,10 +61,6 @@ const VerifyOTP = () => {
   useEffect(() => {
     handleReduxQueryError(isOtpError, otpError);
   }, [otpError, isOtpError]);
-
-  useEffect(() => {
-    handleReduxQueryError(isVerifyError, verifyError, () => setOtp(''));
-  }, [verifyError, isVerifyError]);
 
   return (
     <section className='max-w-[400px] mx-auto flex flex-col h-full items-center justify-center'>
@@ -85,7 +75,7 @@ const VerifyOTP = () => {
           type='submit'
           title='Submit'
           onClick={() => verifyOtp({ email, otp })}
-          disabled={isOtpLoading || isVerifyLoading || isVerified}
+          disabled={isOtpLoading || isVerifyLoading}
           isLoading={isOtpLoading || isVerifyLoading}
         />
 

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: UserData = {
-  isOtpVerified: false,
   isAuthenticated: false,
   prefersDarkMode: false
 };

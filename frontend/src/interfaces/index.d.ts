@@ -59,7 +59,6 @@ interface Hostel extends MongoInterface {
 }
 
 interface UserData {
-  isOtpVerified: boolean;
   isAuthenticated: boolean;
   prefersDarkMode: boolean;
 }

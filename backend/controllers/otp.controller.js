@@ -64,9 +64,7 @@ const verifyOTP = async (req, res) => {
   const otpMatches = await verifyHashedData(otp, otpRecord.otp);
 
   if (otpMatches) {
-    await OTP.deleteOne({ email });
-    await User.updateOne({ email }, { $set: { emailValidated: true } });
-    res.status(200).json('OTP verification successful');
+    res.status(200).json('OTP Verification successful');
   } else {
     res.status(400).json('Wrong OTP provided!');
   }

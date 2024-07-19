@@ -7,9 +7,9 @@ import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
 import { PATHS } from 'routes/PathConstants';
+import { logout } from 'services/apis/userApi/userStoreSlice';
 import { resetUserData } from 'services/userData/userDataSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
-import { logout, updateUser as updateCurrentUser } from 'services/apis/userApi/userStoreSlice';
 import {
   useDeleteUserMutation,
   useUpdateUserMutation,
@@ -96,7 +96,6 @@ const Profile = () => {
   };
 
   const handleResetPassword = () => {
-    dispatch(updateCurrentUser({ _id: '' }));
     dispatch(resetUserData());
     navigate(FORGOT_PASSWORD);
   };

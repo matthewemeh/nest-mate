@@ -12,7 +12,6 @@ interface UserUpdatePayload {
   name?: string;
   token: string;
   roomID?: string;
-  password?: string;
   profileImage?: File;
   emailValidated?: boolean;
 }
@@ -30,7 +29,6 @@ interface GetUsersPayload {
 interface GetUserPayload {
   _id: string;
   token: string;
-  params?: Record<string, any>;
 }
 
 interface DeleteUserPayload {
@@ -162,4 +160,15 @@ interface SendOtpPayload extends Omit<EmailSendPayload, 'text' | 'html'> {
 interface VerifyOtpPayload {
   otp: string;
   email: string;
+}
+
+interface VerifyEmailPayload {
+  otp: string;
+  email: string;
+}
+
+interface ResetPasswordPayload {
+  otp: string;
+  email: string;
+  password: string;
 }

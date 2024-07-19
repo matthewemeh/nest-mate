@@ -1,34 +1,49 @@
-import { AxiosError } from 'axios';
 import { FaHotel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import { PATHS } from 'routes/PathConstants';
 
+import VerifyOTP from './VerifyOTP';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
-import axios from 'services/axios';
-import Endpoints from 'services/Endpoints';
-import { updateUserData } from 'services/userData/userDataSlice';
-import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
-import { useUpdateUserMutation } from 'services/apis/userApi/userStoreApi';
+import { useAppSelector } from 'hooks/useRootStorage';
+import { useVerifyOtpMutation } from 'services/apis/otpApi';
+import { useResetPasswordMutation } from 'services/apis/userApi/userStoreApi';
 
 import { handleReduxQueryError, showAlert } from 'utils';
 
 const ResetPassword = () => {
-  const { USERS } = Endpoints;
-  const { LOGIN, REGISTER, HOME } = PATHS;
+  const { LOGIN, HOME } = PATHS;
 
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const [otp, setOtp] = useState<string>('');
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
-  const [passwordSubmitted, setPasswordSubmitted] = useState(false);
 
-  const { email, token } = useAppSelector(state => state.userStore.currentUser);
-  const { isOtpVerified, isAuthenticated } = useAppSelector(state => state.userData);
-  const [updateUser, { error, isError, isLoading, isSuccess }] = useUpdateUserMutation();
+  const { isAuthenticated } = useAppSelector(state => state.userData);
+  const { email } = useAppSelector(state => state.userStore.currentUser);
+  const [
+    resetPassword,
+    {
+      data: resetData,
+      error: resetError,
+      isError: isResetError,
+      isLoading: isResetLoading,
+      isSuccess: isResetSuccess
+    }
+  ] = useResetPasswordMutation();
+  const [
+    verifyOtp,
+    {
+      data: verifiedData,
+      error: verifyError,
+      isSuccess: isVerified,
+      isError: isVerifyError,
+      isLoading: isVerifyLoading
+    }
+  ] = useVerifyOtpMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -39,44 +54,36 @@ const ResetPassword = () => {
       confirmPasswordRef.current?.focus();
       return showAlert({ msg: 'Passwords must match!' });
     }
-    setPasswordSubmitted(true);
 
-    axios
-      .get(`${USERS}/id`, { params: { email }, headers: { 'x-access-token': token } })
-      .then(res => {
-        setPasswordSubmitted(false);
-        const user = res.data as User | null;
-        if (user) {
-          updateUser({ _id: user._id, token, password });
-        } else {
-          showAlert({ msg: `The account with email: ${email} does not exist` });
-          navigate(REGISTER);
-        }
-      })
-      .catch((err: AxiosError) => {
-        console.log(err);
-        setPasswordSubmitted(false);
-        showAlert({ msg: 'An error has occured' });
-      });
+    resetPassword({ email, otp, password });
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch(updateUserData({ isOtpVerified: false }));
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    handleReduxQueryError(isError, error);
-  }, [error, isError]);
-
-  useEffect(() => {
-    if (!email || !isOtpVerified) {
+    if (!email) {
       isAuthenticated ? navigate(HOME) : navigate(LOGIN);
     }
-  }, [email, isAuthenticated, isOtpVerified]);
+  }, [email, isAuthenticated]);
 
-  return (
+  useEffect(() => {
+    if (verifiedData) showAlert({ msg: verifiedData });
+  }, [verifiedData]);
+
+  useEffect(() => {
+    if (isResetSuccess) {
+      showAlert({ msg: resetData });
+      navigate(LOGIN);
+    }
+  }, [isResetSuccess, resetData]);
+
+  useEffect(() => {
+    handleReduxQueryError(isResetError, resetError);
+  }, [resetError, isResetError]);
+
+  useEffect(() => {
+    handleReduxQueryError(isVerifyError, verifyError, () => setOtp(''));
+  }, [verifyError, isVerifyError]);
+
+  return isVerified ? (
     <section className='flex flex-col h-full items-center justify-center'>
       <FaHotel className='w-[100px] h-[100px] text-current' />
       <h1 className='text-2xl font-semibold text-woodsmoke'>Reset Password</h1>
@@ -119,11 +126,19 @@ const ResetPassword = () => {
         <AuthButton
           type='submit'
           title='Submit'
-          disabled={isLoading || passwordSubmitted}
-          isLoading={isLoading || passwordSubmitted}
+          disabled={isResetLoading}
+          isLoading={isResetLoading}
         />
       </form>
     </section>
+  ) : (
+    <VerifyOTP
+      otp={otp}
+      setOtp={setOtp}
+      verifyOtp={verifyOtp}
+      isVerifyLoading={isVerifyLoading}
+      mailSubject='Password Reset Request for Nest Mate'
+    />
   );
 };
 

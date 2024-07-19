@@ -6,21 +6,23 @@ import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 
 import { PATHS } from 'routes/PathConstants';
-import { useAppDispatch } from 'hooks/useRootStorage';
+import { useAppDispatch, useAppSelector } from 'hooks/useRootStorage';
 import { updateUser } from 'services/apis/userApi/userStoreSlice';
 
 const ForgotPassword = () => {
-  const { LOGIN, VERIFY_OTP } = PATHS;
+  const { LOGIN, RESET_PASSWORD } = PATHS;
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const emailRef = useRef<HTMLInputElement>(null);
 
+  const { email } = useAppSelector(state => state.userStore.currentUser);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const email: string = emailRef.current!.value;
     dispatch(updateUser({ email }));
-    navigate(VERIFY_OTP);
+    navigate(RESET_PASSWORD);
   };
 
   return (
@@ -38,6 +40,7 @@ const ForgotPassword = () => {
           inputName='email'
           spellCheck={false}
           inputRef={emailRef}
+          defaultValue={email}
           autoComplete='username'
           extraLabelClassNames='mt-[15px]'
         />

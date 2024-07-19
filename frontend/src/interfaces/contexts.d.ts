@@ -5,8 +5,3 @@ interface PaginationContext {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
 }
-
-interface AuthContext {
-  mailSubject: string;
-  onOtpValidated: () => void;
-}

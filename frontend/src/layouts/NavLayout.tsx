@@ -9,7 +9,7 @@ import { PATHS } from 'routes/PathConstants';
 import { useAppSelector } from 'hooks/useRootStorage';
 
 const NavLayout = () => {
-  const { LOGIN, VERIFY_OTP } = PATHS;
+  const { LOGIN, VERIFY_EMAIL } = PATHS;
 
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ const NavLayout = () => {
 
   useEffect(() => {
     if (!isAuthenticated) navigate(LOGIN);
-    else if (!emailValidated) navigate(VERIFY_OTP);
+    else if (!emailValidated) navigate(VERIFY_EMAIL);
   }, [emailValidated, isAuthenticated]);
 
   return (

@@ -8,8 +8,10 @@ const {
   BASE_URL,
   REGISTER,
   GET_USERS,
+  VERIFY_EMAIL,
   RESERVE_SPACE,
   USER_CHECK_IN,
+  RESET_PASSWORD,
   USER_CHECK_OUT,
   DECLINE_RESERVATION,
   CONFIRM_RESERVATION,
@@ -74,7 +76,6 @@ export const userStoreApi = createApi({
     getUser: builder.mutation({
       query: (body: GetUserPayload) => ({
         method: 'GET',
-        params: body.params,
         url: `${USERS}/${body._id}`,
         headers: { 'x-access-token': body.token }
       })
@@ -134,6 +135,12 @@ export const userStoreApi = createApi({
         url: `${USER_CHECK_OUT}/${body._id}`,
         headers: { 'x-access-token': body.token }
       })
+    }),
+    resetPassword: builder.mutation({
+      query: (body: ResetPasswordPayload) => ({ body, method: 'PATCH', url: RESET_PASSWORD })
+    }),
+    verifyEmail: builder.mutation({
+      query: (body: VerifyEmailPayload) => ({ body, method: 'PATCH', url: VERIFY_EMAIL })
     })
   })
 });
@@ -145,9 +152,11 @@ export const {
   useRegisterMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useVerifyEmailMutation,
   useUserCheckInMutation,
   useReserveSpaceMutation,
   useUserCheckOutMutation,
+  useResetPasswordMutation,
   useDeleteProfileImageMutation,
   useConfirmReservationMutation,
   useDeclineReservationMutation

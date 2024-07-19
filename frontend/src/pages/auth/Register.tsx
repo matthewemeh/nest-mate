@@ -12,7 +12,7 @@ import Constants from 'Constants';
 import RiUser3Line from 'assets/ri-user-3-line.svg';
 
 const Register = () => {
-  const { LOGIN, VERIFY_OTP } = PATHS;
+  const { LOGIN, VERIFY_EMAIL } = PATHS;
   const { ACCEPTED_IMAGE_TYPES } = Constants;
 
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) navigate(VERIFY_OTP);
+    if (isSuccess) navigate(VERIFY_EMAIL);
   }, [isSuccess]);
 
   useEffect(() => {

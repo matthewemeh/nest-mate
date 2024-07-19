@@ -1,13 +1,14 @@
 const storage = require('../config/firebase.config');
 const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
 
+const OTP = require('../models/otp.model');
 const Room = require('../models/room.model');
 const Rating = require('../models/rating.model');
 const { User, roles } = require('../models/user.model');
 const { Entry, entryStatuses } = require('../models/entry.model');
 const { Reservation, reservationStatuses } = require('../models/reservation.model');
 
-const { createToken } = require('../utils/tokenUtils');
+const { verifyHashedData } = require('../utils/hashUtils');
 const { checkIfFileExists } = require('../utils/firebase.utils');
 
 /* Multipart key information */
@@ -56,7 +57,7 @@ const updateUser = async (req, res) => {
     );
     const { id } = req.params;
     const { userID } = req.currentUser;
-    const { name, password, role, emailValidated, roomID, checkedIn } = userPayload;
+    const { name, role, emailValidated, roomID, checkedIn } = userPayload;
 
     const user = await User.findById(userID);
     const isOwner = user && user._id == id;
@@ -81,7 +82,6 @@ const updateUser = async (req, res) => {
     }
     if (isOwner) {
       if (name) userToBeUpdated.name = name;
-      if (password) userToBeUpdated.password = password;
 
       const profileImageFile = req.files.find(({ fieldname }) => fieldname === PROFILE_IMAGE_KEY);
       const profileImage = profileImageFile?.buffer;
@@ -96,6 +96,70 @@ const updateUser = async (req, res) => {
     if (emailValidated !== undefined) userToBeUpdated.emailValidated = emailValidated;
 
     const updatedUser = await userToBeUpdated.save();
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { password, email, otp } = req.body;
+
+    const otpRecord = await OTP.findOne({ email });
+    if (!otpRecord) {
+      return res.status(404).json('No OTP available');
+    }
+
+    const otpExpired = new Date(otpRecord.expiresAt).getTime() < Date.now();
+    if (otpExpired) {
+      return res.status(400).json('OTP has expired');
+    }
+
+    const otpMatches = await verifyHashedData(otp, otpRecord.otp);
+
+    if (!otpMatches) {
+      return res.status(400).json('Wrong OTP provided!');
+    }
+
+    const user = await User.findOne({ email });
+    if (password) {
+      user.password = password;
+      await user.save();
+    }
+
+    await OTP.deleteOne({ email });
+    res.status(200).json('Password reset successfully');
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+};
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const otpRecord = await OTP.findOne({ email });
+    if (!otpRecord) {
+      return res.status(404).json('No OTP available');
+    }
+
+    const otpExpired = new Date(otpRecord.expiresAt).getTime() < Date.now();
+    if (otpExpired) {
+      return res.status(400).json('OTP has expired');
+    }
+
+    const otpMatches = await verifyHashedData(otp, otpRecord.otp);
+
+    if (!otpMatches) {
+      return res.status(400).json('Wrong OTP provided!');
+    }
+
+    const user = await User.findOne({ email });
+    user.emailValidated = true;
+    const updatedUser = await user.save();
+
+    await OTP.deleteOne({ email });
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(400).json(err.message);
@@ -328,20 +392,12 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   const { id } = req.params;
-  const email = req.query['email'];
-
   const { userID } = req.currentUser;
 
   const user = await User.findById(userID);
   const isOwnerOrAdmin = user && (user.role !== roles.USER || user._id == id);
   if (!isOwnerOrAdmin) {
     return res.status(401).json('You are not authorized to carry out this operation');
-  }
-
-  if (email) {
-    return User.findOne({ email })
-      .then(user => res.status(200).json(user))
-      .catch(err => res.status(400).json(err.message));
   }
 
   User.findById(id)
@@ -399,8 +455,10 @@ module.exports = {
   checkOut,
   deleteUser,
   updateUser,
+  verifyEmail,
   registerUser,
   reserveSpace,
+  resetPassword,
   deleteProfileImage,
   confirmReservation,
   declineReservation

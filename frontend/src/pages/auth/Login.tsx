@@ -9,7 +9,6 @@ import { resetUserData, updateUserData } from 'services/userData/userDataSlice';
 import FormInput from 'components/forms/FormInput';
 import AuthButton from 'components/forms/AuthButton';
 import { useAppDispatch } from 'hooks/useRootStorage';
-import { updateUser } from 'services/apis/userApi/userStoreSlice';
 
 import { handleReduxQueryError } from 'utils';
 
@@ -71,10 +70,7 @@ const Login = () => {
         />
         <Link
           to={FORGOT_PASSWORD}
-          onClick={() => {
-            dispatch(updateUser({ _id: '' }));
-            dispatch(resetUserData());
-          }}
+          onClick={() => dispatch(resetUserData())}
           className='text-right text-lightning-yellow-800 text-sm mt-2 block whitespace-nowrap'>
           Forgot password?
         </Link>
