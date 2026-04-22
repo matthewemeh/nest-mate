@@ -21,8 +21,7 @@ const Register = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const profileImageRef = useRef<HTMLInputElement>(null);
   const profileImagePreviewRef = useRef<HTMLImageElement>(null);
-  const [register, { error: error, isError: isError, isLoading: isLoading, isSuccess: isSuccess }] =
-    useRegisterMutation();
+  const [register, { error, isError, isLoading, isSuccess }] = useRegisterMutation();
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();

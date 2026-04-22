@@ -20,7 +20,6 @@ interface Props {
   autoFocus?: boolean;
   placeholder?: string;
   defaultValue?: string;
-  autoComplete?: string;
   spellCheck?: Booleanish;
   extraLabelClassNames?: string;
   extraInputClassNames?: string;
@@ -29,6 +28,7 @@ interface Props {
   extraInputStyles?: React.CSSProperties;
   inputRef?: React.RefObject<HTMLInputElement>;
   formatRule?: Omit<FormatInputTextProps, 'text'>;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   inputMode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
 }
