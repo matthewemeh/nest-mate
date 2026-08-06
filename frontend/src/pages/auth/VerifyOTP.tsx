@@ -1,12 +1,4 @@
 import { useEffect, useState } from 'react';
-import { BaseQueryFn } from '@reduxjs/toolkit/query';
-import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
-import {
-  FetchArgs,
-  MutationDefinition,
-  FetchBaseQueryMeta,
-  FetchBaseQueryError
-} from '@reduxjs/toolkit/query';
 
 import OtpInput from 'components/forms/OtpInput';
 import AuthButton from 'components/forms/AuthButton';
@@ -21,15 +13,7 @@ interface Props {
   mailSubject: string;
   isVerifyLoading: boolean;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
-  verifyOtp: MutationTrigger<
-    MutationDefinition<
-      VerifyOtpPayload,
-      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>,
-      never,
-      any,
-      'otpApi'
-    >
-  >;
+  verifyOtp: any;
 }
 
 const VerifyOTP: React.FC<Props> = ({ otp, setOtp, verifyOtp, mailSubject, isVerifyLoading }) => {
