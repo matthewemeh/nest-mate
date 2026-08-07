@@ -3,7 +3,7 @@ const router = require('express').Router();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-router.route('/send').post(async (req, res) => {
+const sendEmail = async (req, res) => {
   const { to, subject, text, html } = req.body;
 
   try {
@@ -22,6 +22,6 @@ router.route('/send').post(async (req, res) => {
     console.error('Error sending email:', error);
     return res.status(500).send('Error sending email');
   }
-});
+};
 
-module.exports = router;
+module.exports = { sendEmail };
